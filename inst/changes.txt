@@ -1,0 +1,17 @@
+0.6.6a > 0.6.7a [3 May 2011]
+--------------
+* Added field for conversion of plain text.
+* Script is now called by cknv, not tocyr.
+
+0.6.5a > 0.6.6a [19 April 2011]
+--------------
+* Bug fixes (file conversion works on nt/posix).
+* Interface change.
+* Basic user-friendly log.
+
+0.6.2a > 0.6.5a [11 April 2011]
+--------------
+* Correct free space calculation on Linux.
+* Correct paths on Linux.
+* Command line support.
+* Many minor tweaks.
