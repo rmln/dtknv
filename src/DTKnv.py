@@ -4,7 +4,7 @@
 This is a GUI wrapper for tocyr.
 
 """
-import os.path # I don't know why, but NetBeans keep inserting this.
+
 
 #
 #    Copyright (C) 2011  Romeo Mlinar (mlinar [a] languagebits.com)
