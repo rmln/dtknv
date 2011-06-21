@@ -2,7 +2,7 @@ Dtknv is a simple tool that converts files containing Serbian Cyrillic
 alphabet into Serbian Latin alphabet.
 
 It converts DOCX and ODT files, as well as all text-based files, if the
-extension is supplied.
+extensions are supplied.
 
 PREREQUISITES
 
@@ -50,7 +50,7 @@ Use DTKnv.py to start a simple graphical interface.
 ABOUT
 Alpha version.
 License GNU GLP 3.
-More, in Serbian: http://www.digitalnitrg.com/?p=1094
+More, in Serbian: <http://digitalnitrg.blogspot.com/2011/03/dt-konvertor-datoteka-iz-cirilice-u.html>
 
 -- 
 Cheers,

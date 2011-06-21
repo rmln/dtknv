@@ -5,7 +5,6 @@ This is a GUI wrapper for tocyr.
 
 """
 
-
 #
 #    Copyright (C) 2011  Romeo Mlinar (mlinar [a] languagebits.com)
 #
@@ -194,7 +193,7 @@ class TocyrGui(tk.Frame):
         self.lbl_site["fg"] = "blue"
         self.lbl_site["cursor"] = "hand1"
         self.lbl_site["font"] = 'console', 8, 'underline italic'
-        self.lbl_site.bind("<Button-1>", self.openbrowser_home)
+        self.lbl_site.bind("<Button-1>", self.show_mail)
         self.lbl_site.grid(column=1, row=1, sticky='wesn')
         # -------------------------------------------------
         # GUI for labels on the bottom of the main frame
@@ -318,19 +317,22 @@ class TocyrGui(tk.Frame):
             t.append((e[i], '*.%s' % i))
         return t
 
-    def openbrowser_home(self, event):
-        "go to the website"
-        browse = webbrowser.get()
-        browse.open('http://www.digitalnitrg.com/?p=1094#prijava-greske')
+    def show_mail(self, event):
+        """Open a window showing the email address."""
+        text = 'Prijavu greške (ili predloge) pošaljite na \n' + \
+            'cheesepy@gmail.com \n\n Hvala! :)'
+        messagebox.showinfo("Kontakt", text) 
+        
 
     def openbrowser_help(self, event):
         "go to the website"
         browse = webbrowser.get()
-        browse.open('http://www.digitalnitrg.com/?p=1094#uputstvo_gui')
+        browse.open(r'http://digitalnitrg.blogspot.com/2011/03/' + \
+                        'dt-konvertor-datoteka-iz-cirilice-u.html#uputstvo_gui')
 
     def about(self):
         """About dialog"""
-        text =  "DT Konvertor pisama\nDigitalnitrg.com" + \
+        text =  "DT Konvertor pisama (dtknv)" + \
                 "\n\nRazvojna verzija %s, maj 2011." % version.__version__ + \
                 "\nVerzija konvertora: %s" % tocyr.__version__ + \
                 "\nVerzija sučelja: %s" % __version__ + \
