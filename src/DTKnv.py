@@ -38,6 +38,9 @@ from tocyr import ToCyr
 from cyrconv import CirConv
 
 __version__ = '0.3'
+__url__ = "https://gitorious.org/dtknv"
+__author__ = "Romeo Mlinar"
+__license__ = "GNU General Public License v. 3"
 
 class TocyrGui(tk.Frame):
 
@@ -336,7 +339,8 @@ class TocyrGui(tk.Frame):
                 "\n\nRazvojna verzija %s, maj 2011." % version.__version__ + \
                 "\nVerzija konvertora: %s" % tocyr.__version__ + \
                 "\nVerzija sučelja: %s" % __version__ + \
-                "\nOS: %s" % os.name
+                "\nOS: %s" % os.name + \
+                "\n\nNove verzije dostupne su na www.languagebits.com/dtknv/"
         messagebox.showinfo("O programu", text)
     
     def dotext(self, act='del'):

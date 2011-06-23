@@ -52,6 +52,10 @@ Use DTKnv.py to start a simple graphical interface.
 
 """
 
+__url__ = "https://gitorious.org/dtknv"
+__author__ = "Romeo Mlinar"
+__license__ = "GNU General Public License v. 3"
+
 import sys
 import getopt
 

@@ -1,3 +1,8 @@
+0.3 beta > 0.3.1 beta [3 May 2011]
+--------------
+* No significant changes (mostly strings).
+* Added project at <https://gitorious.org/dtknv>.
+
 0.6.6a > 0.6.7a [3 May 2011]
 --------------
 * Added field for conversion of plain text.

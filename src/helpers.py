@@ -6,6 +6,9 @@ Help functions for tocyr3.
 """
 
 __version__ = '0.2.1'
+__url__ = "https://gitorious.org/dtknv"
+__author__ = "Romeo Mlinar"
+__license__ = "GNU General Public License v. 3"
 
 
 #
@@ -39,7 +42,7 @@ def getstampnewdir(path):
     return d
 
 def build_directory_tree(dirin, dirout):
-    """Build direcotry tree in DIROUT, based on DIRIN"""
+    """Build directory tree in DIROUT, based on DIRIN"""
     # We won't allow making directories in the
     # DIROUT directory, but in newly created one.
     # This is to prevent possible deletion.
@@ -108,7 +111,6 @@ def getdatetime(f='short'):
         return strftime("%Y-%m-%d-%H-%M")
     else:
         raise()
-
 
 
 def maketmpdir(tempdir):

@@ -36,12 +36,12 @@ from cyrconv import CirConv
 from helpers import *
 
 __version__ = "0.5"
-__url__ = "http://www.digitalnitrg.com/?p=1094"
-__author__ = "DigitalniTrg.com"
+__url__ = "https://gitorious.org/dtknv"
+__author__ = "Romeo Mlinar"
 __license__ = "GNU General Public License v. 3"
 
 class ToCyr:
-    """Converts textual content files form Cyrillic to Latin alphabet."""
+    """Converts textual content files from Cyrillic to Latin alphabet."""
 
     # File types that are listed in the open file dialogue.
 
@@ -100,7 +100,7 @@ class ToCyr:
         """Start the conversion."""
         # Set temporary directory and add it the affix.
         # TODO: Add a check upon each start to see if
-        # a filder was left undleted due to a crash.
+        # a file was left undeleted due to a crash.
         self.DIRTMP = tempfile.mkdtemp(prefix='dtknv_')
         
         # Percentage counter based on file sizes, to indicate
@@ -206,10 +206,10 @@ class ToCyr:
         outpath = self._outpathrec(f)
         # See if the filename needs conversion.
         outpath = self._converfname(outpath)
-        # Create recursivelly the out dir.
+        # Create recursively the out dir.
         if self.RECURSIVE:
             makefullpath(outpath)
-        # Deal with text files separetly.
+        # Deal with text files separately.
         self.extension = getext(f)
         if self.extension in self.TEXTFILES:
             try:
@@ -220,7 +220,7 @@ class ToCyr:
                 print('ERROR reading in ._load_txt: %s' % f.encode(self.ENC))
                 return('Error in conversion!')
 
-        # Open Office / Lible Office Writer document.
+        # Open Office / Libre Office Writer document.
         elif self.extension == 'odt':
             self._unzip(f)
             files = self._filterfiles(self.unzipped, 'xml')
@@ -378,8 +378,7 @@ class ToCyr:
 
 
     def _save_txt(self, f, text, check=False):
-        """
-        Save text based files.
+        """Saves text based files.
         
         Check if the file already exists. This applies only
         to saving text-based files. In ODT/DOCX they are

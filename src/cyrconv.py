@@ -21,7 +21,10 @@ Converts Cyrillic script to Latin.
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-__version__ = '1.0'
+__version__ = '1.1'
+__url__ = "https://gitorious.org/dtknv"
+__author__ = "Romeo Mlinar"
+__license__ = "GNU General Public License v. 3"
 
 cyr = {'А':'A', 'Б':'B', 'В':'V', 'Г':'G', 'Д':'D', 'Е':'E',
        'Ж':'Ž', 'З':'Z', 'И':'I', 'Ј':'J', 'К':'K', 'Л':'L',
@@ -37,7 +40,7 @@ cyr = {'А':'A', 'Б':'B', 'В':'V', 'Г':'G', 'Д':'D', 'Е':'E',
 class CirConv:
 
     def __init__(self, text='', mode="tolat"):
-        "start the class"
+        """start the class"""
         self.text = text
         self.mode = mode
         if mode == "tolat":
@@ -48,11 +51,12 @@ class CirConv:
             raise KeyError("Unesite tolat ili tocyr za konverziju.")
 
     def convert(self):
+        """Convert the text and place it into .result. No return."""
         text = self.text
         self.result = self._charreplace(text)
 
     def _charreplace(self, text):
-        "Replace cherecters in text"
+        """Replace characters in text"""
         charkeys = self.charmap.keys()
         for letter in charkeys:
             if letter in text:
@@ -60,6 +64,6 @@ class CirConv:
         return text
 
     def get_converted(self):
-        "Return the conversion."
+        """"Return the converted text."""
         self.convert()
         return self.result
