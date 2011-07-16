@@ -21,7 +21,7 @@ Converts Cyrillic script to Latin.
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-__version__ = '1.1'
+__version__ = '1.2'
 __url__ = "https://gitorious.org/dtknv"
 __author__ = "Romeo Mlinar"
 __license__ = "GNU General Public License v. 3"
@@ -52,11 +52,14 @@ class CirConv:
 
     def convert(self):
         """Convert the text and place it into .result. No return."""
-        text = self.text
-        self.result = self._charreplace(text)
+        self.result = self._charreplace(self.text)
 
     def _charreplace(self, text):
         """Replace characters in text"""
+        # Check if text is NoneType
+        if text == None:
+            return text
+        
         charkeys = self.charmap.keys()
         for letter in charkeys:
             if letter in text:
