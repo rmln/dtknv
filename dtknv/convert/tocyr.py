@@ -1,5 +1,4 @@
 #! /usr/bin/python3
-# -*- coding: utf-8 -*-
 
 """
 
@@ -32,7 +31,7 @@ import zipfile
 import shutil
 import tempfile
 
-from cyrconv import CirConv
+from convert.cyrconv import CirConv
 from helpers import *
 
 __version__ = "0.5"

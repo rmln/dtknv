@@ -4,8 +4,8 @@
 Dtknv is a simple tool that converts files containing Serbian Cyrillic
 alphabet into Serbian Latin alphabet.
 
-It converts DOCX and ODT files, as well as all text-based files, if the
-extension is supplied.
+It converts DOCX and ODT files, as well as all text-based files, if a
+supported extension is supplied.
 
 PREREQUISITES
 
@@ -56,10 +56,11 @@ __url__ = "https://gitorious.org/dtknv"
 __author__ = "Romeo Mlinar"
 __license__ = "GNU General Public License v. 3"
 
+import os
 import sys
 import getopt
 
-from tocyr import ToCyr
+from convert.tocyr import ToCyr
 
 __version__ = '0.2'
 
@@ -94,6 +95,16 @@ if __name__ == '__main__':
     3. Run!
 
     """
+    #Test ---------------------------------------------------------------------
+    #Arguments, just for testing here, on both systems
+#    if os.name == 'nt':
+#        args = '-r -i D:\\datastore\\tocyr\\in_files -o D:\\datastore\\tocyr\\out_files'
+#        args = args + ' '
+#    else:
+#        args = '-r -i /home/marw/Documents/testdtknv/test1 -o /home/marw/Documents/testout'
+#        args = args + ' '
+#    args = args.split()
+    #Test ---------------------------------------------------------------------
     args = sys.argv[1:]
     # If nothing is supplied, show help and exit:
     if len(args) == 0:
@@ -107,16 +118,6 @@ if __name__ == '__main__':
     except:
         print('Could not initialise the TocCyr() Aborting.')
         sys.exit(2)
-    #Test ---------------------------------------------------------------------
-    #Arguments, just for testing here, on both systems
-#    if os.name == 'nt':
-#        args = '-r -i D:\\datastore\\tocyr\\in_files -o D:\\datastore\\tocyr\\out_files -c Izvjestaj'
-#        args = args + ' '
-#    else:
-#        args = '-r -i /home/marw/Documents/testdtknv/test1 -o /home/marw/Documents/testout'
-#        args = args + ' '
-#    args = args.split()
-    #Test ---------------------------------------------------------------------
     try:
         supplied, r = getopt.getopt(args, 'i:o:e:c:snrh', ['pathin=',
                     'pathout=', 'encoding=', 'conversionreportname=', 'show',

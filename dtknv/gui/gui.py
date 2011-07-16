@@ -32,10 +32,12 @@ from tkinter import filedialog
 from tkinter import messagebox
 from functools import partial
 
-import tocyr
+
+from convert import tocyr
+from convert.tocyr import ToCyr
+from convert.cyrconv import CirConv
+
 import version
-from tocyr import ToCyr
-from cyrconv import CirConv
 
 __version__ = '0.3'
 __url__ = "https://gitorious.org/dtknv"
