@@ -221,29 +221,18 @@ class ToCyr:
             except UnicodeEncodeError:
                 print('ERROR reading in ._load_txt: %s' % f.encode(self.ENC))
                 return('Error in conversion!')
-
-        # Open Office / Libre Office Writer document.
-        elif self.extension == 'odt':
+            
+        
+        if self.extension in ('odt', 'docx'):
             self._unzip(f)
             if self.USERAM:
                 self._newzip(outpath)
             files = self._filterfiles(self.unzipped, 'xml')
-            for odtxml in files:
-                text = self._load_odt(odtxml)
-                self._save_odt(odtxml, self._converttext(text))
+            for xmlfile in files:
+                text = self._load_office(xmlfile)
+                self._save_office(xmlfile, self._converttext(text))
             self._zip(outpath)
 
-        # MS Office Word document.
-        elif self.extension == 'docx':
-            self._unzip(f)
-            if self.USERAM:
-                self._newzip(outpath)
-            files = self._filterfiles(self.unzipped, 'xml')
-            for wordxml in files:
-                text = self._load_docx(wordxml)
-                self._save_docx(wordxml, self._converttext(text))
-            self._zip(outpath)
-        #Update the percentage counter.
         self._updatecounter(f)
 
 
@@ -387,22 +376,18 @@ class ToCyr:
         else:
             return codecs.open(f, encoding = self.ENC, mode="r").read()
 
-
-    def _load_odt(self, f):
-        """Load and return content file of ODT."""
+    def _load_office(self, f):
+        """Load file and return textual content."""
         if self.USERAM:
             return self._load_txt(f)
         else:
-            return self._load_txt(os.path.join(self.unzipped, f))
-
-
-    def _load_docx(self, f):
-        """Load and return content file of DOCX."""
-        if self.USERAM:
-            return self._load_txt(f)
-        else:
-            return self._load_txt(os.path.join(self.unzipped, 'word', f))
-
+            if self.extension == '.odt':
+                return self._load_txt(os.path.join(self.unzipped, f))
+            elif self.extension == '.docx':
+                return self._load_txt(os.path.join(self.unzipped, 'word', f))
+            else:
+                print("Unknown office suite extension! Aborting.")
+                sys.exit(0)
 
     def _save_txt(self, f, text, check=False):
         """Saves text based files.
@@ -418,21 +403,18 @@ class ToCyr:
                 f = self._checkife(f)
             codecs.open(f, encoding=self.ENC, mode="w").write(text)
 
-
-    def _save_odt(self, f, text):
-        """Save content ODT file."""
+    def _save_office(self, f, text):
+        """Save an office file."""
         if self.USERAM:
             self.zipout.writestr(f, text.encode(self.ENC))
         else:
-            self._save_txt(os.path.join(self.unzipped, f), text)
-
-
-    def _save_docx(self, f, text):
-        """Save file member of DOCX."""
-        if self.USERAM:
-            self.zipout.writestr(f, text.encode(self.ENC))
-        else:
-            self._save_txt(os.path.join(self.unzipped, 'word', f), text)
+            if self.extension == '.odt':
+                self._save_txt(os.path.join(self.unzipped, f), text)
+            elif self.extension == '.docx':
+                self._save_txt(os.path.join(self.unzipped, 'word', f), text)
+            else:
+                print("Unknown office suite extension! Aborting.")
+                sys.exit(0)
 
 
     def _checkifexists(self, f):
