@@ -4,8 +4,8 @@
 Dtknv is a simple tool that converts files containing Serbian Cyrillic
 alphabet into Serbian Latin alphabet.
 
-It converts DOCX and ODT files, as well as all text-based files, if a
-supported extension is supplied.
+It converts DOCX and ODT files, as well as all text-based files, if
+supported extensions are supplied.
 
 PREREQUISITES
 
@@ -13,8 +13,6 @@ Windows: Python 3+
 Linux: python3 for console use; python3-tk for GUI
 
 === CONSOLE ================
-
-This file is a console wrapper for tocyr.
 
 Use the following switches to run the program:
 
@@ -25,6 +23,10 @@ Use the following switches to run the program:
     -r (--recursive)    Recursive conversion. Be careful!
     -s (--show)         Show report while running.
     -c (--conversionreportname) Conversion report name.
+    -f (--nofailsafe)   Abort conversion on the first file failure.
+    -m (--noram)        Unzip odt/docx files on disk, and not in RAM
+                        (slower).
+    -g (--gui)          Show graphical interface (overrides console commands).
 
 Conslole examples:
 
@@ -46,11 +48,28 @@ cknv.py -i /home/me/Documents/myfile.odt -o /home/me/Documents/conv
 
 Convert myfile.odt and store it in conv.
 
+(4)
+cknv.py -g
+
+Show a simple graphical interface.
+
 === GUI ====================
 
-Use DTKnv.py to start a simple graphical interface.
+Double-click on rungui.py to start a simple graphical interface, or
+type cknv.py -g in console.
 
 """
+
+#
+# A checklist before deployment:
+#
+#    - zip mode on?
+#    - failsafe on?
+#    - testing args commented?
+#    - readme updated?
+#    - info about changes updated?
+#    - runs on Linux?
+#
 
 __url__ = "https://gitorious.org/dtknv"
 __author__ = "Romeo Mlinar"
@@ -59,8 +78,6 @@ __license__ = "GNU General Public License v. 3"
 import os
 import sys
 import getopt
-
-from convert.tocyr import ToCyr
 
 __version__ = '0.2'
 
@@ -80,9 +97,6 @@ __version__ = '0.2'
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
-__version__ = '0.1'
-
 def usage():
     """Print help"""
     print(__doc__)
@@ -98,7 +112,7 @@ if __name__ == '__main__':
     #Test ---------------------------------------------------------------------
     #Arguments, just for testing here, on both systems
     if os.name == 'nt':
-        args = '-m -f -r -i D:\\datastore\\tocyr\\in_files -o D:\\datastore\\tocyr\\out_files'
+        args = '-r -i D:\\datastore\\tocyr\\in_files -o D:\\datastore\\tocyr\\out_files'
         args = args + ' '
     else:
         args = '-r -i /home/marw/Documents/testdtknv/test1 -o /home/marw/Documents/testout'
@@ -112,16 +126,20 @@ if __name__ == '__main__':
         sys.exit(2)
     # Try initialising the class:
     try:
+        from convert.tocyr import ToCyr
         c = ToCyr()
         c.SHOW = False
         c.RECURSIVE = False
     except:
-        print('Could not initialise the TocCyr() Aborting.')
+        print('Could not initialise TocCyr() Aborting.')
         sys.exit(2)
+    # Gui variable can override command calls
+    SHOWGUI = False
+    # Command line arguments
     try:
-        supplied, r = getopt.getopt(args, 'i:o:e:c:snrhfm', ['pathin=',
+        supplied, r = getopt.getopt(args, 'i:o:e:c:snrhfmg', ['pathin=',
                     'pathout=', 'encoding=', 'conversionreportname=', 'show',
-                    'names', 'recursive', 'help', 'nofailsafe', 'ram'])
+                    'names', 'recursive', 'help', 'nofailsafe', 'noram', 'gui'])
     except:
         usage()
         sys.exit(2)
@@ -145,7 +163,14 @@ if __name__ == '__main__':
             c.REPORT = a
         elif o in ('-f', '--nofailsafe'):
             c.FAILSAFE = False
-        elif o in ('-m', '--ram'):
-            c.USERAM = True
-    c.run()
-    
+        elif o in ('-m', '--noram'):
+            c.USERAM = False
+        elif o in ('-g', '--gui'):
+            SHOWGUI = True
+            
+    if SHOWGUI == True:
+        del(c)
+        from gui import gui
+        gui.bootgui()
+    else:
+        c.run()
