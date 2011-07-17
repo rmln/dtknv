@@ -97,15 +97,15 @@ if __name__ == '__main__':
     """
     #Test ---------------------------------------------------------------------
     #Arguments, just for testing here, on both systems
-#    if os.name == 'nt':
-#        args = '-r -i D:\\datastore\\tocyr\\in_files -o D:\\datastore\\tocyr\\out_files'
-#        args = args + ' '
-#    else:
-#        args = '-r -i /home/marw/Documents/testdtknv/test1 -o /home/marw/Documents/testout'
-#        args = args + ' '
-#    args = args.split()
+    if os.name == 'nt':
+        args = '-m -f -r -i D:\\datastore\\tocyr\\in_files -o D:\\datastore\\tocyr\\out_files'
+        args = args + ' '
+    else:
+        args = '-r -i /home/marw/Documents/testdtknv/test1 -o /home/marw/Documents/testout'
+        args = args + ' '
+    args = args.split()
     #Test ---------------------------------------------------------------------
-    args = sys.argv[1:]
+    # args = sys.argv[1:] # Uncomment if not testing!
     # If nothing is supplied, show help and exit:
     if len(args) == 0:
         usage()
@@ -119,9 +119,9 @@ if __name__ == '__main__':
         print('Could not initialise the TocCyr() Aborting.')
         sys.exit(2)
     try:
-        supplied, r = getopt.getopt(args, 'i:o:e:c:snrh', ['pathin=',
+        supplied, r = getopt.getopt(args, 'i:o:e:c:snrhfm', ['pathin=',
                     'pathout=', 'encoding=', 'conversionreportname=', 'show',
-                    'names', 'recursive', 'help'])
+                    'names', 'recursive', 'help', 'nofailsafe', 'ram'])
     except:
         usage()
         sys.exit(2)
@@ -143,4 +143,9 @@ if __name__ == '__main__':
             c.RECURSIVE = True
         elif o in ('-c', '--conversionreportname'):
             c.REPORT = a
+        elif o in ('-f', '--nofailsafe'):
+            c.FAILSAFE = False
+        elif o in ('-m', '--ram'):
+            c.USERAM = True
     c.run()
+    

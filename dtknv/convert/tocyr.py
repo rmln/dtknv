@@ -32,6 +32,8 @@ import shutil
 import tempfile
 
 from convert.cyrconv import CirConv
+from formats.formats import OfficeZIP
+import helpers
 from helpers import *
 
 __version__ = "0.5"
@@ -87,7 +89,8 @@ class ToCyr:
     FAILSAFE = True
     # Default file name for simple report after the conversion.
     REPORT = 'dtknt-pregled-konverzije'
-    
+    # Unpack type
+    USERAM = False
 
     def __init__(self):
         """Convert between Latin and Cyrillic scripts."""
@@ -212,7 +215,7 @@ class ToCyr:
         self.extension = getext(f)
         if self.extension in self.TEXTFILES:
             try:
-                text = self._load_txt(f)
+                text = self._load_txt(f, nomem=True)
                 converted_text = self._converttext(text)
                 self._save_txt(outpath, converted_text, check=True)
             except UnicodeEncodeError:
@@ -222,6 +225,8 @@ class ToCyr:
         # Open Office / Libre Office Writer document.
         elif self.extension == 'odt':
             self._unzip(f)
+            if self.USERAM:
+                self._newzip(outpath)
             files = self._filterfiles(self.unzipped, 'xml')
             for odtxml in files:
                 text = self._load_odt(odtxml)
@@ -231,8 +236,9 @@ class ToCyr:
         # MS Office Word document.
         elif self.extension == 'docx':
             self._unzip(f)
-            files = self._filterfiles((os.path.join(self.unzipped,
-                    'word')), 'xml')
+            if self.USERAM:
+                self._newzip(outpath)
+            files = self._filterfiles(self.unzipped, 'xml')
             for wordxml in files:
                 text = self._load_docx(wordxml)
                 self._save_docx(wordxml, self._converttext(text))
@@ -348,7 +354,17 @@ class ToCyr:
 
     def _filterfiles(self, d, ext):
         """Return only files of the extension specified."""
-        return [i for i in os.listdir(d) if getext(i) == ext]
+        if self.USERAM:
+            toconvert = []
+            self.zipother = []
+            for i in self.unzipped.zip.filelist:
+                if os.path.splitext(i.filename)[1] == '.xml':
+                    toconvert.append(i.filename)
+                else:
+                    self.zipother.append(i.filename)
+            return toconvert
+        else:
+            return [i for i in os.listdir(d) if getext(i) == ext]
 
 
     def _filtersupported(self, fs):
@@ -361,19 +377,31 @@ class ToCyr:
         return os.path.join(self.PATHOUT, filename(f))
 
 
-    def _load_txt(self, f):
+    def _load_txt(self, f, nomem=False):
         """Load and return plain text based files."""
-        return codecs.open(f, encoding = self.ENC, mode="r").read()
+        if self.USERAM and not nomem:
+            z = self.unzipped.zip.open(f)
+            encread = codecs.EncodedFile(z, self.ENC, self.ENC).read()
+            ecodedtext = encread.decode(self.ENC)
+            return ecodedtext
+        else:
+            return codecs.open(f, encoding = self.ENC, mode="r").read()
 
 
     def _load_odt(self, f):
         """Load and return content file of ODT."""
-        return self._load_txt(os.path.join(self.unzipped, f))
+        if self.USERAM:
+            return self._load_txt(f)
+        else:
+            return self._load_txt(os.path.join(self.unzipped, f))
 
 
     def _load_docx(self, f):
         """Load and return content file of DOCX."""
-        return self._load_txt(os.path.join(self.unzipped, 'word', f))
+        if self.USERAM:
+            return self._load_txt(f)
+        else:
+            return self._load_txt(os.path.join(self.unzipped, 'word', f))
 
 
     def _save_txt(self, f, text, check=False):
@@ -383,19 +411,28 @@ class ToCyr:
         to saving text-based files. In ODT/DOCX they are
         automatically overwritten.
         """
-        if check:
-            f = self._checkife(f)
-        codecs.open(f, encoding=self.ENC, mode="w").write(text)
+        if self.USERAM:
+            pass
+        else:
+            if check: 
+                f = self._checkife(f)
+            codecs.open(f, encoding=self.ENC, mode="w").write(text)
 
 
     def _save_odt(self, f, text):
         """Save content ODT file."""
-        self._save_txt(os.path.join(self.unzipped, f), text)
+        if self.USERAM:
+            self.zipout.writestr(f, text.encode(self.ENC))
+        else:
+            self._save_txt(os.path.join(self.unzipped, f), text)
 
 
     def _save_docx(self, f, text):
         """Save file member of DOCX."""
-        self._save_txt(os.path.join(self.unzipped, 'word', f), text)
+        if self.USERAM:
+            self.zipout.writestr(f, text.encode(self.ENC))
+        else:
+            self._save_txt(os.path.join(self.unzipped, 'word', f), text)
 
 
     def _checkifexists(self, f):
@@ -413,30 +450,46 @@ class ToCyr:
         # Convert the script of the filename (датотека.txt > datoteka.txt)
         # This has to  be done here, or the program will not find the path.
         #fname = self._converfname(filename(f))
-        fname = filename(f)
-        # Unzipped is the path to the temp subfolder where the file
-        # is to be unzipped.
-        maketmpdir(self.DIRTMP)
-        self.unzipped = makesubdir(self.DIRTMP, fname)
-        z = zipfile.ZipFile(f)
-        z.extractall(self.unzipped)
+        fname = helpers.filename(f)
+        if self.USERAM:
+            self.unzipped = OfficeZIP(f)
+        else:
+            # Unzipped is the path to the temp subfolder where the file
+            # is to be unzipped.
+            maketmpdir(self.DIRTMP)
+            self.unzipped = makesubdir(self.DIRTMP, fname)
+            z = zipfile.ZipFile(f)
+            z.extractall(self.unzipped)
+    
+    def _newzip(self, outpath):
+        """Create new zip object"""
+        self.zipout = zipfile.ZipFile(outpath, mode='w')
 
 
     def _zip(self, path):
         """Zip file the path points to."""
-        if self.conversiontype == 'files':
-            path = self._checkife(path)
-        # Store current working dir so it can be restored later.
-        cwdu = os.getcwd()
-        z = zipfile.ZipFile(path, 'w')
-        os.chdir(self.unzipped)
-        for r, d, files in os.walk('.'):
-            for fz in files:
-                z.write(os.path.join(r, fz))
-        z.close()
-        # Restore working dir.
-        os.chdir(cwdu)
-        shutil.rmtree(self.unzipped)
+        if self.USERAM:
+            # Save into zip the files that did not
+            # need the conversion, to complete the
+            # output zip.
+            for i in self.zipother:
+                content = self.unzipped.zip.read(i)
+                self.zipout.writestr(i, content)
+            self.zipout.close()
+        else:
+            if self.conversiontype == 'files':
+                path = self._checkife(path) # TODO: Check this in ZIP mode
+            # Store current working dir so it can be restored later.
+            cwdu = os.getcwd()
+            z = zipfile.ZipFile(path, 'w')
+            os.chdir(self.unzipped)
+            for r, d, files in os.walk('.'):
+                for fz in files:
+                    z.write(os.path.join(r, fz))
+            z.close()
+            # Restore working dir.
+            os.chdir(cwdu)
+            shutil.rmtree(self.unzipped)
 
 
     def _apppath(self):
