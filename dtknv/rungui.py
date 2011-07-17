@@ -7,4 +7,5 @@ Start the GUI.
 
 from gui import gui
 
-gui.bootgui()
+if __name__ == '__main__':
+    gui.bootgui()

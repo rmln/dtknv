@@ -556,7 +556,3 @@ def bootgui():
     #root.resizable(0,0)
     app = TocyrGui(master=root)
     app.mainloop()
-
-if __name__ == '__main__':
-    bootgui()
-
