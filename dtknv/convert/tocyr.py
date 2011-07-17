@@ -90,7 +90,7 @@ class ToCyr:
     # Default file name for simple report after the conversion.
     REPORT = 'dtknt-pregled-konverzije'
     # Unpack type
-    USERAM = False
+    USERAM = True
 
     def __init__(self):
         """Convert between Latin and Cyrillic scripts."""
@@ -149,11 +149,19 @@ class ToCyr:
         """Initiate the report file and return the handle."""
         d = getdatetime(f='long')
         self.repfilename = self.REPORT + '_' + d + '_.txt'
-        f = os.path.join(self._apppath(), self.repfilename)
+        f = os.path.join('..', self.repfilename)
+        #if self.SHOW:
+        #    print('Izvjestaj o radu je u:\r\n', f)
         repfile = codecs.open(f, mode='w', encoding=self.ENC)
+        if self.USERAM:
+            mode = 'Program datoteke raspakiva u RAM (brži način).\r\n'
+        else:
+            mode = 'Program datoteke raspakiva na disk\r\n(sporiji način, ' + \
+            'pogledajte podešavanja).\r\n'
         repfile.write('DTknv datoteka o radu\r\n')
         repfile.write('Verzija programa: %s\r\n' % __version__)
         repfile.write('Datum/vrijeme: %s\r\n' % d)
+        repfile.write(mode)
         repfile.write('-----------------------------------\r\n\r\n')
         return repfile
 
@@ -381,13 +389,8 @@ class ToCyr:
         if self.USERAM:
             return self._load_txt(f)
         else:
-            if self.extension == '.odt':
-                return self._load_txt(os.path.join(self.unzipped, f))
-            elif self.extension == '.docx':
-                return self._load_txt(os.path.join(self.unzipped, 'word', f))
-            else:
-                print("Unknown office suite extension! Aborting.")
-                sys.exit(0)
+            return self._load_txt(os.path.join(self.unzipped, f))
+            
 
     def _save_txt(self, f, text, check=False):
         """Saves text based files.
@@ -408,13 +411,7 @@ class ToCyr:
         if self.USERAM:
             self.zipout.writestr(f, text.encode(self.ENC))
         else:
-            if self.extension == '.odt':
-                self._save_txt(os.path.join(self.unzipped, f), text)
-            elif self.extension == '.docx':
-                self._save_txt(os.path.join(self.unzipped, 'word', f), text)
-            else:
-                print("Unknown office suite extension! Aborting.")
-                sys.exit(0)
+            self._save_txt(os.path.join(self.unzipped, f), text)
 
 
     def _checkifexists(self, f):
