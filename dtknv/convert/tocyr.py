@@ -225,7 +225,7 @@ class ToCyr:
             try:
                 text = self._load_txt(f, nomem=True)
                 converted_text = self._converttext(text)
-                self._save_txt(outpath, converted_text, check=True)
+                self._save_txt(outpath, converted_text, check=True, nomem=True)
             except UnicodeEncodeError:
                 print('ERROR reading in ._load_txt: %s' % f.encode(self.ENC))
                 return('Error in conversion!')
@@ -392,14 +392,14 @@ class ToCyr:
             return self._load_txt(os.path.join(self.unzipped, f))
             
 
-    def _save_txt(self, f, text, check=False):
+    def _save_txt(self, f, text, check=False, nomem=False):
         """Saves text based files.
         
         Check if the file already exists. This applies only
         to saving text-based files. In ODT/DOCX they are
         automatically overwritten.
         """
-        if self.USERAM:
+        if self.USERAM and not nomem:
             pass
         else:
             if check: 
