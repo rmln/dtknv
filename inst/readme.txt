@@ -1,8 +1,8 @@
 Dtknv is a simple tool that converts files containing Serbian Cyrillic
 alphabet into Serbian Latin alphabet.
 
-It converts DOCX and ODT files, as well as all text-based files, if the
-extensions are supplied.
+It converts DOCX and ODT files, as well as all text-based files, if
+supported extensions are supplied.
 
 PREREQUISITES
 
@@ -10,8 +10,6 @@ Windows: Python 3+
 Linux: python3 for console use; python3-tk for GUI
 
 === CONSOLE ================
-
-This file is a console wrapper for tocyr.
 
 Use the following switches to run the program:
 
@@ -22,6 +20,10 @@ Use the following switches to run the program:
     -r (--recursive)    Recursive conversion. Be careful!
     -s (--show)         Show report while running.
     -c (--conversionreportname) Conversion report name.
+    -f (--nofailsafe)   Abort conversion on the first file failure.
+    -m (--noram)        Unzip odt/docx files on disk, and not in RAM
+                        (slower).
+    -g (--gui)          Show graphical interface (overrides console commands).
 
 Conslole examples:
 
@@ -43,9 +45,16 @@ cknv.py -i /home/me/Documents/myfile.odt -o /home/me/Documents/conv
 
 Convert myfile.odt and store it in conv.
 
+(4)
+cknv.py -g
+
+Show a simple graphical interface.
+
 === GUI ====================
 
-Use DTKnv.py to start a simple graphical interface.
+Double-click on rungui.py to start a simple graphical interface, or
+type cknv.py -g in console.
+
 
 ABOUT
 Alpha version.

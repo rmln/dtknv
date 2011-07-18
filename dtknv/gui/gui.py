@@ -338,7 +338,7 @@ class TocyrGui(tk.Frame):
     def about(self):
         """About dialog"""
         text =  "DT Konvertor pisama (dtknv)" + \
-                "\n\nRazvojna verzija %s, maj 2011." % version.__version__ + \
+                "\n\nRazvojna verzija %s, jul 2011." % version.__version__ + \
                 "\nVerzija konvertora: %s" % tocyr.__version__ + \
                 "\nVerzija sučelja: %s" % __version__ + \
                 "\nOS: %s" % os.name + \

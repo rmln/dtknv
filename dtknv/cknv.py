@@ -79,7 +79,7 @@ import os
 import sys
 import getopt
 
-__version__ = '0.2'
+__version__ = '0.3'
 
 #
 #    Copyright (C) 2011  Romeo Mlinar (mlinar [a] languagebits.com)
