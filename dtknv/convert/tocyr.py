@@ -35,6 +35,7 @@ from convert.cyrconv import CirConv
 from formats.formats import OfficeZIP
 import helpers
 from helpers import *
+import version
 
 __version__ = "0.6"
 __url__ = "https://gitorious.org/dtknv"
@@ -159,7 +160,7 @@ class ToCyr:
             mode = 'Program datoteke raspakiva na disk\r\n(sporiji način, ' + \
             'pogledajte podešavanja).\r\n'
         repfile.write('DTknv datoteka o radu\r\n')
-        repfile.write('Verzija programa: %s\r\n' % __version__)
+        repfile.write('Verzija programa: %s\r\n' % version.__version__)
         repfile.write('Datum/vrijeme: %s\r\n' % d)
         repfile.write(mode)
         repfile.write('-----------------------------------\r\n\r\n')
