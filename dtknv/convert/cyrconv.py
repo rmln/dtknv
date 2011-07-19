@@ -88,13 +88,15 @@ class CirConv:
 
     def _charreplace(self, text):
         """Replace characters in the input text."""
-        len_in = len(text)
+        if self.calc_stats: # Don't bother with len() if no stats are needed
+            len_in = len(text)
+        # Replace the characters
         for letter in self.charkeys:
             if letter in text:
                 text = text.replace(letter, self.charmap[letter])
-        len_out = len(text)
+        # Stats needed?
         if self.calc_stats:
-            self._stats(len_in, len_out) 
+            self._stats(len_in, len(text)) 
         return text
 
     
