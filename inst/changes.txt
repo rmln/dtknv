@@ -1,4 +1,4 @@
-0.3.3 beta [ July 2011]
+0.3.3 beta [18 July 2011]
 --------------
 * Added (by default) unzipping OTD/DOCX in RAM
 * New console switches
