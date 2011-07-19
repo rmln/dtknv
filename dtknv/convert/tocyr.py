@@ -31,7 +31,7 @@ import zipfile
 import shutil
 import tempfile
 
-from convert.cyrconv import CirConv
+from tocir.cyrconv import CirConv 
 from formats.formats import OfficeZIP
 import helpers
 from helpers import *

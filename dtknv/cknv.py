@@ -111,15 +111,15 @@ if __name__ == '__main__':
     """
     #Test ---------------------------------------------------------------------
     #Arguments, just for testing here, on both systems
-    #if os.name == 'nt':
-    #    args = '-r -i D:\\datastore\\tocyr\\in_files -o D:\\datastore\\tocyr\\out_files'
-    #    args = args + ' '
-    #else:
-    #    args = '-r -i /home/marw/Documents/testdtknv/test1 -o /home/marw/Documents/testout'
-    #    args = args + ' '
-    #args = args.split()
+    if os.name == 'nt':
+        args = '-r -i D:\\datastore\\tocyr\\in_files -o D:\\datastore\\tocyr\\out_files'
+        args = args + ' '
+    else:
+        args = '-r -i /home/marw/Documents/testdtknv/test1 -o /home/marw/Documents/testout'
+        args = args + ' '
+    args = args.split()
     #Test ---------------------------------------------------------------------
-    args = sys.argv[1:] # Uncomment if not testing!
+    #args = sys.argv[1:] # Uncomment if not testing!
     # If nothing is supplied, show help and exit:
     if len(args) == 0:
         usage()
@@ -131,8 +131,7 @@ if __name__ == '__main__':
         c.SHOW = False
         c.RECURSIVE = False
     except:
-        print('Could not initialise TocCyr() Aborting.')
-        sys.exit(2)
+        raise RuntimeError('Could not initialise TocCyr.')
     # Gui variable can override command calls
     SHOWGUI = False
     # Command line arguments
