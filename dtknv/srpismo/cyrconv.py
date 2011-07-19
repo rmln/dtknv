@@ -40,6 +40,11 @@ __url__ = "https://gitorious.org/dtknv"
 __author__ = "Romeo Mlinar"
 __license__ = "GNU General Public License v. 3"
 
+import os
+import codecs
+
+RESPATH = os.path.join(os.path.dirname(__file__), '..', 'resources', 'cyrlatdiff')
+
 cyr = {'А':'A', 'Б':'B', 'В':'V', 'Г':'G', 'Д':'D', 'Е':'E',
        'Ж':'Ž', 'З':'Z', 'И':'I', 'Ј':'J', 'К':'K', 'Л':'L',
        'М':'M', 'Н':'N', 'Њ':'Nj','О':'O', 'П':'P', 'Р':'R',
@@ -51,27 +56,72 @@ cyr = {'А':'A', 'Б':'B', 'В':'V', 'Г':'G', 'Д':'D', 'Е':'E',
        'р':'r', 'с':'s', 'т':'t', 'ћ':'ć', 'у':'u', 'ф':'f',
        'х':'h', 'ц':'c', 'ч':'č', 'џ':'dž','ш':'š', 'ђ':'đ'}
 
+lat_resolutions = {'NJ':'Њ',
+                   'Nj':'Њ',
+                   'nJ':'нЈ',
+                   'LJ':'љ',
+                   'Lj':'љ',
+                   'lJ':'лЈ',
+                   'DŽ':'Џ',
+                   'Dž':'Џ',
+                   'dŽ':'дЖ',}
+
 class CirConv:
     """Converts Cyrillic script to Latin."""
+        
+    stats = {}
         
     def __init__(self, text='', mode="tolat", stats=False):
         """Initiate the class."""
         self.text = text
         self.mode = mode
         self.calc_stats = stats
-        self.stats_char_original = self.calc_stats
-        self.stats_char_replaced = self.calc_stats
+        self.stats['char_original'] = self.calc_stats
+        self.stats['char_replaced'] = self.calc_stats
         
         # Raise TypeError if 'text' is not a character
         # object.
         if not isinstance(text, str):
             raise TypeError('CirConv accepts text only, %s is rejected.' % type(text))
-        # Make character maps.
-        self._make_charkeys()
-
+        # Load latdiff file.
+        if mode == 'tocyr':
+            cyrlatdiff = self._load_latdif()
+            # Add variants
+            self.cyr_latdiff = cyrlatdiff[0] + self._make_variants(cyrlatdiff[0])
+            self.lat_latdiff = cyrlatdiff[1] + self._make_variants(cyrlatdiff[1])
+        
+    def _load_latdif(self):
+        """Load cirlatdif.txt file."""
+        fcyr = os.path.join(RESPATH, 'cyr_cyrlatdiff.txt')
+        flat = os.path.join(RESPATH, 'lat_cyrlatdiff.txt')
+        cyr_words = codecs.open(fcyr, mode='r', 
+                                   encoding='utf-8').readlines()
+        lat_words = codecs.open(flat, mode='r', 
+                                   encoding='utf-8').readlines()
+        if not len(lat_words) == len(cyr_words):
+            raise ValueError('Cyrlatdiff lists do not match.')
+        # Clean the words from spaces and breaks.
+        cyr_words = [c.strip() for c in cyr_words]
+        lat_words = [c.strip() for c in lat_words]
+        return [cyr_words, lat_words]
+    
+    def _make_variants(self, words):
+        """Make variants of the words."""
+        variants = []
+        for word in words:
+            variants.append(word.upper())
+            variants.append(word.capitalize())
+        return variants
 
     def convert(self):
         """Convert the text and place it into .result. No return."""
+        # Make character maps.
+        self._make_charkeys()
+        # Conversion to Cyrillic needs some preparations
+        if self.mode == 'tocyr':
+            self.text = self._custom_words(self.text)
+            self.text = self._prepare_cyrillic(self.text)
+        #Convert!
         self.result = self._charreplace(self.text)
 
     
@@ -84,6 +134,22 @@ class CirConv:
         else:
             raise KeyError
         self.charkeys = self.charmap.keys() 
+        
+    def _prepare_cyrillic(self, text):
+        """Prepare text for conversion to Cyrillic"""
+        lat_keys = lat_resolutions.keys()
+        for letter in lat_keys:
+            if letter in text:
+                text = text.replace(letter, cyr_resolutions[letter])
+        return text
+    
+    def _custom_words(self, text):
+        """Replace custom selected words"""
+        w_number = len(self.lat_latdiff)
+        for i in range(w_number):
+            if self.lat_latdiff[i] in text:
+                text = text.replace(self.lat_latdiff[i], self.cyr_latdiff[i])
+        return text
 
 
     def _charreplace(self, text):
@@ -102,8 +168,8 @@ class CirConv:
     
     def _stats(self, len_in, len_out):
         """Stats about conversion"""
-        self.stats_char_original = len_in
-        self.stats_char_replaced = len_out
+        self.stats['char_original'] = len_in
+        self.stats['char_replaced'] = len_out
 
 
     def get_converted(self):

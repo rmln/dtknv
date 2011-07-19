@@ -32,10 +32,9 @@ from tkinter import filedialog
 from tkinter import messagebox
 from functools import partial
 
-
 from convert import tocyr
 from convert.tocyr import ToCyr
-from convert.cyrconv import CirConv
+from srpismo.cyrconv import CirConv
 
 import version
 
@@ -69,7 +68,7 @@ class TocyrGui(tk.Frame):
         self.create_widgets()
         self.updatestates()
         #Script conversion class
-        self.tolatin = CirConv()
+        self.tolatin = CirConv(mode='tocyr')
         # Global binds
         self.bind_class('Text', '<Control-a>', self.ctext_selectall)
 
