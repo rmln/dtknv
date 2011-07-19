@@ -1,8 +1,22 @@
 #! /usr/bin/python3
 """
-
 Converts Cyrillic script to Latin.
 
+Use:
+
+cyrillic_text = 'На ливади коњ ућустечен и расћустечен!'
+
+converted = CirConv(text=cyrillic_text, stats=True)
+latin_text =  converted.get_converted()
+
+print(latin_text)
+> Na livadi konj ućustečen i rasćustečen!
+
+print('Characters in original text: ', converted.stats_char_original)
+> Characters in original text:  38
+
+print('Characters in replaced text: ', converted.stats_char_replaced)
+> Characters in replaced text:  39
 """
 
 #
@@ -21,7 +35,7 @@ Converts Cyrillic script to Latin.
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-__version__ = '1.2'
+__version__ = '1.3'
 __url__ = "https://gitorious.org/dtknv"
 __author__ = "Romeo Mlinar"
 __license__ = "GNU General Public License v. 3"
@@ -38,33 +52,57 @@ cyr = {'А':'A', 'Б':'B', 'В':'V', 'Г':'G', 'Д':'D', 'Е':'E',
        'х':'h', 'ц':'c', 'ч':'č', 'џ':'dž','ш':'š', 'ђ':'đ'}
 
 class CirConv:
-
-    def __init__(self, text='', mode="tolat"):
-        """start the class"""
+    """Converts Cyrillic script to Latin."""
+        
+    def __init__(self, text='', mode="tolat", stats=False):
+        """Initiate the class."""
         self.text = text
         self.mode = mode
-        if mode == "tolat":
-            self.charmap = cyr
-        elif mode == "tocyr":
-            self.charmap = dict([v,k] for k,v in cyr.items())
-        else:
-            raise KeyError("Unesite tolat ili tocyr za konverziju.")
+        self.calc_stats = stats
+        self.stats_char_original = self.calc_stats
+        self.stats_char_replaced = self.calc_stats
+        
+        # Raise TypeError if 'text' is not a character
+        # object.
+        if not isinstance(text, str):
+            raise TypeError('CirConv accepts text only, %s is rejected.' % type(text))
+        # Make character maps.
+        self._make_charkeys()
+
 
     def convert(self):
         """Convert the text and place it into .result. No return."""
         self.result = self._charreplace(self.text)
 
+    
+    def _make_charkeys(self):
+        """Make dictionary for character replacement"""
+        if self.mode == "tolat":
+            self.charmap = cyr
+        elif self.mode == "tocyr":
+            self.charmap = dict([v,k] for k,v in cyr.items())
+        else:
+            raise KeyError
+        self.charkeys = self.charmap.keys() 
+
+
     def _charreplace(self, text):
-        """Replace characters in text"""
-        # Check if text is NoneType
-        if text == None:
-            return text
-        
-        charkeys = self.charmap.keys()
-        for letter in charkeys:
+        """Replace characters in the input text."""
+        len_in = len(text)
+        for letter in self.charkeys:
             if letter in text:
                 text = text.replace(letter, self.charmap[letter])
+        len_out = len(text)
+        if self.calc_stats:
+            self._stats(len_in, len_out) 
         return text
+
+    
+    def _stats(self, len_in, len_out):
+        """Stats about conversion"""
+        self.stats_char_original = len_in
+        self.stats_char_replaced = len_out
+
 
     def get_converted(self):
         """"Return the converted text."""
