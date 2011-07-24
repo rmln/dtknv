@@ -59,7 +59,7 @@ class TocyrGui(tk.Frame):
         self.filecalc['path'] = 0
         self.filecalc['filecount'] = 0
         self.filecalc['filesize'] = 0
-        # Initalise Tk stuff
+        # Initialise Tk stuff
         tk.Frame.__init__(self, master)
         self.grid()
         #Title
@@ -68,7 +68,8 @@ class TocyrGui(tk.Frame):
         self.create_widgets()
         self.updatestates()
         #Script conversion class
-        self.tolatin = CirConv(mode='tocyr')
+        self.tolatin = CirConv(mode='tolat')
+        self.tocyrillic = CirConv(mode='tocyr')
         # Global binds
         self.bind_class('Text', '<Control-a>', self.ctext_selectall)
 
@@ -238,17 +239,24 @@ class TocyrGui(tk.Frame):
         # Buttons
         # Frame:
         fra_buttons2 = tk.Frame(fra_textconv)
-        #1
-        btn_converttext = tk.Button(fra_buttons2)
-        btn_converttext['text'] = 'Konvertuj tekst'
-        btn_converttext['command'] = command=partial(self.dotext,
-                                                     act = 'convert')
-        btn_converttext.grid(column=0, row=0, padx=2, pady=2)
-        #2
+        # 1
+        btn_converttext_2lat = tk.Button(fra_buttons2)
+        btn_converttext_2lat['text'] = 'Konvertuj (ćir. > lat.)'
+        btn_converttext_2lat['command'] = command=partial(self.dotext,
+                                                     act = 'tolat')
+        btn_converttext_2lat.grid(column=0, row=0, padx=2, pady=2)
+        # 2
+        btn_converttext_2cyr = tk.Button(fra_buttons2)
+        btn_converttext_2cyr['text'] = 'Konvertuj (lat. > ćir.)'
+        btn_converttext_2cyr['command'] = command=partial(self.dotext,
+                                                     act = 'tocyr')
+        btn_converttext_2cyr.grid(column=1, row=0, padx=2, pady=2)
+        # 3
         btn_showfilesdirs = tk.Button(fra_buttons2)
         btn_showfilesdirs['text'] = 'Konvertuj datoteke...'
         btn_showfilesdirs['command'] = self.show_filesdirs
-        btn_showfilesdirs.grid(column=1, row=0, padx=2, pady=2)
+        btn_showfilesdirs.grid(column=0, row=2, columnspan=2, padx=2, pady=2, sticky='EW')
+        
         # Pack frames
         fra_buttons2.grid(column=0, row=1)
         fra_textconv.grid(sticky='snew')
@@ -346,22 +354,28 @@ class TocyrGui(tk.Frame):
     
     def dotext(self, act='del'):
         """Misc operations for main text entry / conversion"""
-        if act == 'convert':
+        if (act == 'tocyr') or (act =='tolat'):
             text = self.txt_text.get(1.0, 'end')
             try:
-                # convert text to Latin
-                converted_text = self.get_converedtext(text)
-                # delete text in text widget
+            # convert text to Latin
+                converted_text = self.get_converedtext(text, act)
+            # delete text in text widget
                 self.txt_text.delete(1.0, 'end')
-                # insert converted text
+            # insert converted text
                 self.txt_text.insert(1.0, converted_text)
             except:
-                print('Could not convert text!')
+                print('Konverzija nije uspjela!')
     
-    def get_converedtext(self, text):
-        """Return convertd text"""
-        self.tolatin.text = text
-        return self.tolatin.get_converted()
+    def get_converedtext(self, text, mode):
+        """Return converted text"""
+        if mode == 'tolat':
+            self.tolatin.text = text
+            return self.tolatin.get_converted()
+        elif mode == 'tocyr':
+            self.tocyrillic.text = text
+            return self.tocyrillic.get_converted()
+        else:
+            raise ValueError('Mode can be only tolat or tocyr.')
     
     def get_abouttext(self):
         """Return text about the current setup"""
