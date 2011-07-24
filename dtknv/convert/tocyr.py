@@ -33,6 +33,8 @@ import tempfile
 
 from srpismo.cyrconv import CirConv 
 from formats.formats import OfficeZIP
+from convert.report import Report
+
 import helpers
 from helpers import *
 import version
@@ -98,7 +100,6 @@ class ToCyr:
         self.convertor = CirConv()
         self.conversiontype = None
 
-
     def run(self):
         """Start the conversion."""
         # Set temporary directory and add it the affix.
@@ -124,14 +125,14 @@ class ToCyr:
             self.files_space = os.path.getsize(self.PATHIN)
             # Open lf log file, try converting and save
             # the report.
-            lf = self._initreport()
+            self.report = Report(cn=self)
             try:
                 self._convertfile(self.PATHIN)
                 msg = 'Konvertovana datoteka %s' % self.PATHIN
             except:
                 msg = 'Greška, nije konvertovano: %s' % self.PATHIN
             print(msg)
-            lf.write(msg)
+            self.report.write(msg)
         elif self.conversiontype == 'dir':
             self._convertdir()
         else:
@@ -144,27 +145,6 @@ class ToCyr:
             shutil.rmtree(self.DIRTMP)
         except:
             print('Could not remove tmp dir. Gracefully ignoring this...')
-
-
-    def _initreport(self):
-        """Initiate the report file and return the handle."""
-        d = getdatetime(f='long')
-        self.repfilename = self.REPORT + '_' + d + '_.txt'
-        f = os.path.join('..', self.repfilename)
-        #if self.SHOW:
-        #    print('Izvjestaj o radu je u:\r\n', f)
-        repfile = codecs.open(f, mode='w', encoding=self.ENC)
-        if self.USERAM:
-            mode = 'Program datoteke raspakiva u RAM (brži način).\r\n'
-        else:
-            mode = 'Program datoteke raspakiva na disk\r\n(sporiji način, ' + \
-            'pogledajte podešavanja).\r\n'
-        repfile.write('DTknv datoteka o radu\r\n')
-        repfile.write('Verzija programa: %s\r\n' % version.__version__)
-        repfile.write('Datum/vrijeme: %s\r\n' % d)
-        repfile.write(mode)
-        repfile.write('-----------------------------------\r\n\r\n')
-        return repfile
 
 
     def _outpathrec(self, f):
@@ -312,20 +292,21 @@ class ToCyr:
         """Iterate over items and convert."""
         # Convert all files in the loop:
         if self.FAILSAFE:
-            repfile = self._initreport()
+            self.report = Report(cn=self)
         for f in loopover:
             if self.SHOW:
                 print('Ucitava se %s' % f.encode(self.ENC))
             if self.FAILSAFE:
                 try:
                     self._convertfile(f)
-                    repfile.write('OK: %s\r\n' % f)
+                    self.report.write('OK: %s\r\n' % f)
                 except:
                     print('\tOps, greska! Ova datoteka nije konvertovana...')
-                    repfile.write('GREŠKA: %s\r\n' % f)
+                    self.report.write('GREŠKA: %s\r\n' % f)
             else:
                 self._convertfile(f)
         print('Konverzija zavsena. Provjerite izvjestaj.')
+        self.report.repopened.close()
 
 
     def _updatecounter(self, f):
