@@ -140,7 +140,7 @@ class CirConv:
         lat_keys = lat_resolutions.keys()
         for letter in lat_keys:
             if letter in text:
-                text = text.replace(letter, cyr_resolutions[letter])
+                text = text.replace(letter, lat_resolutions[letter])
         return text
     
     def _custom_words(self, text):
