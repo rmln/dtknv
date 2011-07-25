@@ -47,8 +47,7 @@ class Report:
     def _openfile(self):
         """Open the report file."""
         f = os.path.join('..', self._filename())
-        #if self.cn.SHOW:
-        if True:
+        if self.cn.SHOW:
             print('Izvjestaj o radu je u:\r\n', f)
         opened = codecs.open(f, mode='w', encoding=self.cn.ENC)
         self.file = f
@@ -67,8 +66,8 @@ class Report:
         t = 70*'-' + '\r\n'
         t = t + 'DTknv datoteka o radu\r\n'
         t = t + 70*'-' + '\r\n'
-        t = t +'Verzija programa: %s\r\n' % version.__version__
-        t = t +'Datum/vrijeme: %s\r\n' % self.dt
+        t = t + 'Verzija programa: %s\r\n' % version.__version__
+        t = t + 'Datum/vrijeme: %s\r\n' % self.dt
         t = t + 'Raspakivanje: %s' % mode
         t = t + 70*'-' + '\r\n'
         self.write(t)

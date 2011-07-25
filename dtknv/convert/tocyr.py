@@ -142,7 +142,7 @@ class ToCyr:
         elif self.conversiontype == 'dir':
             self._convertdir()
         else:
-            print('ConversionNotDefinedError')
+            raise ValueError('Conversion must be "files" or "dir".')
             
         if self.SHOW:
             print('Konverzija zavrsena.')

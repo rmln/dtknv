@@ -331,7 +331,7 @@ class TocyrGui(tk.Frame):
 
     def show_mail(self, event):
         """Open a window showing the email address."""
-        text = 'Prijavu greške (ili predloge) pošaljite na \n' + \
+        text = 'Greške u radu programa ili predloge pošaljite na \n' + \
             'cheesepy@gmail.com \n\n Hvala! :)'
         messagebox.showinfo("Kontakt", text) 
         
