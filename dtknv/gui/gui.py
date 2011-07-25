@@ -509,12 +509,19 @@ class TocyrGui(tk.Frame):
             time.sleep(0.3)
             if not self.th.is_alive():
                 try:
-                    reptext = "OK! Provjerite datoteke i izvještaj %s." % \
+                    reptext = "Provjerite datoteke i izvještaj %s." % \
                     self.tocyrclass.report.file
                 except AttributeError:
-                    reptext = 'Ok! (Izvještaj nije bio uključen prilikom konverzije.)'
+                    reptext = '(Bez izvještaja.)'
+                #
+                if self.tocyrclass.errors_during_work:
+                    reptext = 'Završeno, uz greške. ' + reptext
+                    repcol = "orange"
+                else:
+                    reptext = 'Završeno. ' + reptext
+                    repcol = "green"
                 self.lbl_info["text"] = reptext
-                self.lbl_info["bg"] = "green"
+                self.lbl_info["bg"] = repcol 
                 self.btn_run["state"] =  "disabled"
                 break
 

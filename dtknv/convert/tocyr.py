@@ -111,6 +111,10 @@ class ToCyr:
         # the conversion progress.
         self.pcounter = {'p':0, 'f':None, 'i':0}
         
+        # Remains false if no error occurs during
+        # conversion.
+        self.errors_during_work = False
+        
         if os.path.isdir(self.PATHIN):
             self.conversiontype = 'dir'
         elif os.path.isfile(self.PATHIN):
@@ -130,8 +134,10 @@ class ToCyr:
                 self._convertfile(self.PATHIN)
                 msg = 'Konvertovana datoteka %s' % self.PATHIN
             except:
+                self.errors_during_work = True
                 msg = 'Greška, nije konvertovano: %s' % self.PATHIN
-            print(msg)
+                if self.SHOW:
+                    print(msg)
             self.report.write(msg)
         elif self.conversiontype == 'dir':
             self._convertdir()
@@ -303,6 +309,7 @@ class ToCyr:
                 except:
                     print('\tOps, greska! Ova datoteka nije konvertovana...')
                     self.report.write('GREŠKA: %s\r\n' % f)
+                    self.errors_during_work = True
             else:
                 self._convertfile(f)
         print('Konverzija zavsena. Provjerite izvjestaj, ako je ukljucen.')
