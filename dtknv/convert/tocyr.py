@@ -91,7 +91,7 @@ class ToCyr:
     # A switch to prevent too much partying by the script.
     FAILSAFE = True
     # Default file name for simple report after the conversion.
-    REPORT = 'dtknt-pregled-konverzije'
+    REPORT = 'dtknv-'
     # Unpack type
     USERAM = True
 
@@ -305,8 +305,12 @@ class ToCyr:
                     self.report.write('GREŠKA: %s\r\n' % f)
             else:
                 self._convertfile(f)
-        print('Konverzija zavsena. Provjerite izvjestaj.')
-        self.report.repopened.close()
+        print('Konverzija zavsena. Provjerite izvjestaj, ako je ukljucen.')
+        
+        try:
+            self.report.close()
+        except:
+            pass
 
 
     def _updatecounter(self, f):

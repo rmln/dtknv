@@ -494,6 +494,7 @@ class TocyrGui(tk.Frame):
         self.tocyrclass.CONVERTFNAMES = self.fnames.get()
         self.tocyrclass.SHOWPERC = True
         self.tocyrclass.CALLEDFROM = 'DTKnv, v. %s' % __version__
+        self.tocyrclass.FAILSAFE = True
         # Run
         self.th = threading.Thread(target = self.tocyrclass.run)
         self.th.start()
@@ -507,8 +508,12 @@ class TocyrGui(tk.Frame):
             self.lbl_info.update()
             time.sleep(0.3)
             if not self.th.is_alive():
-                self.lbl_info["text"] = "OK! Provjerite datoteke i %s" % \
-                                        self.tocyrclass.repfilename
+                try:
+                    reptext = "OK! Provjerite datoteke i izvještaj %s." % \
+                    self.tocyrclass.report.file
+                except AttributeError:
+                    reptext = 'Ok! (Izvještaj nije bio uključen prilikom konverzije.)'
+                self.lbl_info["text"] = reptext
                 self.lbl_info["bg"] = "green"
                 self.btn_run["state"] =  "disabled"
                 break

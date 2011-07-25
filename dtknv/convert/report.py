@@ -51,6 +51,7 @@ class Report:
         if True:
             print('Izvjestaj o radu je u:\r\n', f)
         opened = codecs.open(f, mode='w', encoding=self.cn.ENC)
+        self.file = f
         return opened 
     
     def _filename(self):
