@@ -14,30 +14,41 @@ echo Prave se folderi...
 md D:\apps\portablepy\dist\%dir%\dtknv
 md D:\apps\portablepy\dist\%dir%\dtknv\convert
 md D:\apps\portablepy\dist\%dir%\dtknv\formats
+md D:\apps\portablepy\dist\%dir%\dtknv\srpismo
 md D:\apps\portablepy\dist\%dir%\dtknv\gui
+md D:\apps\portablepy\dist\%dir%\dtknv\resources\cyrlatdiff
 
 REM echo Brisanje setup.py datoteke
 REM del D:\code\dtknv\src\setup.py
 
 echo Kopiranje datoteka txt u dtknv...
-copy D:\code\dtknv\inst\changes.txt D:\apps\portablepy\dist\%dir%
-copy D:\code\dtknv\inst\gpl.txt D:\apps\portablepy\dist\%dir%
-copy D:\code\dtknv\inst\readme.txt D:\apps\portablepy\dist\%dir%
+copy D:\code\dtknvrep\inst\changes.txt D:\apps\portablepy\dist\%dir%
+copy D:\code\dtknvrep\inst\gpl.txt D:\apps\portablepy\dist\%dir%
+copy D:\code\dtknvrep\inst\readme.txt D:\apps\portablepy\dist\%dir%
 
 echo Kopiranje pokrenime.bat datoteke...
-copy D:\code\dtknv\inst\pokrenime.bat D:\apps\portablepy\dist\%dir%
+copy D:\code\dtknvrep\inst\pokrenime.bat D:\apps\portablepy\dist\%dir%
 
 echo Kopiranje py datoteka u dtknv...
-copy D:\code\dtknv\dtknv\*.py D:\apps\portablepy\dist\%dir%\dtknv
+copy D:\code\dtknvrep\dtknv\*.py D:\apps\portablepy\dist\%dir%\dtknv
 
 echo Kopiranje py datoteka u convert...
-copy D:\code\dtknv\dtknv\convert\*.py D:\apps\portablepy\dist\%dir%\dtknv\convert
+copy D:\code\dtknvrep\dtknv\convert\*.py D:\apps\portablepy\dist\%dir%\dtknv\convert
 
 echo Kopiranje py datoteka u formats...
-copy D:\code\dtknv\dtknv\formats\*.py D:\apps\portablepy\dist\%dir%\dtknv\formats
+copy D:\code\dtknvrep\dtknv\formats\*.py D:\apps\portablepy\dist\%dir%\dtknv\formats
+
+echo Kopiranje py datoteka u srpismo...
+copy D:\code\dtknvrep\dtknv\srpismo\*.py D:\apps\portablepy\dist\%dir%\dtknv\srpismo
 
 echo Kopiranje py datoteka u gui...
-copy D:\code\dtknv\dtknv\gui\*.py D:\apps\portablepy\dist\%dir%\dtknv\gui
+copy D:\code\dtknvrep\dtknv\gui\*.py D:\apps\portablepy\dist\%dir%\dtknv\gui
+
+REM RESOURCES
+echo Kopiranje datoteka u resources...
+copy D:\code\dtknvrep\dtknv\resources\cyrlatdiff\cyr_cyrlatdiff.txt D:\apps\portablepy\dist\%dir%\dtknv\resources\cyrlatdiff
+copy D:\code\dtknvrep\dtknv\resources\cyrlatdiff\lat_cyrlatdiff.txt D:\apps\portablepy\dist\%dir%\dtknv\resources\cyrlatdiff
+
 
 echo Zipovanje...
 D:\apps\7za920\7za.exe a -tzip D:\apps\portablepy\dist\%dir%c.zip D:\apps\portablepy\dist\%dir%\dtknv
