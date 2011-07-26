@@ -112,10 +112,10 @@ if __name__ == '__main__':
     #Test ---------------------------------------------------------------------
     #Arguments, just for testing here, on both systems
     if os.name == 'nt':
-        args = '-r -i D:\\datastore\\tocyr\\in_files -o D:\\datastore\\tocyr\\out_files'
+        args = '-r -i D:\\datastore\\tocyr\\in_files1f\\ -o D:\\datastore\\tocyr\\out_files'
         args = args + ' '
     else:
-        args = '-r -i /home/marw/Documents/testdtknv/test1 -o /home/marw/Documents/testout'
+        args = '-r -i /home/marw/Documents/testdtknv/test1f/otrvorenidokument-ispravno.odt -o /home/marw/Documents/testout'
         args = args + ' '
     args = args.split()
     #Test ---------------------------------------------------------------------

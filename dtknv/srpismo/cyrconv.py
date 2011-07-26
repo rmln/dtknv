@@ -35,7 +35,7 @@ print('Characters in replaced text: ', converted.stats_char_replaced)
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-__version__ = '1.3'
+__version__ = '1.5'
 __url__ = "https://gitorious.org/dtknv"
 __author__ = "Romeo Mlinar"
 __license__ = "GNU General Public License v. 3"
