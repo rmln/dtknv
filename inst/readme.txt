@@ -4,7 +4,11 @@ alphabet into Serbian Latin alphabet.
 It converts DOCX and ODT files, as well as all text-based files, if
 supported extensions are supplied.
 
-PREREQUISITES
+Basic Latin to Cyrillic conversion is supported for plain text, 
+in GUI only. Launch the window (rungui.py) and hit the "Konverzija
+teksta" button.
+
+=== PREREQUISITES =========
 
 Windows: Python 3+
 Linux: python3 for console use; python3-tk for GUI
@@ -56,8 +60,9 @@ Double-click on rungui.py to start a simple graphical interface, or
 type cknv.py -g in console.
 
 
-ABOUT
-Alpha version.
+=== ABOUT ==================
+
+Beta version.
 License GNU GLP 3.
 More, in Serbian: <http://digitalnitrg.blogspot.com/2011/03/dt-konvertor-datoteka-iz-cirilice-u.html>
 

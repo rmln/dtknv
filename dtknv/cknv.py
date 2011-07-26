@@ -1,13 +1,16 @@
 #! /usr/bin/python3
 """
-
 Dtknv is a simple tool that converts files containing Serbian Cyrillic
 alphabet into Serbian Latin alphabet.
 
 It converts DOCX and ODT files, as well as all text-based files, if
 supported extensions are supplied.
 
-PREREQUISITES
+Basic Latin to Cyrillic conversion is supported for plain text, 
+in GUI only. Launch the window (rungui.py) and hit the "Konverzija
+teksta" button.
+
+=== PREREQUISITES =========
 
 Windows: Python 3+
 Linux: python3 for console use; python3-tk for GUI
@@ -57,6 +60,11 @@ Show a simple graphical interface.
 
 Double-click on rungui.py to start a simple graphical interface, or
 type cknv.py -g in console.
+
+
+=== ABOUT ==================
+Beta version.
+License GNU GLP 3.
 
 """
 
