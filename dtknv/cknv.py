@@ -79,7 +79,7 @@ import os
 import sys
 import getopt
 
-__version__ = '0.3'
+__version__ = '0.3.1'
 
 #
 #    Copyright (C) 2011  Romeo Mlinar (mlinar [a] languagebits.com)
@@ -111,15 +111,15 @@ if __name__ == '__main__':
     """
     #Test ---------------------------------------------------------------------
     #Arguments, just for testing here, on both systems
-    if os.name == 'nt':
-        args = '-r -i D:\\datastore\\tocyr\\in_files1f\\ -o D:\\datastore\\tocyr\\out_files'
-        args = args + ' '
-    else:
-        args = '-r -i /home/marw/Documents/testdtknv/test1f/otrvorenidokument-ispravno.odt -o /home/marw/Documents/testout'
-        args = args + ' '
-    args = args.split()
+    #if os.name == 'nt':
+    #    args = '-r -i D:\\datastore\\tocyr\\in_files1f\\ -o D:\\datastore\\tocyr\\out_files'
+    #    args = args + ' '
+    #else:
+    #    args = '-r -i /home/marw/Documents/testdtknv/test1f/otrvorenidokument-ispravno.odt -o /home/marw/Documents/testout'
+    #    args = args + ' '
+    #args = args.split()
     #Test ---------------------------------------------------------------------
-    #args = sys.argv[1:] # Uncomment if not testing!
+    args = sys.argv[1:] # Uncomment if not testing!
     # If nothing is supplied, show help and exit:
     if len(args) == 0:
         usage()
