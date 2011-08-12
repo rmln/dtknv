@@ -26,11 +26,14 @@ __author__ = "Romeo Mlinar"
 __license__ = "GNU General Public License v. 3"
 
 import os
+import sys
 import codecs
 import helpers
 import version
 
 class Report:
+    
+    REPORTPATH_WIN = r'HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders'
     
     def __init__(self, cn=False, reppath='..', flush=True):
         """Start Report() call"""
@@ -38,6 +41,7 @@ class Report:
             raise RuntimeError('Host class (cn) must be supplied.')
         else:
             self.cn = cn
+            
         self.flush = flush
         self.reppath = reppath
         self.dt = helpers.getdatetime(f='long')
@@ -46,7 +50,25 @@ class Report:
         
     def _openfile(self):
         """Open the report file."""
-        f = os.path.join('..', self._filename())
+        if os.name == 'posix':
+            home = os.getenv("HOME")
+        else:
+            print("Implement this in Windows!")
+            sys.exit(0)
+        # the path for the reports
+        
+        begin_in = os.path.join(home, 'izvjestaji-dknv')
+        # Check if this path exists, ~/Izvjestaji-dknv in  Linux and My Documents/Dtknv (or whatever
+        # personal path is) on Windows.
+        if not os.path.exists(begin_in):
+                try:
+                     os.mkdir(begin_in)
+                except:
+                    # Refuse to work without report if it is switched on
+                    print('Putanja za izvjestaj %s nije mogla biti kreirana. Kraj rada.'  % begin_in)
+                    sys.exit(0)
+         
+        f = os.path.join(begin_in, self._filename())
         if self.cn.SHOW:
             print('Izvjestaj o radu je u:\r\n', f)
         opened = codecs.open(f, mode='w', encoding=self.cn.ENC)
@@ -55,7 +77,7 @@ class Report:
     
     def _filename(self):
         """Return filename"""
-        return self.cn.REPORT + '_' + self.dt + '.txt'
+        return self.cn.REPORT  + self.dt + '.txt'
     
     def _saveinitial(self):
         """Save initial text"""
