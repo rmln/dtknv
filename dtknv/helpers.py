@@ -91,7 +91,7 @@ def getfreespace(path):
     else:
         # This dows not work with the rest of the
         # logic in the programme:
-        return os.statvfs(path).f_bfree
+        return os.statvfs(path).f_bfree * os.statvfs(path).f_bsize
 
 def getext(f):
     """Return the extension."""
