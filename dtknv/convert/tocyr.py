@@ -125,7 +125,8 @@ class ToCyr:
         elif os.path.isfile(self.PATHIN):
             self.conversiontype = 'files'
         else:
-            print('No file or directory as input. Aborting.')
+            # "Input file/directory was not find." 
+            print('Ulazna fasickla/datoteka nije nadjena.')
             sys.exit(0)
         
         # Select file(s) or the whole directory and then
@@ -147,15 +148,18 @@ class ToCyr:
         elif self.conversiontype == 'dir':
             self._convertdir()
         else:
-            raise ValueError('Conversion must be "files" or "dir".')
+            # "Conversion must be 'files' or 'dir'"
+            raise ValueError('Komverzija mora biti "files" ili "dir".')
             
         if self.SHOW:
+            # "Conversion finished."
             print('Konverzija zavrsena.')
         # Delete the tempdir.
         try:
             shutil.rmtree(self.DIRTMP)
         except:
-            print('Could not remove tmp dir. Gracefully ignoring this...')
+            #'Could not remove tmp dir. Gracefully ignoring this...'
+            print("Tmp fasickla nije mogla bit uklonjena. Psssssst!")
 
 
     def _outpathrec(self, f):
@@ -165,7 +169,8 @@ class ToCyr:
         # bar.txt > bar_cir.txt
         if self.SAMEOUTPATH:
             split_path = os.path.splitext(f)
-            outpath = os.path.join(split_path[0] + self.CONVSUFFIX + split_path[1])
+            outpath = os.path.join(split_path[0] + \
+                      self.CONVSUFFIX + split_path[1])
             return outpath
         
         # In and out paths are not the same, so continue.      
@@ -187,7 +192,8 @@ class ToCyr:
             final = os.path.join(self.PATHOUT, filename(f))
             return final
         else:
-            print('Unrecognized conversion type. Aborting.')
+            #'Unrecognized conversion type. Aborting.'
+            print('Nepoznata vrsta konverzije. Prekid rada.')
             sys.exit(0)
 
 
@@ -228,8 +234,10 @@ class ToCyr:
                 converted_text = self._converttext(text)
                 self._save_txt(outpath, converted_text, check=True, nomem=True)
             except UnicodeEncodeError:
-                print('ERROR reading in ._load_txt: %s' % f.encode(self.ENC))
-                return('Error in conversion!')
+                # 'ERROR reading in ._load_txt: %s' % f.encode(self.ENC)
+                print('GRESKA u funkciji  ._load_txt: %s' % f.encode(self.ENC))
+                # 'Error in conversion!'
+                return('Greska u konverziji!')
             
         
         if self.extension in ('odt', 'docx'):
@@ -305,6 +313,7 @@ class ToCyr:
             is_same = (cf == f)
             if not is_same:
                 if self.SHOW:
+                    # "File name converted to Latin."
                     print('Naziv datoteke prebacen u latinicu...')
             return os.path.join(path, cf)
         else:
@@ -318,17 +327,21 @@ class ToCyr:
             self.report = Report(cn=self)
         for f in loopover:
             if self.SHOW:
+                # "Loading %s"
                 print('Ucitava se %s' % f.encode(self.ENC))
             if self.FAILSAFE:
                 try:
                     self._convertfile(f)
                     self.report.write('OK: %s\r\n' % f)
                 except:
+                    # "Ooops! This file was not converted..."
                     print('\tOps, greska! Ova datoteka nije konvertovana...')
+                    # "ERROR: "
                     self.report.write('GREŠKA: %s\r\n' % f)
                     self.errors_during_work = True
             else:
                 self._convertfile(f)
+        # "Conversion done. Check report, if on."
         print('Konverzija zavsena. Provjerite izvjestaj, ako je ukljucen.')
         
         try:
@@ -346,6 +359,7 @@ class ToCyr:
         self.pcounter['i'] += 1
         if self.SHOWPERC and (self.conversiontype != 'files'):
             pround = round(self.pcounter['p'], 2)
+            # "File %s of %s. Total converted %s%%."
             print('Datoteka %s od %s. Ukupno konvertvano %s%% bajtova.' % \
                                                 (self.pcounter['i'],
                 self.pcounter['all'], pround))
