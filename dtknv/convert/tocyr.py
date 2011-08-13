@@ -251,7 +251,10 @@ class ToCyr:
         List files and call conversion function.
         """
         if self.conversiontype == 'dir':
-            self.PATHOUT = getstampnewdir(self.PATHOUT)
+            if self.SAMEOUTPATH:
+                self.PATHOUT = self.PATHIN
+            else:
+                self.PATHOUT = getstampnewdir(self.PATHOUT)
             if self.RECURSIVE:
                 # Map all files and folders
                 loopover = get_paths('files', self.PATHIN)
