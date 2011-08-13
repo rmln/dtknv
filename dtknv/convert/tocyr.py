@@ -94,6 +94,11 @@ class ToCyr:
     REPORT = 'dtknv-'
     # Unpack type
     USERAM = True
+    # Suffix added to the converted file where
+    # in and out paths are the same.
+    CONVSUFFIX = '_konv'
+    # In and out paths are the same?
+    SAMEOUTPATH = True
 
     def __init__(self):
         """Convert between Latin and Cyrillic scripts."""
@@ -155,6 +160,15 @@ class ToCyr:
 
     def _outpathrec(self, f):
         """Compile path where content will be saved."""
+        # The out path is the same as in path, so
+        # just add self.CONVSUFFIX to filename, ie:
+        # bar.txt > bar_cir.txt
+        if self.SAMEOUTPATH:
+            split_path = os.path.splitext(f)
+            outpath = os.path.join(split_path[0] + self.CONVSUFFIX + split_path[1])
+            return outpath
+        
+        # In and out paths are not the same, so continue.      
         if self.conversiontype == 'dir':
             # PATHIN = r'c:\\foo\\foo1'
             # f = r'c:\\foo\\foo1\\foo2\\bar.txt'
