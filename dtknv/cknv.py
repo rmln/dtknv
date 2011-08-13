@@ -1,71 +1,38 @@
 #! /usr/bin/python3
 """
-Dtknv is a simple tool that converts files containing Serbian Cyrillic
-alphabet into Serbian Latin alphabet.
 
-It converts DOCX and ODT files, as well as all text-based files, if
-supported extensions are supplied.
+Dtknv je jednostavna alatka za konverziju datoteka sa ćiriličnim
+sadržajem u latinični. Moguće je konvertovati tekstualne datoteke, ali
+i Libreofis (Openofis) i Vord dokumenta (samo DOCX). Grafički
+interfejs podržava i prebacivanje latinice u ćirilicu, ali za sada samo
+u ograničenom tekstualnom modu.
 
-Basic Latin to Cyrillic conversion is supported for plain text, 
-in GUI only. Launch the window (rungui.py) and hit the "Konverzija
-teksta" button.
+Komande:
 
-=== PREREQUISITES =========
-
-Windows: Python 3+
-Linux: python3 for console use; python3-tk for GUI
-
-=== CONSOLE ================
-
-Use the following switches to run the program:
-
-    -i (--pathin)       Input directory of file.
-    -o (--pathout)      Output directory.
-    -e (--encoding)     Encoding (the default is utf-8).
-    -n (--names)        Convert names.
-    -r (--recursive)    Recursive conversion. Be careful!
-    -s (--show)         Show report while running.
-    -c (--conversionreportname) Conversion report name.
-    -f (--nofailsafe)   Abort conversion on the first file failure.
-    -m (--noram)        Unzip odt/docx files on disk, and not in RAM
-                        (slower).
-    -g (--gui)          Show graphical interface (overrides console commands).
-
-Conslole examples:
-
-(1)
-cknv.py -i /home/me/Documents/myfiles -o /home/me/Documents/conv -r -n
-
-This will convert all supported files in all directories in myfiles. Also,
-file names will be converted if they are in the Cyrillic script. A new folder
-will be created in conv for each run (the names start with rcon-hour_min_sec).
-
-(2)
-cknv.py -i /home/me/Documents/myfiles -o /home/me/Documents/conv -e utf-16
-
-Only files in myfiles will be converted; the utf-16 encoding will be used to
-open files/log.
-
-(3)
-cknv.py -i /home/me/Documents/myfile.odt -o /home/me/Documents/conv
-
-Convert myfile.odt and store it in conv.
-
-(4)
-cknv.py -g
-
-Show a simple graphical interface.
-
-=== GUI ====================
-
-Double-click on rungui.py to start a simple graphical interface, or
-type cknv.py -g in console.
-
-
-=== ABOUT ==================
-Beta version.
-License GNU GLP 3.
-
+    -i (--pathin)
+	Ulazna putanja (fascila ili datoteka).
+    -o (--pathout)
+	Izlazna putanja.
+    -e (--encoding)     
+	Kodna strana (standardno utf-8).
+    -n (--names)
+	Konvertuj nazive datoteka.
+    -r (--recursive)
+	Rekurzivna konverzija. Pažljivo!
+    -v (--verbose)
+	Prikazuj izvještaj prilikom rada.
+    -c (--conversionreportname) 
+	Naziv datoteke za izvještaj.
+    -f (--nofailsafe)
+	Obustavi konverziju prilikom prve greške.
+    -m (--noram)
+	Raspakuj odt/docx na disk (standardno RAM) 
+    -g (--gui)
+	Prikaži sučelje (zanemaruje ostale komande).
+    -s (--sameoutpath)
+	Izlazna putanja ista kao ulazna (dodaje se novi 
+        nastavak na naziv datoteke).
+        
 """
 
 #
@@ -117,17 +84,7 @@ if __name__ == '__main__':
     3. Run!
 
     """
-    #Test ---------------------------------------------------------------------
-    #Arguments, just for testing here, on both systems
-    #if os.name == 'nt':
-    #    args = '-r -i D:\\datastore\\tocyr\\in_files1f\\ -o D:\\datastore\\tocyr\\out_files'
-    #    args = args + ' '
-    #else:
-    #    args = '-r -i /home/marw/Documents/testdtknv/test1f/otrvorenidokument-ispravno.odt -o /home/marw/Documents/testout'
-    #    args = args + ' '
-    #args = args.split()
-    #Test ---------------------------------------------------------------------
-    args = sys.argv[1:] # Uncomment if not testing!
+    args = sys.argv[1:]
     # If nothing is supplied, show help and exit:
     if len(args) == 0:
         usage()
@@ -144,9 +101,9 @@ if __name__ == '__main__':
     SHOWGUI = False
     # Command line arguments
     try:
-        supplied, r = getopt.getopt(args, 'i:o:e:c:snrhfmg', ['pathin=',
-                    'pathout=', 'encoding=', 'conversionreportname=', 'show',
-                    'names', 'recursive', 'help', 'nofailsafe', 'noram', 'gui'])
+        supplied, r = getopt.getopt(args, 'i:o:e:c:vnrhfmgs', ['pathin=',
+                    'pathout=', 'encoding=', 'conversionreportname=', 'verbose',
+                    'names', 'recursive', 'help', 'nofailsafe', 'noram', 'gui', 'sameoutpath'])
     except:
         usage()
         sys.exit(2)
@@ -160,7 +117,7 @@ if __name__ == '__main__':
             c.PATHOUT = a
         elif o in ('-e', '--encoding'):
             c.ENC = a
-        elif o in ('-s', '--show'):
+        elif o in ('-v ', ' --verbose'):
             c.SHOW = True
         elif o in ('-n', '--names'):
             c.CONVERTFNAMES = True
@@ -174,6 +131,8 @@ if __name__ == '__main__':
             c.USERAM = False
         elif o in ('-g', '--gui'):
             SHOWGUI = True
+        elif o in ('-s', '--sameouthpath'):
+            c.SAMEOUTPATH = True
             
     if SHOWGUI == True:
         del(c)
