@@ -133,31 +133,40 @@ class TocyrGui(tk.Frame):
         # Browse button in 1, 2
         self.btn_browseoutdir = tk.Button(fra_filesdirs, width=9)
         self.btn_browseoutdir.grid(column=1, row=2)
-        self.btn_browseoutdir["text"] = "Izlaz..."
+        self.btn_browseoutdir["text"] = "Sačuvaj u..."
         self.btn_browseoutdir["command"] = command=partial(self.browse,
                                                      what = "outdir")
 
-        # Checkbutton recursive 0,3
+        
+        # Checkbutton same out 0,3
+        self.chk_sameoutpath = tk.Checkbutton(fra_filesdirs)
+        self.chk_sameoutpath["text"] = "Sačuvaj u istoj fascikli."
+        self.sameoutpath = tk.IntVar()
+        self.chk_sameoutpath["variable"] = self.sameoutpath
+        self.sameoutpath.set(1)
+        self.chk_sameoutpath["command"] = self.updatestates
+        self.chk_sameoutpath.grid(column=0, row=3, sticky='w')
+        # Checkbutton recursive 0,4
         self.chk_recursive = tk.Checkbutton(fra_filesdirs)
-        self.chk_recursive["text"] = "Rekurzivna konverzija"
+        self.chk_recursive["text"] = "Rekurzivna konverzija."
         self.recursive = tk.IntVar()
         self.chk_recursive["variable"] = self.recursive
         self.recursive.set(0)
         self.chk_recursive["state"] = 'disabled'
         self.chk_recursive["command"] = self.updatestates
-        self.chk_recursive.grid(column=0, row=3, sticky='w')
-        # Checkbutton filenames 0,4
+        self.chk_recursive.grid(column=0, row=4, sticky='w')
+        # Checkbutton filenames 0,5
         self.chk_fnames = tk.Checkbutton(fra_filesdirs)
         self.chk_fnames["text"] = "Konvertuj imena datoteka."
         self.fnames = tk.IntVar()
         self.chk_fnames["variable"] = self.fnames
-        self.chk_fnames.grid(column=0, row=4, sticky='w')
+        self.chk_fnames.grid(column=0, row=5, sticky='w')
         self.chk_fnames["command"] = self.updatestates
         #Button for text conversion
         self.btn_text = tk.Button(fra_filesdirs)
         self.btn_text['text'] = 'Konverzija teksta...'
         self.btn_text['command'] = self.show_textconv
-        self.btn_text.grid(column=0, row=5, sticky='we')      
+        self.btn_text.grid(column=0, row=6, sticky='we')      
         # Buttonz!
         # Run
         self.btn_run = tk.Button(fra_buttons, width=8)
@@ -205,11 +214,11 @@ class TocyrGui(tk.Frame):
         # -------------------------------------------------
         self.lbl_info = tk.Label(fra_mainfilesdirs)
         self.lbl_info["bg"] = "white"
-        self.lbl_info["text"] = "Odaberite folder ili datoteku."
+        self.lbl_info["text"] = "Odaberite fasciklu ili datoteku."
         self.lbl_info.grid(column=0, row=2, columnspan=2, sticky=W+E+S+N)
         # Pack the frames
         fra_filesdirs.grid(column=0, row=0)
-        fra_buttons.grid(column=0, row=6, pady=5)
+        fra_buttons.grid(column=0, row=7, pady=5)
         fra_filesdirsinfo.grid(column=1, row=0, rowspan=2)
         fra_mainfilesdirs.grid()
         # Make them publically available
@@ -488,6 +497,7 @@ class TocyrGui(tk.Frame):
         self.tocyrclass.PATHIN = self.settings['pathin']
         self.tocyrclass.PATHOUT = self.settings['pathout']
         self.tocyrclass.FILES = self.settings['pathin']
+        self.tocyrclass.SAMEOUTPATH = self.sameoutpath.get()
         #self.tocyrclass.conversiontype = self.settings['conversiontype']
         self.tocyrclass.SHOW = False
         self.tocyrclass.RECURSIVE = self.recursive.get()
@@ -546,11 +556,24 @@ class TocyrGui(tk.Frame):
             self.txt_dirin.insert(0, '(odaberite klikom na dugme)')
             self.txt_filein.insert(0, '(odaberite klikom na dugme)')
         # Checkboxes
+        # Recursion:
         if self.settings['conversiontype'] == 'files':
             self.recursive.set(0)
             self.chk_recursive["state"] = 'disabled'
         else:
             self.chk_recursive["state"] = 'normal'
+        # Same out dir:
+        if self.sameoutpath.get():
+            self.txt_dirout.delete(0, 'end')
+            self.txt_dirout.insert(0, '(ista kao ulazna)')
+            self.txt_dirout['state'] = "disabled"
+            self.btn_browseoutdir['state'] = "disabled"
+        else:
+            self.txt_dirout.delete(0, 'end')
+            #self.txt_dirout.insert(0, '(odaberite klikom na dugme)')
+            self.txt_dirout['state'] = "normal"
+            self.btn_browseoutdir['state'] = "normal"
+
         # Labels in case dir/file is selected
         if self.settings['pathin'] or self.settings['pathin']:
             # The order of inserd/disable/normal bellow
