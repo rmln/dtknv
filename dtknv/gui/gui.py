@@ -264,7 +264,8 @@ class TocyrGui(tk.Frame):
         btn_showfilesdirs = tk.Button(fra_buttons2)
         btn_showfilesdirs['text'] = 'Konvertuj datoteke...'
         btn_showfilesdirs['command'] = self.show_filesdirs
-        btn_showfilesdirs.grid(column=0, row=2, columnspan=2, padx=2, pady=2, sticky='EW')
+        btn_showfilesdirs.grid(column=0, row=2, columnspan=2, 
+                               padx=2, pady=2, sticky='EW')
         
         # Pack frames
         fra_buttons2.grid(column=0, row=1)
@@ -476,10 +477,14 @@ class TocyrGui(tk.Frame):
         # Same in/out file
         if self.settings['pathin'] == self.settings['pathout']:
             ask = messagebox.askyesno(
-            'Upozorenje: Iste faskile',
-            'Ulazna i izlazna fascikla se ne razlikuju. ' + \
-            '\n\nŽelite li nastaviti sa konverzijom?')
-            return ask
+            'Upozorenje: iste fascikle',
+            'Ako konvertovane datoteke želite sačuvati u istim fasciklama\n' + \
+            'morate potvrditi polje "Sačuvaj u istoj fasckili."\n' + \
+            '\n\nŽelite li potvrditi ovo polje?')
+            self.sameoutpath.set(ask)
+            if ask:
+                self.updatestates()
+            return False
 
         return True
 
