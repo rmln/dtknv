@@ -33,6 +33,21 @@ import sys
 import ctypes
 from time import strftime
 
+def getwindoc():
+    """Get Windows document folder
+
+    From Josh Purvis on <http://stackoverflow.com/
+    questions/3927259/how-do-you-get-the-exact-path-to-my-documents>
+
+    via
+
+    <http://bugs.python.org/issue1763#msg62242>
+    
+    """
+    dll = ctypes.windll.shell32
+    buf = ctypes.create_unicode_buffer(300)
+    dll.SHGetSpecialFolderPathW(None, buf, 0x0005, False)
+    return(buf.value)
 
 def getstampnewdir(path):
     """Get time/date stamped name"""

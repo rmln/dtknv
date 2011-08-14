@@ -32,9 +32,8 @@ import helpers
 import version
 
 class Report:
-    
-    REPORTPATH_WIN = r'HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders'
-    
+    """Class for creating reports of conversion, with some stats."""
+        
     def __init__(self, cn=False, reppath='..', flush=True):
         """Start Report() call"""
         if not cn:
@@ -50,23 +49,21 @@ class Report:
         
     def _openfile(self):
         """Open the report file."""
-        if os.name == 'posix':
-            home = os.getenv("HOME")
+        if os.name == 'nt':
+               home = helpers.getwindoc()
         else:
-            print("Implement this in Windows!")
-            sys.exit(0)
+            home = os.getenv("HOME")
         # the path for the reports
-        
         begin_in = os.path.join(home, 'izvjestaji-dknv')
         # Check if this path exists, ~/Izvjestaji-dknv in  Linux and My Documents/Dtknv (or whatever
         # personal path is) on Windows.
         if not os.path.exists(begin_in):
-                try:
-                     os.mkdir(begin_in)
-                except:
-                    # Refuse to work without report if it is switched on
-                    print('Putanja za izvjestaj %s nije mogla biti kreirana. Kraj rada.'  % begin_in)
-                    sys.exit(0)
+            try:
+                os.mkdir(begin_in)
+            except:
+                # Refuse to work without report if it is switched on
+                print('Putanja za izvjestaj %s nije mogla biti kreirana. Kraj rada.'  % begin_in)
+                sys.exit(0)
          
         f = os.path.join(begin_in, self._filename())
         if self.cn.SHOW:
