@@ -39,7 +39,7 @@ import helpers
 from helpers import *
 import version
 
-__version__ = "0.6.3"
+__version__ = "0.6.3.5"
 __url__ = "https://gitorious.org/dtknv"
 __author__ = "Romeo Mlinar"
 __license__ = "GNU General Public License v. 3"
@@ -141,7 +141,7 @@ class ToCyr:
                 msg = 'Konvertovana datoteka %s' % self.PATHIN
             except:
                 self.errors_during_work = True
-                msg = 'Greška, nije konvertovano: %s' % self.PATHIN
+                msg = 'Greska, nije konvertovano: %s' % self.PATHIN
                 if self.SHOW:
                     print(msg)
             self.report.write(msg)
@@ -149,7 +149,7 @@ class ToCyr:
             self._convertdir()
         else:
             # "Conversion must be 'files' or 'dir'"
-            raise ValueError('Komverzija mora biti "files" ili "dir".')
+            raise ValueError('Konverzija mora biti "files" ili "dir".')
             
         if self.SHOW:
             # "Conversion finished."

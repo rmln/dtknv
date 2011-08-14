@@ -6,7 +6,7 @@ Version tag for the main release.
 
 """
 
-__version__ = '0.3.4 beta'
+__version__ = '0.3.4.5 beta'
 __url__ = "https://gitorious.org/dtknv"
 __author__ = "Romeo Mlinar"
 __license__ = "GNU General Public License v. 3"
