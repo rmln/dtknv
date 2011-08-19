@@ -1,11 +1,10 @@
 #! /usr/bin/python3
 """
-
-Dtknv je jednostavna alatka za konverziju datoteka sa ćiriličnim
-sadržajem u latinični. Moguće je konvertovati tekstualne datoteke, ali
-i Libreofis (Openofis) i Vord dokumenta (samo DOCX). Grafički
-interfejs podržava i prebacivanje latinice u ćirilicu, ali za sada samo
-u ograničenom tekstualnom modu.
+Dtknv je jednostavna alatka za konverziju datoteka sa cirilicnim
+sadrzajem u latinicni. Moguce je konvertovati tekstualne datoteke, ali
+i Libreofis (Openofis) i Vord dokumenta (samo DOCX). Graficki
+interfejs podrzava i prebacivanje latinice u cirilicu, ali za sada samo
+u ogranicenom tekstualnom modu.
 
 Komande:
 
@@ -18,21 +17,20 @@ Komande:
     -n (--names)
 	Konvertuj nazive datoteka.
     -r (--recursive)
-	Rekurzivna konverzija. Pažljivo!
+	Rekurzivna konverzija. Pazljivo!
     -v (--verbose)
-	Prikazuj izvještaj prilikom rada.
+	Prikazuj izvjestaj prilikom rada.
     -c (--conversionreportname) 
-	Naziv datoteke za izvještaj.
+	Naziv datoteke za izvjestaj.
     -f (--nofailsafe)
-	Obustavi konverziju prilikom prve greške.
+	Obustavi konverziju prilikom prve greske.
     -m (--noram)
 	Raspakuj odt/docx na disk (standardno RAM) 
     -g (--gui)
-	Prikaži sučelje (zanemaruje ostale komande).
+	Prikazi sucelje (zanemaruje ostale komande).
     -s (--sameoutpath)
 	Izlazna putanja ista kao ulazna (dodaje se novi 
-        nastavak na naziv datoteke).
-        
+        nastavak na naziv datoteke).        
 """
 
 #
@@ -53,6 +51,9 @@ __license__ = "GNU General Public License v. 3"
 import os
 import sys
 import getopt
+import codecs
+
+import version
 
 __version__ = '0.3.1'
 
@@ -72,9 +73,24 @@ __version__ = '0.3.1'
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+RESPATH = os.path.join(os.path.dirname(__file__), 'resources', 'info')
+
 def usage():
     """Print help"""
-    print(__doc__)
+    # Linux terminal supports utf-8, so show information
+    # in Serbian with diacritics. On Windows, show "safe"
+    # version of the same text.
+    if os.name == 'posix':
+        info_file = 'info-latinica.txt'
+    else:
+        info_file = 'info-latinica-cl.txt'
+    # Comile path and show it onto the screen
+    info_file = os.path.join(RESPATH, info_file)
+    print(codecs.open(info_file, encoding='utf-8').read())
+    print('v.', version.__version__)
+    print('http://www.languagebits.com/dtknv')
+    print('https://gitorious.org/dtknv')
+    print('')
     
 if __name__ == '__main__':
     """Execute the script.
