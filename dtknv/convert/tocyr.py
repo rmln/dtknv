@@ -207,7 +207,7 @@ class ToCyr:
                 f = os.path.join(path, '_%s' % fn)
             else:
                 return f
-        sys.exit(0)
+        raise ValueError('Prekoracen broj provjera za isti  naziv.')
 
 
     def _renameresfiles(self, f):
@@ -223,6 +223,8 @@ class ToCyr:
         outpath = self._outpathrec(f)
         # See if the filename needs conversion.
         outpath = self._converfname(outpath)
+        # See if the file already exists, if yes, add an underscore.
+        outpath = self._checkife(outpath)
         # Create recursively the out dir.
         if self.RECURSIVE:
             makefullpath(outpath)
