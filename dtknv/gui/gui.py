@@ -299,6 +299,7 @@ class TocyrGui(tk.Frame):
         
         """
         in_path = ""
+        old_path_in = self.settings['pathin']
         if what == "files":
             in_path = filedialog.askopenfilenames(multiple=False,
                       filetypes = self.filedesc())
@@ -327,7 +328,10 @@ class TocyrGui(tk.Frame):
             in_path = filedialog.askdirectory()
             self.settings['pathout'] = in_path
 
-        self.updatestates()
+        # Don't update states of the widgets if
+        # the path is unchanged.
+        if old_path_in != self.settings['pathin']:
+            self.updatestates()
 
 
     def filedesc(self):
