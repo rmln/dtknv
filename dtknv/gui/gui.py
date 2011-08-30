@@ -353,8 +353,7 @@ class TocyrGui(tk.Frame):
     def openbrowser_help(self, event):
         "go to the website"
         browse = webbrowser.get()
-        browse.open(r'http://digitalnitrg.blogspot.com/2011/03/' + \
-                        'dt-konvertor-datoteka-iz-cirilice-u.html#uputstvo_gui')
+        browse.open(r'http://www.languagebits.com/dtknv/doc/')
 
     def about(self):
         """About dialog"""
