@@ -1,3 +1,11 @@
+0.3.4.5 beta [3 September 2011]
+--------------
+* An option to save converted files in the input directory(es).
+* The reports are saved in home folder (or My Documents, on Windows).
+* Changes in switches.
+* Bug removed: wrong free space calculation on Linux.
+* Bug removed: crash in Windows console.
+
 0.3.4 beta [26 July 2011]
 --------------
 * Initial support for Latin to Cyrillic (in GUI's text box only).
