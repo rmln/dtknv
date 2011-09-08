@@ -152,7 +152,7 @@ if __name__ == '__main__':
             
     if SHOWGUI == True:
         del(c)
-        from gui import gui
-        gui.bootgui()
+        from gui import main
+        main.show()
     else:
         c.run()
