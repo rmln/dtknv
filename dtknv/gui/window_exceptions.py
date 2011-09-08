@@ -15,7 +15,7 @@ class Exceptions:
         self.lng = self.master.lng
         self.window = tk.Toplevel(master)
         self.window.resizable(0,0)
-        self.window.title(lng['window_exceptions'])
+        self.window.title(self.lng['window_exceptions'])
         self.window.protocol("WM_DELETE_WINDOW", self.close)
         self.main = tk.Frame(self.window, height=300, width=300)
         self.main.pack(padx=0, pady=0, fill='both', expand=1)
@@ -81,7 +81,7 @@ class Exceptions:
                         ('remove', print)]
         for b, c in button_array:
             button_objects[b] = tk.Button(frame_buttons, 
-                                          text=lng['button_%s' % b],
+                                          text=self.lng['button_%s' % b],
                                           command=c)
             button_objects[b].pack(side='left')
         #Menu button

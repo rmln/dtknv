@@ -14,7 +14,7 @@ class Options:
         self.lng = self.master.lng
         self.window = tk.Toplevel(master)
         self.window.resizable(0,0)
-        self.window.title(lng['window_options'])
+        self.window.title(self.lng['window_options'])
         self.window.protocol("WM_DELETE_WINDOW", self.close)
         self.main = tk.Frame(self.window, height=300, width=400)
         self.main.pack(padx=10, pady=10, fill='both', expand=1)
