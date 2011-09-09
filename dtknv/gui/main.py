@@ -20,9 +20,9 @@ class DtknvGui(tk.Frame):
     lng = Set.language
 
     def __init__(self, master=None):
-        tk.Frame.__init__(self, master, height=270, width=500)
+        tk.Frame.__init__(self, master, height=270, width=500, bg='green')
         self.master.title('dtknv 0.5 alfa')
-        self.pack(padx=0,pady=0,fill=tk.BOTH, expand=1)
+        self.pack(padx=0,pady=0,fill=tk.BOTH, expand=0)
         self.pack_propagate(0)
         # Variable to track opened windows
         self.master.windows_opened = []
@@ -36,18 +36,28 @@ class DtknvGui(tk.Frame):
         self.menu = Dmenu(master)
         self.master.config(menu=self.menu.main)
         # Plain text / file conversion frames
-        self.window_plaintext = PlainText(master)
+        self.window_plaintext = PlainText(self)
         self.window_plaintext.window.forget()
-        self.window_filesdir = FilesDir(master)
+        self.window_filesdir = FilesDir(self)
+         # Status bar
+        self.create_statusbar()
         # Shortcuts
         self.bind_all("<F2>", self.show_exceptions)
         self.bind_all("<F3>", self.show_options)
         self.bind_all("<F7>", self.show_filesdir)
         self.bind_all("<F8>", self.show_plaintext)
+        # Select default mode
+        self.show_filesdir()
+
         
-    def switch_mode(self, *event, mode):
-        """Switch the morde of work"""
-        pass
+    def create_statusbar(self):
+        """Status bar"""
+        self.status = tk.Label(self, relief='sunken', width='63', anchor='w')
+        self.status.pack(side='bottom')
+    
+    def update_status(self, text):
+        """Update status text"""
+        self.status.configure(text= '  ' + self.lng[text])
 
     def show_exceptions(self, *event):
         """Show exception window."""
@@ -65,12 +75,13 @@ class DtknvGui(tk.Frame):
         """Show file conversion mode"""
         self.window_plaintext.window.forget()
         self.window_filesdir.window.pack()
+        self.update_status('status_mode_filesdir')
         
     def show_plaintext(self, *event):
         """Show plain text mode"""
         self.window_filesdir.window.forget()
         self.window_plaintext.window.pack()
-
+        self.update_status('status_mode_plaintext')
 def show():
         """Show GUI"""
         root = tk.Tk()
