@@ -33,6 +33,15 @@ import sys
 import ctypes
 from time import strftime
 
+
+def def_report_path():
+    """Return the default report path"""
+    if os.name == 'nt':
+        return( getwindoc())
+    else:
+        return(os.getenv("HOME"))
+
+
 def getwindoc():
     """Get Windows document folder
 
