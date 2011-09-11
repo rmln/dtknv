@@ -20,7 +20,8 @@ class DtknvGui(tk.Frame):
     lng = Set.language
 
     def __init__(self, master=None):
-        tk.Frame.__init__(self, master, height=270, width=500, bg='green')
+        tk.Frame.__init__(self, master, height=270, width=500)
+        self.sett = Set
         self.master.title('dtknv 0.5 alfa')
         self.pack(padx=0,pady=0,fill=tk.BOTH, expand=0)
         self.pack_propagate(0)
@@ -82,6 +83,8 @@ class DtknvGui(tk.Frame):
         self.window_filesdir.window.forget()
         self.window_plaintext.window.pack()
         self.update_status('status_mode_plaintext')
+        
+        
 def show():
         """Show GUI"""
         root = tk.Tk()

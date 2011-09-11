@@ -8,8 +8,11 @@ New interface for dtknv.
 
 import tkinter as tk
 
+from gui.settings import Set
+
 class Options:
     def __init__(self, master):
+        self.set = Set
         self.master = master
         self.lng = self.master.lng
         self.window = tk.Toplevel(master)
@@ -20,21 +23,31 @@ class Options:
         self.main.pack(padx=10, pady=10, fill='both', expand=1)
         #self.main.pack_propagate(0)
         # Options
-        self.var_sett_verbose = tk.IntVar()
-        self.var_sett_failsafe = tk.IntVar()
-        self.var_sett_noram = tk.IntVar()
-        self.var_sett_report = tk.IntVar()
-        self.var_sett_update = tk.IntVar()
-        self.var_sett_reportname = tk.StringVar()
-        self.var_sett_encoding = tk.StringVar()
-        self.var_sett_warningmb = tk.StringVar()
-        self.var_sett_warningn = tk.StringVar()
-        self.var_sett_reportpath = tk.StringVar()
+        self.var_set_verbose = tk.IntVar()
+        self.var_set_failsafe = tk.IntVar()
+        self.var_set_noram = tk.IntVar()
+        self.var_set_report = tk.IntVar()
+        self.var_set_update = tk.IntVar()
+        self.var_set_reportname = tk.StringVar()
+        self.var_set_encoding = tk.StringVar()
+        self.var_set_warningmb = tk.StringVar()
+        self.var_set_warningn = tk.StringVar()
+        self.var_set_reportpath = tk.StringVar()
+        self.win_setting_elements()
         # Create elements
         self.create_elements()
         self.create_buttons()
         self.window.grab_set()
-        
+
+    def win_setting_elements(self): 
+        """Get all attributes that contain settings"""
+        #settings = self.
+        for i in dir(self):
+            if i.startswith('var_set_'):
+                key = i[4:]
+                fc = getattr(self.set, '%s' % key)
+                getattr(self, i).set(fc)       
+                        
     def close(self, *event):
         """Actions upon close"""
         self.master. windows_opened.remove('window_options')
@@ -60,16 +73,16 @@ class Options:
     def create_elements(self):
         """Create elements"""
         frame = tk.Frame(self.main)
-        chks = [(self.var_sett_verbose, 'verbose'),
-                (self.var_sett_failsafe, 'failsafe'),
-                (self.var_sett_noram, 'noram'),
-                (self.var_sett_report, 'report'),
-                 (self.var_sett_update, 'update')]
-        txts = [(self.var_sett_reportname, 'reportname'),
-                (self.var_sett_reportpath, 'reportpath'),
-                (self.var_sett_encoding, 'encoding'),
-                (self.var_sett_warningmb, 'warningmb'),
-                (self.var_sett_warningn, 'warningn')]
+        chks = [(self.var_set_verbose, 'verbose'),
+                (self.var_set_failsafe, 'failsafe'),
+                (self.var_set_noram, 'noram'),
+                (self.var_set_report, 'report'),
+                 (self.var_set_update, 'update')]
+        txts = [(self.var_set_reportname, 'reportname'),
+                (self.var_set_reportpath, 'reportpath'),
+                (self.var_set_encoding, 'encoding'),
+                (self.var_set_warningmb, 'warningmb'),
+                (self.var_set_warningn, 'warningn')]
         # Checkbuttons ---------------------------
         checkbuttons = {}
         for e, n in chks:
@@ -84,7 +97,7 @@ class Options:
             label  = tk.Label(checkbuttons[n], 
                               text=self.lng['options_%s' % n],
                               justify='left')
-            box = tk.Entry(checkbuttons[n], width='5')
+            box = tk.Entry(checkbuttons[n], width='5', textvariable=e)
             if n == 'reportpath':
                 box.configure(width='15')
             label.pack(side='left')

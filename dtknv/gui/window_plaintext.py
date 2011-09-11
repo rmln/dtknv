@@ -13,10 +13,8 @@ class PlainText:
         self.master = master
         self.lng = self.master.lng
         self.window = tk.Frame(master)
-        
         self.buttons()
         self.text()
-        
         self.window.pack()
 
     def text(self):
