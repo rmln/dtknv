@@ -56,5 +56,7 @@ serbian_cyrillic = {
 'label_file':'Датотека: ',
 'label_dir':'Фасцикла: ',
 'label_size':'Укупно: ',
-'label_number':'Бр. датотека:'
+'label_dirout':'Сачувати у: ',
+'label_number':'Бр. датотека:',
+'label_noselection':'(није изабрано) '
 }
