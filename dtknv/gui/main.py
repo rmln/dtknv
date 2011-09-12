@@ -12,6 +12,7 @@ from gui.window_exceptions import Exceptions
 from gui.window_settings import Options
 from gui.window_plaintext import PlainText
 from gui.window_filesdir import FilesDir
+
         
 from gui.settings import Set
 
@@ -33,6 +34,7 @@ class DtknvGui(tk.Frame):
         self.master.show_options = self.show_options
         self.master.show_filesdir = self.show_filesdir
         self.master.show_plaintext = self.show_plaintext
+        self.master.update_gui = self.update_gui
         # Create and attach the menu
         self.menu = Dmenu(master)
         self.master.config(menu=self.menu.main)
@@ -53,7 +55,7 @@ class DtknvGui(tk.Frame):
         
     def create_statusbar(self):
         """Status bar"""
-        self.status = tk.Label(self, relief='sunken', anchor='center')
+        self.status = tk.Label(self, relief='sunken', anchor='w')
         self.status.pack(side='bottom', fill='x', padx=1, pady=1)
     
     def update_status(self, text):
@@ -83,6 +85,11 @@ class DtknvGui(tk.Frame):
         self.window_filesdir.window.forget()
         self.window_plaintext.window.pack()
         self.update_status('status_mode_plaintext')
+    
+    def update_gui(self):
+        """Update GUI stuff"""
+        self.sett.reload()
+        self.window_filesdir.update_gui()
         
         
 def show():

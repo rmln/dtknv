@@ -8,10 +8,13 @@ Strings for the GUI.
 
 serbian_cyrillic = {
 
+# Language strings for Serbian Cyrillic (converted automatically
+# to Serbian Latin, if selected).
+
 'menu_main':'Датотека',
-'menu_file_loadf':'Учитај датотеку...',
-'menu_file_loadd':'Учитај фасциклу...',
-'menu_file_outpath':'Сачувај у...',
+'menu_file_loadf':'Учитај датотеку... <ctrl + o>',
+'menu_file_loadd':'Учитај фасциклу... <ctrl + f>',
+'menu_file_outpath':'Сачувај у...  <ctrl + u>',
 'menu_file_saveprofile':'Сачувај профил...',
 'menu_file_exit':'Затвори',
 'menu_settings':'Опције',
@@ -52,8 +55,8 @@ serbian_cyrillic = {
 'options_warningmb':'Број мегабајта прије упозорења:',
 'options_warningn':'Број датотека прије упозорења:',
 'options_reportpath':'Фасцикла за извјештаје\n(двоклик за одабир):',
-'status_mode_filesdir':'Начин рада: конверзија датотека и фасикли.',
-'status_mode_plaintext':'Начин рада: конверзија обичног текста.',
+'status_mode_filesdir':'Датотеке и фасикле.',
+'status_mode_plaintext':'Обичан текст.',
 'msg_settingschanged':'Подешавања су промијењена. Сачувати?',
 'label_file':'Датотека: ',
 'label_dir':'Фасцикла: ',
@@ -61,4 +64,16 @@ serbian_cyrillic = {
 'label_dirout':'Сачувати у: ',
 'label_number':'Бр. датотека:',
 'label_noselection':'(није изабрано) '
+}
+
+
+multilanguage = {
+
+# Multilanguage strings that can be called independently from the main
+# language strings.
+
+'lngcyr_msg_restart':'За промјену језика поново покрените\n програм.', 
+'lnglat_msg_restart':'Za promjenu jezika ponovo pokrenite\nprogram.',
+'lngeng_msg_restart':'To change the language restart the program.'          
+         
 }

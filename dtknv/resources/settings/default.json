@@ -1,8 +1,8 @@
 {
-"set_file": "(\u043d\u0438\u0458\u0435 \u0438\u0437\u0430\u0431\u0440\u0430\u043d\u043e) ", 
-"set_dirout": "(\u043d\u0438\u0458\u0435 \u0438\u0437\u0430\u0431\u0440\u0430\u043d\u043e) ", 
-"set_dir": "(\u043d\u0438\u0458\u0435 \u0438\u0437\u0430\u0431\u0440\u0430\u043d\u043e) ", 
-"set_language": "sr_cyr",
+"set_file": "None", 
+"set_dirout": "None", 
+"set_dir": "None", 
+"set_language": "lngcyr",
 "set_dir": "None",
 "set_dirout": "None",
 "set_recursive": "1",

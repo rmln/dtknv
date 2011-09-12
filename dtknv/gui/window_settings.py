@@ -74,10 +74,10 @@ class Options:
         return False
 
                         
-    def close(self, *event):
-        """Actions upon close"""
-        self.master. windows_opened.remove('window_options')
-        self.window.destroy()
+#    def close(self, *event):
+#        """Actions upon close"""
+#        self.master. windows_opened.remove('window_options')
+#        self.window.destroy()
 
         
     def check_entries(self, *event):

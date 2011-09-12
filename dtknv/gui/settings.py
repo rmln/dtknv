@@ -25,7 +25,8 @@ class Settings:
         """Loads the settings for GUI"""
         self.numeric  = ('set_failsafe', 'set_recursive', 'set_convertnames', 
                                         'set_verbose', 'set_noram', 'set_report', 'set_update',
-                                        'set_warningmb', 'set_warningn')      
+                                        'set_warningmb', 'set_warningn')   
+        self.checkpaths = ('set_file', 'set_dir', 'set_dirout')   
 #        self.set_file = self.language['label_noselection']
 #        self.set_dir = self.language['label_noselection']
 #        self.set_dirout = self.language['label_noselection']
@@ -43,20 +44,24 @@ class Settings:
 #        self.set_warningn = 100
         self.load()
         self.load_language()
+        # Multilanguage messages
+        self.multilanguage = language.multilanguage
         
         
     def load_language(self):
         """Apply settings"""
-        if self.set_language == 'sr_lat':
+        if self.set_language == 'lnglat':
             self.language = self.latin()
-        if self.set_language == 'sr_cyr':
+        if self.set_language == 'lngcyr':
             self.language = language.serbian_cyrillic
+
         
     def save(self):
         """Save settings in JSON file"""
         settings = self.settings_elements_get()
         with open(self.JPATH, mode='w', encoding='utf-8') as f:
             json.dump(settings, f)
+
     
     def settings_elements_get(self):
         """Get all attributes that contain settings"""
@@ -66,11 +71,6 @@ class Settings:
                 settings[i] = getattr(self, i)
         return settings
 
-#    def settings_elements_set(self, settings):
-#        """Set all attributes that contain settings"""
-#        for i in settings.keys():
-#            setattr(self, i, settings[i])       
-#             
                 
     def load(self):
         """Load settings from JSON file."""
@@ -86,6 +86,10 @@ class Settings:
             if i == 'set_reportpath':
                 if value.strip() == 'default':
                     value = helpers.def_report_path()
+            # A note that nothing is selected for paths
+            if i in self.checkpaths:
+                if not os.path.exists(value):
+                    value = "(?)"
             setattr(self, i, value)       
  
  
@@ -97,5 +101,10 @@ class Settings:
              conv.text = source[i]
              source[i] = conv.get_converted()
         return source
+
+    def reload(self):
+        """Save and load settings"""
+        self.save()
+        self.load()
              
 Set = Settings()        
