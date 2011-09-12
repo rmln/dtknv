@@ -53,8 +53,8 @@ class DtknvGui(tk.Frame):
         
     def create_statusbar(self):
         """Status bar"""
-        self.status = tk.Label(self, relief='sunken', width='63', anchor='w')
-        self.status.pack(side='bottom')
+        self.status = tk.Label(self, relief='sunken', anchor='center')
+        self.status.pack(side='bottom', fill='x', padx=1, pady=1)
     
     def update_status(self, text):
         """Update status text"""

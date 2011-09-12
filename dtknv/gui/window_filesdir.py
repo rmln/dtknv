@@ -13,10 +13,10 @@ class FilesDir:
     def __init__(self, master):
         self.master = master
         self.lng = self.master.lng
-        self.window = tk.Frame(master, width=100)
-        self.label = tk.Label(self.window, relief='sunken')
-        self.label.pack()
-        self.window.pack(anchor='w', padx=5, pady=5)
+        self.window = tk.Frame(master, relief='groove', borderwidth=2)
+        self.label = tk.Label(self.window, bg='red')
+        self.label.pack(anchor='w', padx=5, pady=5)
+        self.window.pack(anchor='w', padx=5, pady=8, fill='x')
         self.update()
     
     def update(self):
