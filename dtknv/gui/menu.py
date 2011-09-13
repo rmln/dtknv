@@ -86,8 +86,8 @@ class Dmenu:
 
     def browse_file(self, *e):
         """Browse for a file"""
-        self.set.set_file = elements.Browse(mode='file').path[0]
-        self.set.set_dir = 'None'
+        self.set.set_file = elements.Browse(mode='file').path
+        self.set.set_dirin = 'None'
         self.master.update_gui()
     
     def browse_dirin(self, *e):
@@ -95,7 +95,6 @@ class Dmenu:
         self.set.set_file = 'None'
         self.master.update_gui()
         
-    
     def browse_dirout(self, *e):
         self.set.set_dirout = elements.Browse(mode='dir').path
         self.master.update_gui()

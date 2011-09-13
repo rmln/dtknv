@@ -8,7 +8,8 @@ Various elements for the GUI.
 
 import tkinter as tk
 from tkinter  import filedialog
-import helpers 
+import helpers
+import os
 
 class Browse:
     """Browse for file or folder"""
@@ -22,6 +23,9 @@ class Browse:
         """Open directory or file"""
         if mode == 'file':
             self.path = filedialog.askopenfilenames(multiple=False)
+            # On NT tkinter returns string, on Linux tuple.
+            if os.name != 'nt':
+                self.path = self.path[0]                
         elif mode == 'dir':
             self.path = filedialog.askdirectory()
         else:
