@@ -54,6 +54,7 @@ serbian_cyrillic = {
 'options_encoding':'Кодна страна:',
 'options_warningmb':'Број мегабајта прије упозорења:',
 'options_warningn':'Број датотека прије упозорења:',
+'options_extensions':'Препознате екстензије::',
 'options_reportpath':'Фасцикла за извјештаје\n(двоклик за одабир):',
 'status_mode_filesdir':'Датотеке и фасикле.',
 'status_mode_plaintext':'Обичан текст.',

@@ -42,6 +42,7 @@ class Settings:
 #        self.set_encoding = 'utf-8'
 #        self.set_warningmb = 100
 #        self.set_warningn = 100
+ #       self.set_extensions = 'docx,odt,txt,htm,html'
         self.load()
         self.load_language()
         # Multilanguage messages
@@ -90,7 +91,14 @@ class Settings:
             if i in self.checkpaths:
                 if not os.path.exists(value):
                     value = "(?)"
-            setattr(self, i, value)       
+            setattr(self, i, value)
+        # Place the extensions
+        self.get_extensions()
+ 
+    
+    def get_extensions(self):
+        """Format extensions"""
+        self.extensions =   self.set_extensions.split(",")     
  
  
     def latin(self):

@@ -34,6 +34,7 @@ class Options:
         self.var_set_warningmb = tk.IntVar()
         self.var_set_warningn = tk.IntVar()
         self.var_set_reportpath = tk.StringVar()
+        self.var_set_extensions = tk.StringVar()
         self.settings_load()
         # Create elements
         self.create_elements()
@@ -109,7 +110,8 @@ class Options:
                 (self.var_set_reportpath, 'reportpath'),
                 (self.var_set_encoding, 'encoding'),
                 (self.var_set_warningmb, 'warningmb'),
-                (self.var_set_warningn, 'warningn')]
+                (self.var_set_warningn, 'warningn'),
+                (self.var_set_extensions, 'extensions')]
         # Checkbuttons ---------------------------
         checkbuttons = {}
         for e, n in chks:
@@ -125,7 +127,7 @@ class Options:
                               text=self.lng['options_%s' % n],
                               justify='left')
             box = tk.Entry(checkbuttons[n], width='5', textvariable=e)
-            if n == 'reportpath':
+            if n in ('reportpath', 'extensions'):
                 box.configure(width='15')
             label.pack(side='left')
             box.pack(side='left')

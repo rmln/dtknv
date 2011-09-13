@@ -16,6 +16,7 @@
 "set_reportpath": "default",
 "set_encoding": "utf-8",
 "set_warningmb": "100",
-"set_warningn": "100"
+"set_warningn": "100",
+"set_extensions": "docx,odt,txt,htm,html"
 }
 
