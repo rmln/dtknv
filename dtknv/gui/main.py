@@ -7,6 +7,8 @@ New interface for dtknv.
 """
 
 import tkinter as tk
+from tkinter import messagebox
+
 from gui.menu import Dmenu
 from gui.window_exceptions import Exceptions
 from gui.window_settings import Options
@@ -75,15 +77,18 @@ class DtknvGui(tk.Frame):
             self.status.configure(text= '  ' + self.lng[text])
         else:
             self.status.configure(text=self.lng[text])
+        # Update this widget, so the message is visible
+        # during loops.
+        self.status.update()    
         
     def show_exceptions(self, *event):
-        """Show exception window."""
+        """Show the exceptions window."""
         if 'window_exceptions' not in self.master.windows_opened:
             self.master.windows_opened.append('window_exceptions')
             Exceptions(self.master)
 
     def show_options(self, *event):
-        """Show options window."""
+        """Show the options window."""
         if 'window_options' not in self.master.windows_opened:
             self.master.windows_opened.append('window_options')
             Options(self.master)
@@ -102,18 +107,39 @@ class DtknvGui(tk.Frame):
     
     def update_gui(self):
         """Update GUI stuff"""
+        # Check if in and out dirs are the same,
+        # and ask for the confirmation to continue.
+        self.explicit_save_in_same_folder()
+        # Save and load the settings, and then update the
+        # gui:
         self.set.reload()
         self.window_filesdir.update_gui()
         # If everything is ready, enable the convert
-        # button and bindig
+        # button and bindig:
         if self.are_paths_ready():
             self.btn_convert.configure(state='normal')
             self.bind_all("<F5>", self.convert)
+            self.btn_convert.configure(state='normal')
+            self.update_status('label_ready', append=0)
         else:
             self.bind_all("<F5>", None)
-        self.btn_convert.configure(state='normal')
-        self.update_status('label_ready', append=0)
-        self.menu.update_menu()
+            
+    def explicit_save_in_same_folder(self):
+        """ Converted files can be saved in the same folder
+        only if explicitly allowed. The message to allow
+        it will pop up if 1) the paths are same 2) the option
+        to save in same folder is off."""
+        same = self.set.set_dir ==  self.set.set_dirout
+        selected = (self.set.set_dir != self.set.NOP) and \
+                   (self.set.set_dirout != self.set.NOP)
+        if (same and selected) and not self.set.set_sameinout:
+            ask = messagebox.askyesno('', self.lng['msg_sameinout'])
+            if ask:
+                self.set.set_sameinout = 1
+            else:
+                # If a user declines to save in the same
+                # folder, reset the output folder:
+                self.set.set_dirout = self.set.NOP
 
     def are_paths_ready(self):
         """Check if paths are ready"""
@@ -143,6 +169,7 @@ class DtknvGui(tk.Frame):
         print('reportpath', self.set.set_reportpath)
         print('reportname', self.set.set_reportname)
         print('extensions', self.set.extensions)
+        print('sameinout', self.set.set_sameinout)
 
     def kill_program(self, *e):
         """Save settings and exit."""

@@ -21,19 +21,20 @@ class FilesDir:
         # The label for basic info
         self.label_selection = tk.Label(self.window)
         self.label_selection.pack(anchor='w', padx=5, pady=5)
-        # The label about selected file or 
         self.window.pack(anchor='w', padx=5, pady=8, fill='x')
         self.update_gui()
     
     def update_gui(self):
         """Update label text"""
         text = self.lng['label_file'] + str(self.set.set_file) + '\n' +  \
-                      self.lng['label_dir'] + str(self.set.set_dir) + '\n' +  \
-                      self.lng['label_dirout'] + str(self.set.set_dirout) 
-        # Directory is selected
+               self.lng['label_dir'] + str(self.set.set_dir) + '\n' +  \
+               self.lng['label_dirout'] + str(self.set.set_dirout) 
+        # A directory is selected, so calculate the size
+        # and the number of the files it contains. Skip
+        # the calculation if user selected the same folder.
         if self.set.set_file != self.set.NOP:
             ext = helpers.getext(self.set.set_file)
-            # See if extension is described in the language file.
+            # See if the extension is described in the language file.
             try:
                 ext = self.lng['ext_%s' % ext]
             except:
@@ -41,11 +42,18 @@ class FilesDir:
             text =   text + '\n' + self.lng['label_type'] + ext
         elif self.set.set_dir != self.set.NOP:
             # Calculate file number and size:
-            self.filecount, self.filesize = '?', '?'
-            self.filecount, self.filesize = \
+            if self.set.set_dir != self.set.previous_folder:
+                # Inform user that this migh take time:
+                self.master.update_status('label_pleasewait', 0)
+                # Calculate
+                self.master.tocyr.RECURSIVE = self.set.set_recursive
+                self.filecount, self.filesize = \
                 self.master.tocyr.calculatedirsize(self.set.set_dir)
+                self.set.previous_folder = self.set.set_dir
+                self.master.update_status('label_ok', 0)
             text = text +   '\n' + self.lng['label_number'] % self.filecount
-            text = text +  '\n' + self.lng['label_size'] %  self.filesize 
+            text = text +  '\n' + self.lng['label_size'] %  \
+                   '%0.2f' % self.filesize 
             text = text +  '\n' + self.lng['options_extensions'] + \
                    self.set.set_extensions.replace(",", ", ")
         self.label_selection.configure(text=text, justify='left')

@@ -59,6 +59,9 @@ serbian_cyrillic = {
 'status_mode_filesdir':'Датотеке и фасикле.',
 'status_mode_plaintext':'Обичан текст.',
 'msg_settingschanged':'Подешавања су промијењена. Сачувати?',
+'msg_sameinout':'Да би улазна и излазна путања биле исте, морате\n' + \
+                'укључити опцију "Сачувај у истој фасцикли"\n\n' + \
+                'Укључити ову опцију?',
 'label_type':'Врста: ',
 'label_datechanged':'Посљеднја измјена: ',
 'label_file':'Датотека: ',
@@ -67,6 +70,8 @@ serbian_cyrillic = {
 'label_dirout':'Сачувати у: ',
 'label_number':'Брoj датотека: %s',
 'label_ready':' Све је спремно за конверзију.',
+'label_pleasewait':' Тренутак... Израчунавање у току.',
+'label_ok':' ОК.',
 'ext_html':'хипертекст ',
 'ext_htm':'хипертекст ',
 'ext_odt':'Опенофис / Либреофис документ',

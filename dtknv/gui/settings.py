@@ -15,11 +15,38 @@ from gui import language
 from srpismo import cyrconv
 import helpers
 
+# Default settings
+
+_default_settings = """
+{
+"set_file": "None", 
+"set_dirout": "None", 
+"set_dir": "None", 
+"set_sameinout": "0",
+"set_language": "lngcyr",
+"set_recursive": "0",
+"set_convertnames": "0",
+"set_verbose": "1",
+"set_failsafe": "0",
+"set_noram": "0",
+"set_report": "1",
+"set_reportname": "dtknv",
+"set_update": "1",
+"set_reportpath": "default",
+"set_encoding": "utf-8",
+"set_warningmb": "100",
+"set_warningn": "100",
+"set_extensions": "docx,odt,txt,htm,html"
+}
+"""
+
 PATH = os.path.join( os.path.dirname(__file__),'..', 'resources', 'settings')
 
 class Settings:
     
     JPATH = os.path.join(PATH, 'default.json')
+    JPATH = os.path.join(helpers.def_report_path(),
+                         '.dtknvtestinstall/settings/default.json')
     
     def __init__(self):
         """Loads the settings for GUI"""
@@ -28,29 +55,37 @@ class Settings:
                          'set_warningmb', 'set_warningn', 'set_sameinout')
         self.checkpaths = ('set_file', 'set_dir', 'set_dirout')
         # This marks "none" for paths 
-        self.NOP = "(?)"   
-#        self.set_file = self.language['label_noselection']
-#        self.set_dir = self.language['label_noselection']
-#        self.set_dirout = self.language['label_noselection']
-#        self.set_recursive = 1
-#        self.set_convertnames = 0
-#        self.set_verbose = 1
-#        self.set_failsafe = 0
-#        self.set_noram = 0
-#        self.set_report = 1
-#        self.set_reportname = 'dtknv'
-#        self.set_update = 1
-#        self.set_reportpath = helpers.def_report_path()
-#        self.set_encoding = 'utf-8'
-#        self.set_warningmb = 100
-#        self.set_warningn = 100
-#       self.set_extensions = 'docx,odt,txt,htm,html'
+        self.NOP = "(?)"
+        # This is just to track the prevously selected folder
+        # to prevent long size/number calculation in 
+        # window_filesdir.update_gui
+        self.previous_folder = self.NOP
+        self.settings_exist()
         self.load()
         self.load_language()
         # Multilanguage messages
         self.multilanguage = language.multilanguage
-        
-        
+
+    def settings_exist(self):
+        """Check if the settings file exists. If not,
+        create the path and save default settings"""
+        if not os.path.exists(self.JPATH):
+            # Take settings path and remove the
+            # file name.
+            path = os.path.split(self.JPATH)[0]
+            # Does it exist?
+            try:
+                os.makedirs(path)
+            except OSError:
+                # Folder is already there, so
+                # skipp the creation.
+                pass
+            f = open(os.path.join(path, 'default.json'), encoding='utf-8', 
+                     mode='w')
+            f.write(_default_settings)
+            f.close()
+
+                
     def load_language(self):
         """Apply settings"""
         if self.set_language == 'lnglat':
@@ -61,7 +96,7 @@ class Settings:
         
     def save(self):
         """Save settings in JSON file"""
-        settings = self.settings_elements_get()
+        settings =  self.settings_elements_get()
         with open(self.JPATH, mode='w', encoding='utf-8') as f:
             json.dump(settings, f)
 

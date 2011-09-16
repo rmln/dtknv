@@ -38,23 +38,28 @@ class Dmenu:
         self.sett = tk.Menu(self.main, tearoff=0)
         self.main.add_cascade(label=self.lng['menu_settings'], menu=self.sett)
         #Setting variables
-        self.var_sett_samedir = tk.IntVar()
+        self.var_sett_sameinout = tk.IntVar()
         self.var_sett_convertnames = tk.IntVar()
         self.var_sett_recursive = tk.IntVar()
         self.var_sett_lng = tk.IntVar()
         self.var_sett_lnglat = tk.IntVar()
         self.var_sett_lngeng = tk.IntVar()
+        # Assign
+        self.var_sett_convertnames.set(self.set.set_convertnames)
+        self.var_sett_recursive.set(self.set.set_recursive)
+        self.var_sett_sameinout.set(self.set.set_sameinout)
+        #self.set.set_convertnames = self.var_sett_convertnames.get()
         # Settings: Save in same, Convert names, Recursive
         # Exceptions, Mode1, Mode2, Advanced
         self.sett.add_checkbutton(label=self.lng['menu_settings_samedir'], 
-                                  command=print,
-                                  variable=self.var_sett_samedir)
+                                  variable=self.var_sett_sameinout,
+                                  command=partial(self.assign_chk, v='sameinout'))
         self.sett.add_checkbutton(label=self.lng['menu_settings_names'], 
-                                  command=print,
-                                  variable=self.var_sett_convertnames)
+                                  variable=self.var_sett_convertnames,
+                                  command=partial(self.assign_chk, v='convertnames'))
         self.sett.add_checkbutton(label=self.lng['menu_settings_recur'], 
-                                  command=print,
-                                  variable=self.var_sett_recursive)
+                                  variable=self.var_sett_recursive,
+                                  command=partial(self.assign_chk, v='recursive'))
         self.sett.add_separator()
         # Settings -> Basic settings
         self.sett.add_command(label=self.lng['menu_settings_showfilesdir'], 
@@ -92,8 +97,6 @@ class Dmenu:
         self.master.bind_all('<Control-o>', self.browse_file)
         self.master.bind_all('<Control-f>', self.browse_dirin)
         self.master.bind_all('<Control-u>', self.browse_dirout)
-        # Update checkboxes
-        self.update_menu()
 
     def browse_file(self, *e):
         """Browse for a file"""
@@ -118,12 +121,25 @@ class Dmenu:
         text = self.set.multilanguage[key]
         messagebox.showinfo('', text)
 
-    def update_menu(self):
-        """Place check marks where needed in the menu"""
-        if self.set.set_sameinout:
-            self.sett.invoke(0)
-        if self.set.set_convertnames:
-            self.sett.invoke(1)
-        if self.set.set_recursive:
-            self.sett.invoke(2)
+    # def update_menu(self):
+    #     """Place check marks where needed in the menu"""
+    #     if self.set.set_sameinout:
+    #         self.sett.invoke(0)
+    #     if self.set.set_convertnames:
+    #         self.sett.invoke(1)
+    #     if self.set.set_recursive:
+    #         self.sett.invoke(2)
+
+    def assign_chk(self, v):
+        """Assign value from menu to global settings.
+        This is to pass values into the self.set, which
+        is then saved in settings.py.
+        
+        I.e.:
+
+        self.set.set_racursive = self.var_sett_recursive.get()
+        
+        """
+        setattr(self.set, 'set_%s' % v,
+                getattr(self, 'var_sett_%s' % v).get())
             
