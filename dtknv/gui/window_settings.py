@@ -137,8 +137,10 @@ class Options:
     def close(self, *event):
         """Close, but check for changes"""
         if self.are_settings_changed():
-            ask = messagebox.askyesno(self.lng['window_options'], self.lng['msg_settingschanged'])
+            ask = messagebox.askyesno(self.lng['window_options'], 
+                                      self.lng['msg_settingschanged'])
             if ask:
                 self.settings_save()
+                self.master.update_gui()
         self.master.windows_opened.remove('window_options')
         self.window.destroy()

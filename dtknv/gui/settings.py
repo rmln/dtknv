@@ -24,9 +24,11 @@ class Settings:
     def __init__(self):
         """Loads the settings for GUI"""
         self.numeric  = ('set_failsafe', 'set_recursive', 'set_convertnames', 
-                                        'set_verbose', 'set_noram', 'set_report', 'set_update',
-                                        'set_warningmb', 'set_warningn')   
-        self.checkpaths = ('set_file', 'set_dir', 'set_dirout')   
+                         'set_verbose', 'set_noram', 'set_report', 'set_update',
+                         'set_warningmb', 'set_warningn', 'set_sameinout')
+        self.checkpaths = ('set_file', 'set_dir', 'set_dirout')
+        # This marks "none" for paths 
+        self.NOP = "(?)"   
 #        self.set_file = self.language['label_noselection']
 #        self.set_dir = self.language['label_noselection']
 #        self.set_dirout = self.language['label_noselection']
@@ -42,7 +44,7 @@ class Settings:
 #        self.set_encoding = 'utf-8'
 #        self.set_warningmb = 100
 #        self.set_warningn = 100
- #       self.set_extensions = 'docx,odt,txt,htm,html'
+#       self.set_extensions = 'docx,odt,txt,htm,html'
         self.load()
         self.load_language()
         # Multilanguage messages
@@ -90,7 +92,7 @@ class Settings:
             # A note that nothing is selected for paths
             if i in self.checkpaths:
                 if not os.path.exists(value):
-                    value = "(?)"
+                    value = self.NOP
             setattr(self, i, value)
         # Place the extensions
         self.get_extensions()

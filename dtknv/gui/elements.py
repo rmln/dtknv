@@ -24,10 +24,11 @@ class Browse:
         if mode == 'file':
             self.path = filedialog.askopenfilenames(multiple=False)
             # On NT tkinter returns string, on Linux tuple.
-            if os.name != 'nt':
+            if os.name != 'nt' and self.path != '':
                 self.path = self.path[0]                
         elif mode == 'dir':
             self.path = filedialog.askdirectory()
         else:
             raise ValueError("Mode must be 'dir' of 'file'")
+        
             

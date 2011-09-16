@@ -13,6 +13,10 @@ from gui.window_settings import Options
 from gui.window_plaintext import PlainText
 from gui.window_filesdir import FilesDir
 
+from convert import tocyr
+from convert.tocyr import ToCyr
+from srpismo.cyrconv import CirConv
+
         
 from gui.settings import Set
 
@@ -22,12 +26,13 @@ class DtknvGui(tk.Frame):
 
     def __init__(self, master=None):
         tk.Frame.__init__(self, master, height=270, width=500)
-        self.sett = Set
+        self.set = Set
         self.master.title('dtknv 0.5 alfa')
         self.pack(padx=0,pady=0,fill=tk.BOTH, expand=0)
         self.pack_propagate(0)
-        # Variable to track opened windows
         self.master.windows_opened = []
+        # Conversion class
+        self.tocyr = ToCyr()
         # Commands for interfaces
         self.master.lng = self.lng
         self.master.show_exceptions = self.show_exceptions
@@ -35,6 +40,9 @@ class DtknvGui(tk.Frame):
         self.master.show_filesdir = self.show_filesdir
         self.master.show_plaintext = self.show_plaintext
         self.master.update_gui = self.update_gui
+        self.master.kill_program = self.kill_program
+        # Status bar
+        self.create_statusbar()
         # Create and attach the menu
         self.menu = Dmenu(master)
         self.master.config(menu=self.menu.main)
@@ -42,8 +50,11 @@ class DtknvGui(tk.Frame):
         self.window_plaintext = PlainText(self)
         self.window_plaintext.window.forget()
         self.window_filesdir = FilesDir(self)
-         # Status bar
-        self.create_statusbar()
+        # The conversion button
+        self.btn_convert = tk.Button(self, text=self.lng['button_convert'], 
+                                     width=20, state='disabled',
+                                     command=self.convert)
+        self.btn_convert.pack(side='bottom', pady=5)
         # Shortcuts
         self.bind_all("<F2>", self.show_exceptions)
         self.bind_all("<F3>", self.show_options)
@@ -58,10 +69,13 @@ class DtknvGui(tk.Frame):
         self.status = tk.Label(self, relief='sunken', anchor='w')
         self.status.pack(side='bottom', fill='x', padx=1, pady=1)
     
-    def update_status(self, text):
+    def update_status(self, text, append=True):
         """Update status text"""
-        self.status.configure(text= '  ' + self.lng[text])
-
+        if append:
+            self.status.configure(text= '  ' + self.lng[text])
+        else:
+            self.status.configure(text=self.lng[text])
+        
     def show_exceptions(self, *event):
         """Show exception window."""
         if 'window_exceptions' not in self.master.windows_opened:
@@ -88,13 +102,59 @@ class DtknvGui(tk.Frame):
     
     def update_gui(self):
         """Update GUI stuff"""
-        self.sett.reload()
+        self.set.reload()
         self.window_filesdir.update_gui()
-        
+        # If everything is ready, enable the convert
+        # button and bindig
+        if self.are_paths_ready():
+            self.btn_convert.configure(state='normal')
+            self.bind_all("<F5>", self.convert)
+        else:
+            self.bind_all("<F5>", None)
+        self.btn_convert.configure(state='normal')
+        self.update_status('label_ready', append=0)
+        self.menu.update_menu()
+
+    def are_paths_ready(self):
+        """Check if paths are ready"""
+        input_path_selected = (self.set.set_dir != self.set.NOP) or \
+                              (self.set.set_file != self.set.NOP)
+        output_path_selected = self.set.set_dirout != self.set.NOP
+        if input_path_selected and output_path_selected:
+            return True
+        else:
+            return False
+    
+    def convert(self, *e):
+        """Start the convertsion"""
+        # Disable the button and remove the bind
+        self.btn_convert.configure(state='disabled')
+        self.bind_all("<F5>", None)
+        print("I'm converting now...")
+        print('ENC', self.set.set_encoding)
+        print('file', self.set.set_file)
+        print('dirout', self.set.set_dirout)
+        print('dir', self.set.set_dir)
+        print('recursive', self.set.set_recursive)
+        print('verbose', self.set.set_verbose)
+        print('failsafe', self.set.set_failsafe)
+        print('noram', self.set.set_noram)
+        print('convertnames', self.set.set_convertnames)
+        print('reportpath', self.set.set_reportpath)
+        print('reportname', self.set.set_reportname)
+        print('extensions', self.set.extensions)
+
+    def kill_program(self, *e):
+        """Save settings and exit."""
+        self.set.save()
+        self.destroy()
+        self.master.destroy()
+                    
         
 def show():
         """Show GUI"""
         root = tk.Tk()
         root.resizable(0,0)
         app = DtknvGui(master=root)
+        root.protocol("WM_DELETE_WINDOW", app.kill_program)
         app.mainloop()

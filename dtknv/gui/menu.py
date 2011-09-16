@@ -23,13 +23,17 @@ class Dmenu:
         # File
         self.main.add_cascade(label=self.lng['menu_main'], menu=self.file)
         # File: Load file, Load directory, Exit
-        self.file.add_command(label=self.lng['menu_file_loadf'], command=self.browse_file)
-        self.file.add_command(label=self.lng['menu_file_loadd'], command=self.browse_dirin)
-        self.file.add_command(label=self.lng['menu_file_outpath'], command=self.browse_dirout)
+        self.file.add_command(label=self.lng['menu_file_loadf'],
+                              command=self.browse_file)
+        self.file.add_command(label=self.lng['menu_file_loadd'],
+                              command=self.browse_dirin)
+        self.file.add_command(label=self.lng['menu_file_outpath'],
+                              command=self.browse_dirout)
+        
         self.file.add_separator()
-        self.file.add_command(label=self.lng['menu_file_saveprofile'],  command=print)
-        self.file.add_separator()
-        self.file.add_command(label=self.lng['menu_file_exit'], command=self.master.destroy)
+        # Redirect exit to the exit() function
+        self.file.add_command(label=self.lng['menu_file_exit'],
+                              command=self.master.kill_program)
         # Settings
         self.sett = tk.Menu(self.main, tearoff=0)
         self.main.add_cascade(label=self.lng['menu_settings'], menu=self.sett)
@@ -64,15 +68,20 @@ class Dmenu:
         self.sett.add_separator()
         # Settings -> Language
         self.menu_language = tk.Menu(self.main, tearoff=0)
-        self.sett.add_cascade(label=self.lng['menu_settings_language'], menu=self.menu_language)
+        self.sett.add_cascade(label=self.lng['menu_settings_language'], 
+                              menu=self.menu_language)
         self.menu_language.add_command(label=self.lng['menu_settings_lngcyr'], 
-                                           command=partial(self.languagechanged, to='lngcyr'))
+                                       command=partial(self.languagechanged, 
+                                       to='lngcyr'))
         self.menu_language.add_command(label=self.lng['menu_settings_lnglat'], 
-                                           command=partial(self.languagechanged, to='lnglat'))
+                                       command=partial(self.languagechanged,
+                                       to='lnglat'))
         self.menu_language.add_command(label=self.lng['menu_settings_lngeng'], 
-                                           command=partial(self.languagechanged, to='lngeng'))
+                                           command=partial(self.languagechanged,
+                                           to='lngeng'))
         # Settings -> Advanced settings
-        self.sett.add_command(label=self.lng['menu_settings_adv'], command=master.show_options)
+        self.sett.add_command(label=self.lng['menu_settings_adv'], 
+                              command=master.show_options)
         # Help
         self.help = tk.Menu(self.main, tearoff=0)
         self.main.add_cascade(label=self.lng['menu_help'], menu=self.help)
@@ -83,6 +92,8 @@ class Dmenu:
         self.master.bind_all('<Control-o>', self.browse_file)
         self.master.bind_all('<Control-f>', self.browse_dirin)
         self.master.bind_all('<Control-u>', self.browse_dirout)
+        # Update checkboxes
+        self.update_menu()
 
     def browse_file(self, *e):
         """Browse for a file"""
@@ -106,3 +117,13 @@ class Dmenu:
         key = '%s_msg_restart' % to
         text = self.set.multilanguage[key]
         messagebox.showinfo('', text)
+
+    def update_menu(self):
+        """Place check marks where needed in the menu"""
+        if self.set.set_sameinout:
+            self.sett.invoke(0)
+        if self.set.set_convertnames:
+            self.sett.invoke(1)
+        if self.set.set_recursive:
+            self.sett.invoke(2)
+            
