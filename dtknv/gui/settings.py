@@ -135,7 +135,9 @@ class Settings:
     
     def get_extensions(self):
         """Format extensions"""
-        self.extensions =   self.set_extensions.split(",")     
+        self.extensions =   self.set_extensions.split(",")
+        if '' in self.extensions: 
+            self.extensions.remove('')
  
  
     def latin(self):

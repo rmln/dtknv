@@ -22,6 +22,12 @@ from srpismo.cyrconv import CirConv
         
 from gui.settings import Set
 
+# TODO
+# Report() must receive report path
+# Report strings in tocyr
+
+
+
 class DtknvGui(tk.Frame):
     
     lng = Set.language
@@ -110,6 +116,8 @@ class DtknvGui(tk.Frame):
         # Check if in and out dirs are the same,
         # and ask for the confirmation to continue.
         self.explicit_save_in_same_folder()
+        # Refresh extensions:
+        self.tocyr.EXTENSIONS = self.set.extensions
         # Save and load the settings, and then update the
         # gui:
         self.set.reload()
@@ -146,6 +154,12 @@ class DtknvGui(tk.Frame):
         input_path_selected = (self.set.set_dir != self.set.NOP) or \
                               (self.set.set_file != self.set.NOP)
         output_path_selected = self.set.set_dirout != self.set.NOP
+        # If directory conversion is selected, the number of files
+        # must be higher than zero.
+        if (self.set.set_dir != self.set.NOP) and \
+           (self.window_filesdir.filecount == 0):
+            return False
+        # Check the paths.
         if input_path_selected and output_path_selected:
             return True
         else:
@@ -170,10 +184,40 @@ class DtknvGui(tk.Frame):
         print('reportname', self.set.set_reportname)
         print('extensions', self.set.extensions)
         print('sameinout', self.set.set_sameinout)
+        # -------------- Set up the conversion class
+        self.tocyr.ENC = self.set.set_encoding
+        # After the checks in the gui, of of the
+        # following ar this stage should be
+        # a correct path.
+        if self.set.set_file != self.set.NOP:
+            self.tocyr.PATHIN =  self.set.set_file
+        else:
+            self.tocyr.PATHIN =  self.set.set_dirin
+        self.tocyr.PATHOUT =  self.set.set_dir
+        self.tocyr.RECURSIVE = self.set.set_recursive
+        self.tocyr.SHOW = self.set.set_verbose 
+        self.tocyr.FAILSAFE = self.set.set_failsafe
+        # This has to be negated, since the user was
+        # asked whether NOT to use RAM, but the scrips
+        # expects answer on whether to USE it.
+        self.tocyr.CALLEDFROM = 'dtknv new interface'
+        self.tocyr.USERAM = 0 if self.set.set_noram else 1
+        self.tocyr.CONVERTFNAMES = self.set.set_convertnames
+        self.tocyr.REPORTPATH = self.set.set_reportpath
+        self.tocyr.REPORT = self.set.set_reportname
+        self.tocyr.EXTENSIONS = self.set.extensions
+        self.tocyr.SAMEOUTHPATH = self.set.set_sameinout
+                
 
     def kill_program(self, *e):
         """Save settings and exit."""
+        # Reset paths:
+        self.set.set_file = self.set.NOP
+        self.set.set_dirin = self.set.NOP
+        self.set.set_dir = self.set.NOP
+        # Save the settings
         self.set.save()
+        # Destroy all windows
         self.destroy()
         self.master.destroy()
                     

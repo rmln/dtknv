@@ -12,7 +12,7 @@ from gui.settings import Set
 import helpers
 
 class FilesDir:
-    
+    """Shows and calculates information for file/directory conversion"""
     def __init__(self, master):
         self.master = master
         self.lng = self.master.lng
@@ -42,15 +42,21 @@ class FilesDir:
             text =   text + '\n' + self.lng['label_type'] + ext
         elif self.set.set_dir != self.set.NOP:
             # Calculate file number and size:
-            if self.set.set_dir != self.set.previous_folder:
+            #if self.set.set_dir != self.set.previous_folder:
+            if 1:
                 # Inform user that this migh take time:
                 self.master.update_status('label_pleasewait', 0)
+                # Pass the extension list
+                self.master.tocyr.EXT = self.set.extensions
                 # Calculate
                 self.master.tocyr.RECURSIVE = self.set.set_recursive
                 self.filecount, self.filesize = \
                 self.master.tocyr.calculatedirsize(self.set.set_dir)
                 self.set.previous_folder = self.set.set_dir
-                self.master.update_status('label_ok', 0)
+                if not self.filecount:
+                    self.master.update_status('label_nosupportedfiles', 0)
+                else:
+                    self.master.update_status('label_ok', 0)
             text = text +   '\n' + self.lng['label_number'] % self.filecount
             text = text +  '\n' + self.lng['label_size'] %  \
                    '%0.2f' % self.filesize 

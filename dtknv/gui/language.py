@@ -71,6 +71,7 @@ serbian_cyrillic = {
 'label_number':'Брoj датотека: %s',
 'label_ready':' Све је спремно за конверзију.',
 'label_pleasewait':' Тренутак... Израчунавање у току.',
+'label_nosupportedfiles':' У одабраној фасцикли нема подржаних датотека.',
 'label_ok':' ОК.',
 'ext_html':'хипертекст ',
 'ext_htm':'хипертекст ',
