@@ -49,12 +49,7 @@ class ToCyr:
 
     # File types that are listed in the open file dialogue.
 
-    EXT = {'txt':'Neformatiran tekst',
-           'html':'Hipertekst',
-           'php':'PHP skripta',
-           'xml':'Proširivi metajezik',
-           'docx':'MS Word 2007+',
-           'odt':'Open Ofis Pisac'}
+    EXT = ('txt', 'html','docx', 'odt')
             
     # Files that will be treated as plain text files.
 
@@ -99,6 +94,8 @@ class ToCyr:
     CONVSUFFIX = '_konv'
     # In and out paths are the same?
     SAMEOUTPATH = True
+    # Path to save reports
+    REPORTPATH = helpers.def_report_path()
 
     def __init__(self):
         """Convert between Latin and Cyrillic scripts."""
@@ -392,7 +389,7 @@ class ToCyr:
 
     def _filtersupported(self, fs):
         """Return files with supported extensions."""
-        return [i for i in fs if getext(i) in self.EXT.keys()]
+        return [i for i in fs if getext(i) in self.EXT]
 
 
     def _outpath(self, f):
