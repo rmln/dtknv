@@ -80,11 +80,18 @@ class Settings:
                 # Folder is already there, so
                 # skipp the creation.
                 pass
-            f = open(os.path.join(path, 'default.json'), encoding='utf-8', 
-                     mode='w')
-            f.write(_default_settings)
-            f.close()
+            self.reset_settings(path=os.path.join(path, 'default.json'))
+            
+            
 
+    def reset_settings(self, path='', default=False):
+        """Reset the settings"""
+        if default:
+            path = self.JPATH
+        f = open(path, encoding='utf-8', 
+                     mode='w')
+        f.write(_default_settings)
+        f.close()
                 
     def load_language(self):
         """Apply settings"""

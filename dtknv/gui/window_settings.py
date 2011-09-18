@@ -10,6 +10,7 @@ import tkinter as tk
 from tkinter import messagebox
 
 from gui.settings import Set
+from gui.elements import Browse
 
 class Options:
     def __init__(self, master):
@@ -74,12 +75,6 @@ class Options:
                     return True
         return False
 
-                        
-#    def close(self, *event):
-#        """Actions upon close"""
-#        self.master. windows_opened.remove('window_options')
-#        self.window.destroy()
-
         
     def check_entries(self, *event):
         """Check all entries"""
@@ -94,6 +89,9 @@ class Options:
         button_ok.pack(side='left')
         button_cancel = tk.Button(frame, text=self.lng['button_close'],
                                   command=self.close)
+        button_cancel.pack(side='left')
+        button_cancel = tk.Button(frame, text=self.lng['button_default'],
+                                  command=self.reset_settings)
         button_cancel.pack(side='left')
         frame.pack(pady=10)
         
@@ -128,7 +126,10 @@ class Options:
                               justify='left')
             box = tk.Entry(checkbuttons[n], width='5', textvariable=e)
             if n in ('reportpath', 'extensions'):
-                box.configure(width='15')
+                box.configure(width='30')
+            if n == 'reportpath':
+                box.bind('<Double-Button-1>', self.browse_folder)
+                self.txt_reportpath = box
             label.pack(side='left')
             box.pack(side='left')
             checkbuttons[n].pack(anchor='w')
@@ -144,3 +145,16 @@ class Options:
                 self.master.update_gui()
         self.master.windows_opened.remove('window_options')
         self.window.destroy()
+    
+    def browse_folder(self, *e):
+        """Browse for folder and place path in the entry"""
+        path = Browse(mode='dir', initpath=None).path
+        if path != '':
+            self.txt_reportpath.delete(0, 'end')
+            self.txt_reportpath.insert('end', path)
+
+    def reset_settings(self, *e):
+        """Reset the settings"""
+        self.set.reset_settings(default=True)
+        self.settings_load()
+        

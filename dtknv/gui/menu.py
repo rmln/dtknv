@@ -56,7 +56,8 @@ class Dmenu:
                                   command=partial(self.assign_chk, v='sameinout'))
         self.sett.add_checkbutton(label=self.lng['menu_settings_names'], 
                                   variable=self.var_sett_convertnames,
-                                  command=partial(self.assign_chk, v='convertnames'))
+                                  command=partial(self.assign_chk,
+                                                  v='convertnames'))
         self.sett.add_checkbutton(label=self.lng['menu_settings_recur'], 
                                   variable=self.var_sett_recursive,
                                   command=partial(self.assign_chk, v='recursive'))
@@ -101,16 +102,18 @@ class Dmenu:
     def browse_file(self, *e):
         """Browse for a file"""
         self.set.set_file = elements.Browse(mode='file').path
-        self.set.set_dirin = 'None'
+        self.set.set_dir = self.set.NOP
         self.master.update_gui()
     
     def browse_dirin(self, *e):
-        self.set.set_dir = elements.Browse(mode='dir').path
-        self.set.set_file = 'None'
+        self.set.set_dir = elements.Browse(mode='dir',
+                                           initpath=r'/home/marw/.dtest/in').path
+        self.set.set_file = self.set.NOP
         self.master.update_gui()
         
     def browse_dirout(self, *e):
-        self.set.set_dirout = elements.Browse(mode='dir').path
+        self.set.set_dirout = elements.Browse(mode='dir',
+                              initpath=r'/home/marw/.dtest/out').path
         self.master.update_gui()
     
     def languagechanged(self, to):
@@ -121,14 +124,6 @@ class Dmenu:
         text = self.set.multilanguage[key]
         messagebox.showinfo('', text)
 
-    # def update_menu(self):
-    #     """Place check marks where needed in the menu"""
-    #     if self.set.set_sameinout:
-    #         self.sett.invoke(0)
-    #     if self.set.set_convertnames:
-    #         self.sett.invoke(1)
-    #     if self.set.set_recursive:
-    #         self.sett.invoke(2)
 
     def assign_chk(self, v):
         """Assign value from menu to global settings.

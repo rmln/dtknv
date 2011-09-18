@@ -6,8 +6,12 @@ New interface for dtknv.
 
 """
 
+
 import tkinter as tk
 from tkinter import messagebox
+
+import threading
+import time
 
 from gui.menu import Dmenu
 from gui.window_exceptions import Exceptions
@@ -122,6 +126,7 @@ class DtknvGui(tk.Frame):
         # gui:
         self.set.reload()
         self.window_filesdir.update_gui()
+        self.status.configure(bg='gray')
         # If everything is ready, enable the convert
         # button and bindig:
         if self.are_paths_ready():
@@ -168,6 +173,7 @@ class DtknvGui(tk.Frame):
     def convert(self, *e):
         """Start the convertsion"""
         # Disable the button and remove the bind
+        # end override
         self.btn_convert.configure(state='disabled')
         self.bind_all("<F5>", None)
         print("I'm converting now...")
@@ -190,23 +196,49 @@ class DtknvGui(tk.Frame):
         # following ar this stage should be
         # a correct path.
         if self.set.set_file != self.set.NOP:
-            self.tocyr.PATHIN =  self.set.set_file
+            self.tocyr.PATHIN = self.set.set_file
         else:
-            self.tocyr.PATHIN =  self.set.set_dirin
-        self.tocyr.PATHOUT =  self.set.set_dir
+            self.tocyr.PATHIN = self.set.set_dir
+        self.tocyr.PATHOUT =  self.set.set_dirout
         self.tocyr.RECURSIVE = self.set.set_recursive
         self.tocyr.SHOW = self.set.set_verbose 
-        self.tocyr.FAILSAFE = self.set.set_failsafe
+        self.tocyr.FAILSAFE =  0 if self.set.set_failsafe else 1
         # This has to be negated, since the user was
         # asked whether NOT to use RAM, but the scrips
         # expects answer on whether to USE it.
-        self.tocyr.CALLEDFROM = 'dtknv new interface'
         self.tocyr.USERAM = 0 if self.set.set_noram else 1
         self.tocyr.CONVERTFNAMES = self.set.set_convertnames
         self.tocyr.REPORTPATH = self.set.set_reportpath
         self.tocyr.REPORT = self.set.set_reportname
         self.tocyr.EXTENSIONS = self.set.extensions
-        self.tocyr.SAMEOUTHPATH = self.set.set_sameinout
+        self.tocyr.SAMEOUTPATH = self.set.set_sameinout
+        self.tocyr.SHOW = self.set.set_verbose
+        self.tocyr.CALLEDFROM = 'dtknv new interface'
+        # Start the thread
+        self.th = threading.Thread(target = self.tocyr.run)
+        self.th.start()
+        while True:
+            self.status.configure(text=self.lng['label_conversion'], 
+                                  bg='yellow')
+            self.status.update()
+            time.sleep(1)
+            self.status.configure(text=self.lng['label_conversion'],
+                                  bg='red')
+            self.status.update()
+            time.sleep(0.3)
+            if not self.th.is_alive():
+                try:
+                    reptext = self.lng['label_finishedcheck']
+                except AttributeError:
+                    reptext = '(Bez izvještaja.)'
+                if self.tocyr.errors_during_work:
+                    reptext =  self.lng['label_finishedwitherrors'] + reptext
+                    repcol = "orange"
+                else:
+                    reptext = self.lng['label_finished'] + reptext
+                    repcol = "green"
+                self.status.configure(text=reptext, bg=repcol)
+                break
                 
 
     def kill_program(self, *e):
