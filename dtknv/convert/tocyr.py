@@ -96,6 +96,8 @@ class ToCyr:
     SAMEOUTPATH = True
     # Path to save reports
     REPORTPATH = helpers.def_report_path()
+    # Are reports on?
+    REPORT = True
 
     def __init__(self):
         """Convert between Latin and Cyrillic scripts."""
@@ -116,7 +118,7 @@ class ToCyr:
         # Remains false if no error occurs during
         # conversion.
         self.errors_during_work = False
-        
+        print('tocyr: ', self.PATHOUT)
         if os.path.isdir(self.PATHIN):
             self.conversiontype = 'dir'
         elif os.path.isfile(self.PATHIN):
@@ -323,7 +325,8 @@ class ToCyr:
         """Iterate over items and convert."""
         # Convert all files in the loop:
         if self.FAILSAFE:
-            self.report = Report(cn=self)
+            if self.REPORT:
+                self.report = Report(cn=self)
         for f in loopover:
             if self.SHOW:
                 # "Loading %s"
@@ -331,7 +334,8 @@ class ToCyr:
             if self.FAILSAFE:
                 try:
                     self._convertfile(f)
-                    self.report.write('OK: %s\r\n' % f)
+                    if self.REPORT:
+                        self.report.write('OK: %s\r\n' % f)
                 except:
                     # "Ooops! This file was not converted..."
                     print('\tOps, greska! Ova datoteka nije konvertovana...')

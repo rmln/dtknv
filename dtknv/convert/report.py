@@ -34,7 +34,7 @@ import version
 class Report:
     """Class for creating reports of conversion, with some stats."""
         
-    def __init__(self, cn=False, reppath='..', flush=True):
+    def __init__(self, cn=False, reppath=None, flush=True):
         """Start Report() call"""
         if not cn:
             raise RuntimeError('Host class (cn) must be supplied.')
@@ -42,30 +42,20 @@ class Report:
             self.cn = cn
             
         self.flush = flush
+        reppath = self.cn.REPORTPATH
+        if not os.path.exists(reppath):
+            raise OSError("Report path does not exist.")
+        if not os.path.isdir(reppath):
+            raise ValueError("Report path must be a dirictory.")
         self.reppath = reppath
+
         self.dt = helpers.getdatetime(f='long')
         self.repopened = self._openfile()
         self._saveinitial()
         
     def _openfile(self):
-        """Open the report file."""
-        if os.name == 'nt':
-               home = helpers.getwindoc()
-        else:
-            home = os.getenv("HOME")
-        # the path for the reports
-        begin_in = os.path.join(home, 'izvjestaji-dknv')
-        # Check if this path exists, ~/Izvjestaji-dknv in  Linux and My Documents/Dtknv (or whatever
-        # personal path is) on Windows.
-        if not os.path.exists(begin_in):
-            try:
-                os.mkdir(begin_in)
-            except:
-                # Refuse to work without report if it is switched on
-                print('Putanja za izvjestaj %s nije mogla biti kreirana. Kraj rada.'  % begin_in)
-                sys.exit(0)
-         
-        f = os.path.join(begin_in, self._filename())
+        """Open the report file.""" 
+        f = os.path.join(self.reppath, self._filename())
         if self.cn.SHOW:
             print('Izvjestaj o radu je u:\r\n', f)
         opened = codecs.open(f, mode='w', encoding=self.cn.ENC)
