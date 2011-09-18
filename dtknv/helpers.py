@@ -37,7 +37,7 @@ from time import strftime
 def def_report_path():
     """Return the default report path"""
     if os.name == 'nt':
-        return( getwindoc())
+        return(getwindoc())
     else:
         return(os.getenv("HOME"))
 
