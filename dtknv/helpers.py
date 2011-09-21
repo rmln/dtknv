@@ -33,6 +33,43 @@ import sys
 import ctypes
 from time import strftime
 
+import version
+
+def get_version(v=version.__version__):
+    """Separate the version tag into tuple numbers
+    and string description"""
+    ver = v.split(" ")
+    vtag = ver[1]
+    vnum = [int(i) for i in ver[0].split('.')]
+    return(vnum, vtag)
+
+def get_version_comparison(v1=None, v2=None):
+    """Return lower, higher or same
+    version, when compared v1 to v2."""
+    # If v1 is None, then compare to the corrent version
+    if v1 == None:
+        v1 = get_version()[0]
+    else:
+        v1 = get_version(v1)[0]
+    v2 = get_version(v2)[0]
+    # calculate version differences
+    if v1[0] > v2[0]:
+        return('higher')
+    elif v1[0] == v2[0]:
+        if v1[1] > v2[1]:
+            return('higher')
+        if v1[1] < v2[1]:
+            return('lower')
+        if v1[1] == v2[1]:
+            if v1[2] == v2[2]:
+                return("same")
+            if v1[2] > v2[2]:
+                return("higher")
+            if v1[2] < v2[2]:
+                return("lower")
+    else:
+        return("lower")
+                
 
 def def_report_path():
     """Return the default report path"""
