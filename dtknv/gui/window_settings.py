@@ -29,7 +29,6 @@ class Options:
         self.var_set_failsafe = tk.IntVar()
         self.var_set_noram = tk.IntVar()
         self.var_set_report = tk.IntVar()
-        self.var_set_update = tk.IntVar()
         self.var_set_reportname = tk.StringVar()
         self.var_set_encoding = tk.StringVar()
         self.var_set_warningmb = tk.IntVar()
@@ -102,8 +101,7 @@ class Options:
         chks = [(self.var_set_verbose, 'verbose'),
                 (self.var_set_failsafe, 'failsafe'),
                 (self.var_set_noram, 'noram'),
-                (self.var_set_report, 'report'),
-                 (self.var_set_update, 'update')]
+                (self.var_set_report, 'report')]
         txts = [(self.var_set_reportname, 'reportname'),
                 (self.var_set_reportpath, 'reportpath'),
                 (self.var_set_encoding, 'encoding'),

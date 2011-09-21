@@ -36,9 +36,15 @@ class PlainText:
     def buttons(self):
         """Create buttons"""
         frame_buttons = tk.Frame(self.window)
-        btn_tolatin = tk.Button(frame_buttons, text=self.lng['button_erase'], command=print)
-        btn_tocyr = tk.Button(frame_buttons, text=self.lng['button_tocyr'], command=print)
-        btn_erase = tk.Button(frame_buttons, text=self.lng['button_tolat'], command=print)
+        btn_tolatin = tk.Button(frame_buttons, 
+                                text=self.lng['button_erase'],
+                                command=print)
+        btn_tocyr = tk.Button(frame_buttons,
+                              text=self.lng['button_tocyr'],
+                              command=print)
+        btn_erase = tk.Button(frame_buttons,
+                              text=self.lng['button_tolat'],
+                              command=print)
         btn_tolatin.pack(side='left', padx=3, pady=3)
         btn_erase.pack(side='left', padx=3, pady=3)
         btn_tocyr.pack(side='left', padx=3, pady=3)

@@ -53,14 +53,16 @@ class Dmenu:
         # Exceptions, Mode1, Mode2, Advanced
         self.sett.add_checkbutton(label=self.lng['menu_settings_samedir'], 
                                   variable=self.var_sett_sameinout,
-                                  command=partial(self.assign_chk, v='sameinout'))
+                                  command=partial(self.assign_chk,
+                                                  v='sameinout'))
         self.sett.add_checkbutton(label=self.lng['menu_settings_names'], 
                                   variable=self.var_sett_convertnames,
                                   command=partial(self.assign_chk,
                                                   v='convertnames'))
         self.sett.add_checkbutton(label=self.lng['menu_settings_recur'], 
                                   variable=self.var_sett_recursive,
-                                  command=partial(self.assign_chk, v='recursive'))
+                                  command=partial(self.assign_chk,
+                                                  v='recursive'))
         self.sett.add_separator()
         # Settings -> Basic settings
         self.sett.add_command(label=self.lng['menu_settings_showfilesdir'], 
@@ -94,10 +96,13 @@ class Dmenu:
         # Help: Instructions, About
         self.help.add_command(label=self.lng['menu_help_help'], command=print)
         self.help.add_command(label=self.lng['menu_help_about'], command=print)
+        self.help.add_command(label=self.lng['menu_help_update'],
+                              command=self.master.show_newversion)
         # Shortcuts
         self.master.bind_all('<Control-o>', self.browse_file)
         self.master.bind_all('<Control-f>', self.browse_dirin)
         self.master.bind_all('<Control-u>', self.browse_dirout)
+    
 
     def browse_file(self, *e):
         """Browse for a file"""
@@ -107,13 +112,15 @@ class Dmenu:
     
     def browse_dirin(self, *e):
         self.set.set_dir = elements.Browse(mode='dir',
-                                           initpath=r'/home/marw/.dtest/in').path
+                           initpath=r'/home/marw/.dtest/in').path
         self.set.set_file = self.set.NOP
+        self.assign_same('in')
         self.master.update_gui()
         
     def browse_dirout(self, *e):
         self.set.set_dirout = elements.Browse(mode='dir',
                               initpath=r'/home/marw/.dtest/out').path
+        self.assign_same('out')
         self.master.update_gui()
     
     def languagechanged(self, to):
@@ -123,6 +130,19 @@ class Dmenu:
         key = '%s_msg_restart' % to
         text = self.set.multilanguage[key]
         messagebox.showinfo('', text)
+
+    
+    def assign_same(self, src='in'):
+        """Check if folders are the same"""
+        if src == 'in':
+            if self.set.set_sameinout:
+                self.set.set_dirout =  self.set.set_dir
+        elif src == 'out':
+            if self.set.set_sameinout:
+                self.set.set_dir =  self.set.set_dirout
+        else:
+            raise ValueError("src must be 'in' or 'out'")
+        
 
 
     def assign_chk(self, v):
@@ -137,4 +157,12 @@ class Dmenu:
         """
         setattr(self.set, 'set_%s' % v,
                 getattr(self, 'var_sett_%s' % v).get())
+        if v == 'sameinout' and self.set.set_sameinout:
+            self.set.set_dir =  self.set.set_dirout
+            self.master.update_gui()
+        if v == 'sameinout' and not self.set.set_sameinout:
+            self.set.set_dirout =  self.set.NOP
+            self.master.update_gui()
+        
+            
             

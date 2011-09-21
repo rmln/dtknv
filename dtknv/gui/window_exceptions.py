@@ -68,8 +68,6 @@ class Exceptions:
         frame_fieldsscroll.configure(state='disabled')
 
             
-        
-
     def create_buttons(self):
         """Frame for buttons"""
         button_objects = {}
@@ -91,10 +89,15 @@ class Exceptions:
                                     width=7)
         menu_load = tk.Menu(button_load, tearoff=0)
         # Standard exceptions
-        menu_load.add_command(label=self.lng['button_standardsr'], command=print)
+        menu_load.add_command(label=self.lng['button_standardsr'], 
+                              command=print)
         # Other exceptions
         for i in range(5):
             menu_load.add_command(label='File name %s' % i, command=print)
         button_load.configure(menu=menu_load)
         button_load.pack()
         frame_buttons.pack(padx=10, pady=10)
+
+    def load_exceptions(self):
+        """Load exceptions"""
+        pass

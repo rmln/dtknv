@@ -51,7 +51,7 @@ class Settings:
     def __init__(self):
         """Loads the settings for GUI"""
         self.numeric  = ('set_failsafe', 'set_recursive', 'set_convertnames', 
-                         'set_verbose', 'set_noram', 'set_report', 'set_update',
+                         'set_verbose', 'set_noram', 'set_report', 
                          'set_warningmb', 'set_warningn', 'set_sameinout')
         self.checkpaths = ('set_file', 'set_dir', 'set_dirout')
         # This marks "none" for paths 

@@ -13,11 +13,14 @@ from tkinter import messagebox
 import threading
 import time
 
+
+
 from gui.menu import Dmenu
 from gui.window_exceptions import Exceptions
 from gui.window_settings import Options
 from gui.window_plaintext import PlainText
 from gui.window_filesdir import FilesDir
+from gui.window_checknew import NewVersion
 
 from convert import tocyr
 from convert.tocyr import ToCyr
@@ -51,6 +54,7 @@ class DtknvGui(tk.Frame):
         self.master.show_options = self.show_options
         self.master.show_filesdir = self.show_filesdir
         self.master.show_plaintext = self.show_plaintext
+        self.master.show_newversion = self.show_newversion
         self.master.update_gui = self.update_gui
         self.master.kill_program = self.kill_program
         # Status bar
@@ -89,7 +93,15 @@ class DtknvGui(tk.Frame):
             self.status.configure(text=self.lng[text])
         # Update this widget, so the message is visible
         # during loops.
-        self.status.update()    
+        self.status.update()
+
+    def show_newversion(self, *e):
+        """Check if new version is available, and if yes
+        show details and the download link."""
+        if 'window_newversion' not in self.master.windows_opened:
+            self.master.windows_opened.append('window_newversion')
+            NewVersion(self.master)
+        
         
     def show_exceptions(self, *event):
         """Show the exceptions window."""
@@ -106,7 +118,8 @@ class DtknvGui(tk.Frame):
     def show_filesdir(self, *event):
         """Show file conversion mode"""
         self.window_plaintext.window.forget()
-        self.window_filesdir.window.pack()
+        self.window_filesdir.window.pack(anchor='w', padx=5, 
+                                         pady=8, fill='x')
         self.update_status('status_mode_filesdir')
         
     def show_plaintext(self, *event):
@@ -145,6 +158,7 @@ class DtknvGui(tk.Frame):
         same = self.set.set_dir ==  self.set.set_dirout
         selected = (self.set.set_dir != self.set.NOP) and \
                    (self.set.set_dirout != self.set.NOP)
+
         if (same and selected) and not self.set.set_sameinout:
             ask = messagebox.askyesno('', self.lng['msg_sameinout'])
             if ask:
