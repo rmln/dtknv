@@ -42,8 +42,10 @@ __license__ = "GNU General Public License v. 3"
 
 import os
 import codecs
+import json
 
-RESPATH = os.path.join(os.path.dirname(__file__), '..', 'resources', 'cyrlatdiff')
+RESPATH = os.path.join(os.path.dirname(__file__), '..', 
+                       'resources', 'cyrlatdiff')
 
 cyr = {'А':'A', 'Б':'B', 'В':'V', 'Г':'G', 'Д':'D', 'Е':'E',
        'Ж':'Ž', 'З':'Z', 'И':'I', 'Ј':'J', 'К':'K', 'Л':'L',
@@ -65,6 +67,33 @@ lat_resolutions = {'NJ':'Њ',
                    'DŽ':'Џ',
                    'Dž':'Џ',
                    'dŽ':'дЖ',}
+sample_exc = \
+"""
+{
+"find": "replace"
+}
+"""
+
+class Replace:
+    """Loads and saves strings that need to have different
+    conversion rules"""
+    def __init__(self, f=False):
+        """Load and save file strings"""
+        pass
+
+    def load(self, f):
+        """Load a JSON file"""
+        with open(f, mode='r', encoding='utf-8') as f:
+            c = json.load(f)
+        return(c)
+
+    def save(self, f, exc):
+        """Save a JSON file"""
+        with open(f, mode='w', encoding='utf-8') as f:
+            json.dump(exc, f)
+    
+
+
 
 class CirConv:
     """Converts Cyrillic script to Latin."""
@@ -82,13 +111,16 @@ class CirConv:
         # Raise TypeError if 'text' is not a character
         # object.
         if not isinstance(text, str):
-            raise TypeError('CirConv accepts text only, %s is rejected.' % type(text))
+            raise TypeError('CirConv accepts text only, %s is rejected.' \
+                                % type(text))
         # Load latdiff file.
         if mode == 'tocyr':
             cyrlatdiff = self._load_latdif()
             # Add variants
-            self.cyr_latdiff = cyrlatdiff[0] + self._make_variants(cyrlatdiff[0])
-            self.lat_latdiff = cyrlatdiff[1] + self._make_variants(cyrlatdiff[1])
+            self.cyr_latdiff = cyrlatdiff[0] + \
+                self._make_variants(cyrlatdiff[0])
+            self.lat_latdiff = cyrlatdiff[1] + \
+                self._make_variants(cyrlatdiff[1])
         
     def _load_latdif(self):
         """Load cirlatdif.txt file."""
