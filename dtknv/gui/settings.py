@@ -40,6 +40,7 @@ _default_settings = """
 }
 """
 
+
 PATH = os.path.join( os.path.dirname(__file__),'..', 'resources', 'settings')
 
 class Settings:

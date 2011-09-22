@@ -30,7 +30,7 @@ serbian_cyrillic = {
 'menu_settings_lngeng':'English',
 'menu_help':'Помоћ',
 'menu_help_help':'Упутство',
-'menu_help_update':'Провјери да ли је објављена нова верзија',
+'menu_help_update':'Нова верзија...',
 'menu_help_about':'О програму',
 'window_exceptions':'Изузеци',
 'button_ok':'Потврди',

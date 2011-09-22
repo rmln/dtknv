@@ -6,10 +6,17 @@ Exceptions interface for dtknv.
 
 """
 
+import os
 import tkinter as tk
+
+import helpers
+from srpismo.cyrconv import Replace
 
 class Exceptions:
     
+    # Default path for exception files
+    PATH = os.path.join(helpers.def_report_path(),'.dtknvtestinstall')
+
     def __init__(self, master):
         self.master = master
         self.lng = self.master.lng
@@ -25,11 +32,18 @@ class Exceptions:
         self.create_cells()
         self.window.grab_set()
         
+ 
 
     def close(self, *event):
         """Actions upon close"""
         self.master. windows_opened.remove('window_exceptions')
         self.window.destroy()
+
+    def load_exc(self, f):
+        """Load replacement strings."""
+        f = os.path.join(self.PATH, f)
+        exceptions = Replace().load(f)
+        return(exceptions)
 
     def create_cells(self):
         """Create cells for exception text"""
@@ -38,15 +52,17 @@ class Exceptions:
         text_fields = tk.Text(frame_fieldsscroll, relief='flat')
         frame_fieldsscroll.window_create('insert', window=text_fields)
         
+        exc = self.load_exc('sample_rep.json')
+
         tf = {}
-        for f in range(31):
+        for item in exc.keys():
             #tf[f] = tk.Frame(text_fields)
 
             e_find = tk.Entry(text_fields, width=16, relief='flat')
             e_replace = tk.Entry(text_fields, width=16, relief='flat')
 
-            e_find.insert(0, 'find'+str(f))
-            e_replace.insert(0, 'replace'+str(f))
+            e_find.insert(0, item)
+            e_replace.insert(0, exc[item])
 
             e_find.grid(row=0, column=0)
             e_replace.grid(row=0, column=1)
