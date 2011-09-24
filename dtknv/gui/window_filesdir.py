@@ -17,11 +17,18 @@ class FilesDir:
         self.master = master
         self.lng = self.master.lng
         self.set = Set
-        self.window = tk.Frame(master, relief='groove', borderwidth=2)
+        self.window = tk.Frame(master, relief='groove', borderwidth=0)
         # The label for basic info
         self.label_selection = tk.Label(self.window)
         self.label_selection.pack(anchor='w', padx=5, pady=5)
-        self.window.pack(anchor='w', padx=5, pady=8, fill='x')
+        # The conversion button
+        self.btn_convert = tk.Button(self.window, 
+                                     text=self.lng['button_convert'], 
+                                     width=20, state='disabled',
+                                     command=self.master.convert)
+        self.btn_convert.pack(side='bottom', pady=5)
+
+        self.window.pack(fill='both', anchor='w', expand=1)
         self.update_gui()
     
     def update_gui(self):

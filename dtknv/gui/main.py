@@ -55,6 +55,7 @@ class DtknvGui(tk.Frame):
         self.master.show_filesdir = self.show_filesdir
         self.master.show_plaintext = self.show_plaintext
         self.master.show_newversion = self.show_newversion
+        self.master.convert = self.convert
         self.master.update_gui = self.update_gui
         self.master.kill_program = self.kill_program
         # Status bar
@@ -66,11 +67,6 @@ class DtknvGui(tk.Frame):
         self.window_plaintext = PlainText(self)
         self.window_plaintext.window.forget()
         self.window_filesdir = FilesDir(self)
-        # The conversion button
-        self.btn_convert = tk.Button(self, text=self.lng['button_convert'], 
-                                     width=20, state='disabled',
-                                     command=self.convert)
-        self.btn_convert.pack(side='bottom', pady=5)
         # Shortcuts
         self.bind_all("<F2>", self.show_exceptions)
         self.bind_all("<F3>", self.show_options)
@@ -118,8 +114,7 @@ class DtknvGui(tk.Frame):
     def show_filesdir(self, *event):
         """Show file conversion mode"""
         self.window_plaintext.window.forget()
-        self.window_filesdir.window.pack(anchor='w', padx=5, 
-                                         pady=8, fill='x')
+        self.window_filesdir.window.pack(anchor='w', fill='both', expand=1)
         self.update_status('status_mode_filesdir')
         
     def show_plaintext(self, *event):

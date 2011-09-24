@@ -4,6 +4,10 @@
 
 Exceptions interface for dtknv.
 
+Exceptions are not errors, but any strings in the source text that are
+not to be replaced by a regular Cyr > Lat conversion in the target
+text. They function as search and replace.
+
 """
 
 import os
@@ -31,17 +35,22 @@ class Exceptions:
         self.main.pack(padx=0, pady=0, fill='both', expand=1)
         self.main.pack_propagate(0)
         # Default pairs
-        self.exc = self.load_exc('sample_rep.json')
+        self.exc = self.load_exc('standarni-izuzeci.json')
         # Create needed widgets
         self.create_cells(self.exc)
         self.create_buttons()
+        # Binds
+        self.window.bind('<Control-d>', self.append_empty_cell)
+        self.window.bind('<Control-n>', self.new_set)
+        self.window.bind('<Control-s>', print)
         # Grab the window, so main program window
         # is not accessible
         self.window.grab_set()
 
     def read_cells(self, *e):
-        """Read the content of cells and return a
-        dictionary"""
+        """
+        Read the content of cells and return a dictionary.
+        """
         sr = {}
         for i in self.entry_sr.keys():
             search = i.get()
@@ -63,6 +72,7 @@ class Exceptions:
                 sr[search] = replace
         return sr
 
+
     def get_all_exc_files(self):
         """Return a list of all present exc files"""
         files = {}
@@ -76,15 +86,17 @@ class Exceptions:
         
         
     def close(self, *event):
-        """Actions upon close"""
+        """Actions upon window closing."""
         self.master.windows_opened.remove('window_exceptions')
         self.window.destroy()
+
 
     def load_exc(self, f):
         """Load replacement strings."""
         f = os.path.join(self.PATH, f)
         exceptions = Replace().load(f)
         return(exceptions)
+
 
     def save_exc(self, *e):
         """Save replacement strings."""
@@ -94,38 +106,46 @@ class Exceptions:
             Replace().save(f, strings)
             print('saved in', f)
 
-    def create_cells(self, exc=False):
-        """Create cells for exception text"""
-        # ----------------------------------------------
-        frame_fieldsscroll = tk.Text(self.main, relief='flat')
-        self.frame_fieldsscroll = frame_fieldsscroll
-        text_fields = tk.Text(frame_fieldsscroll, relief='flat')
-        frame_fieldsscroll.window_create('insert', window=text_fields)
-        
-        if exc:
-            keys = list(self.exc.keys())
-            values = list(self.exc.values())
+
+    def set_cell_focus(self, cell=False):
+        """Set focus on a particular cell"""
+        # False means that the last cell
+        # should be selected
+        if not cell:
+            lastcell = list(self.allcells.keys())
+            #lastcell[-1].focus_set()
+
+
+    def append_empty_cell(self, *e):
+        """Add an empty cell to the list"""
+        keys = values = ('',)
+        self.draw_cells(keys, values, appendempty=True)
+        #self.set_cell_focus()
+
+
+    def draw_cells(self,  keys, values, appendempty=False):
+        """
+        Create new paris of cells. To add new cells at the end
+        appendempty must be True, and key/values have the same
+        number of empty items.
+        """
+        if appendempty:
+            tf = self.allcells
         else:
-            keys = ('',) * 10
-            values = ('',) * 10
-
-        tf = {}
+            tf = {}
+        # Master is inherited from the parent widget in
+        # create_cells().
+        master = self.text_fields
         for item in range(len(keys)):
-            #tf[f] = tk.Frame(text_fields)
-
-            e_find = tk.Entry(text_fields, width=16)
-            e_replace = tk.Entry(text_fields, width=16)
-
+            e_find = tk.Entry(master, width=16)
+            e_replace = tk.Entry(master, width=16)
             e_find.insert(0, keys[item])
             e_replace.insert(0, values[item])
-
             e_find.grid(row=0, column=0)
             e_replace.grid(row=0, column=1)
-
-            text_fields.window_create('insert', window=e_find)
-            text_fields.window_create('insert', window=e_replace)
-            
-            # Put them into dictionary
+            master.window_create('insert', window=e_find)
+            master.window_create('insert', window=e_replace)
+            # Put cell widgets into dictionary.
             tf[e_find] = e_replace
             # Bind function that discovers which cells have
             # focus.
@@ -143,26 +163,71 @@ class Exceptions:
             e_replace.bind('<FocusOut>', 
                            partial(self.selected_content, 
                            e_replace, 'r', 'reset'))
-            text_fields.insert('end', '\n')
-        
-        scrollbar = tk.Scrollbar(frame_fieldsscroll, width=15)
-        scrollbar.config(command=text_fields.yview)
-        text_fields.config(yscrollcommand=scrollbar.set)
-        
-        frame_fieldsscroll.pack()
-        scrollbar.pack(side='right', fill='y')
-        text_fields.pack(fill='both')
-        
-        text_fields.configure(state='disabled')
-        frame_fieldsscroll.configure(state='disabled')
+            master.insert('end', '\n')
+        # self.entry_sr and self.entry_rs are the same
+        # dictionary, but with swapped keys and values.
         # Ordered by search, replace
         self.entry_sr = tf
         # Ordered by replace, search
         self.entry_rs = {tf[i]: i for i in tf}
+        self.allcells = tf
+    
+
+    def create_cells(self, exc=False):
+        """
+        Create cells for exception text, where exc can
+        be False or contain a dictionary of values. False
+        will create default 10 blank cell pairs.
+        """
+        # ----------------------------------------------
+        frame_fieldsscroll = tk.Text(self.main, relief='flat')
+        self.frame_fieldsscroll = frame_fieldsscroll
+        self.text_fields = tk.Text(frame_fieldsscroll, relief='flat')
+        frame_fieldsscroll.window_create('insert', window=self.text_fields)
+        
+        if exc:
+            keys = list(self.exc.keys())
+            values = list(self.exc.values())
+        else:
+            keys = ('',) * 10
+            values = ('',) * 10
+
+        self.draw_cells(keys, values)
+        # self.allcells contains all cells and it is accessible
+        # throughout the class. This attribute is important in
+        # draw_cells().
+        tf = self.allcells
+        # Add scrollbar and attach it to the text field that holds
+        # the cells pairs.
+        scrollbar = tk.Scrollbar(self.frame_fieldsscroll, width=15)
+        scrollbar.config(command=self.text_fields.yview)
+        self.text_fields.config(yscrollcommand=scrollbar.set)
+        frame_fieldsscroll.pack()
+        scrollbar.pack(side='right', fill='y')
+        self.text_fields.pack(fill='both')
+        # Don't allow any changes in parent text field.
+        self.text_fields.configure(state='disabled')
+        frame_fieldsscroll.configure(state='disabled')
 
 
     def selected_content(self, *w):
-        """Calculate which cells are selected."""
+        """
+        Determine  which cells are selected, and then
+        format them by color:
+        
+        red      a warning to user that "find" string will
+                 be deleted in the target text;
+
+        orange   a warning to user that "find" string will
+                 be deleted in the target text by blanks;
+
+        gray     a warning to user that "find" and "replace"
+                 were removed from the list and will be deleted
+                 from the current exceptions file
+
+        yellow   currently selected cells.
+        
+        """
         if w[1] == 'f':
             self.sel_find = w[0]
             self.sel_replace = self.entry_sr[w[0]]
@@ -171,31 +236,38 @@ class Exceptions:
             self.sel_find = self.entry_rs[w[0]]
         else:
              raise ValueError("2nd value must be 'f' or 'r'")
+        # Print content (debugging)
+        #print('find: ', self.sel_find.get(), ' replace: ',
+        #      self.sel_replace.get())
         # Configure
         if w[2] == 'select':
-            self.fields_color('yellow')
+            self.cells_color('yellow')
         elif w[2] == 'reset':
-            self.fields_color('white')
+            self.cells_color('white')
             # If there's no value in "find", gray out
             # the field
             if self.sel_find.get().strip() == '':
-                self.fields_color('gray')
+                self.cells_color('gray')
             # If "replace" string is blank, that
             # means that the "find" string will
             # be erased in the target text
             if self.sel_replace.get().strip() == '':
-                print("replace is blank")
                 if ' ' in self.sel_replace.get():
-                    self.fields_color('orange')
+                    self.cells_color('orange')
                 else:
-                    self.fields_color('red')
+                    self.cells_color('red')
         else:
             raise ValueError("3rd value must be 'select' or 'reset'")
 
-    def fields_color(self, color):
+    def cells_color(self, color1, color2=False):
         """Set colors in the fields"""
-        self.sel_replace.configure(bg=color)
-        self.sel_find.configure(bg=color)
+        # If there's no argument for color2,
+        # then both cells should have same
+        # color.
+        if not color2:
+            color2 = color1
+        self.sel_replace.configure(bg=color1)
+        self.sel_find.configure(bg=color2)
         
     def create_buttons(self):
         """Frame for buttons"""
@@ -203,7 +275,7 @@ class Exceptions:
         frame_buttons = tk.Frame(self.window)
         # Buttons & menus
         menu_array = [('saveexc', self.save_exc),
-                        ('addcells', self.new_set),
+                        ('addcells', self.append_empty_cell),
                         ('removecells', self.new_set),
                         ('newexcfile', self.new_set)]
         #Menu button actions ---------------
@@ -241,6 +313,13 @@ class Exceptions:
         button_load.pack(pady=3, padx=5)
         # Menu button end --------------
         frame_buttons.pack(padx=10, pady=10)
+
+    def menu_exception_files(self):
+        """
+        Attach a list of all exception files found in
+        the exceptions folder
+        """
+        pass
 
     def new_set(self, *e):
         """Create a blank sheet for values"""
