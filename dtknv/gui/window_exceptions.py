@@ -46,27 +46,34 @@ class Exceptions:
         for i in self.entry_sr.keys():
             search = i.get()
             replace = self.entry_sr[i].get()
-            if search in sr.keys():
-                # Keys in a dictionary that holds "search"
-                # strings must be unique.
-                messagebox.showwarning(self.lng['label_error'],
-                                   self.lng['label_fieldsrepeat'])
-                return False
-            elif search.strip() == '' and replace.strip() != '':
+            if search.strip() == '' and replace.strip() != '':
                 # "Search" and "replace" fields must both
                 # be blank.
                 messagebox.showwarning(self.lng['label_error'],
                                    self.lng['label_fieldsblank'])
 
                 return False
+            elif search in sr.keys() and search != '':
+                # Keys in a dictionary that holds "search"
+                # strings must be unique.
+                messagebox.showwarning(self.lng['label_error'],
+                                   self.lng['label_fieldsrepeat'])
+                return False
             else:
                 sr[search] = replace
         return sr
 
-    def verify_rs(self, *e):
-        """Verify cells/values: they must not repeat in
-        search fields, nor have '' value."""
-        pass
+    def get_all_exc_files(self):
+        """Return a list of all present exc files"""
+        files = {}
+        fs = helpers.getallfiles(self.PATH, 'json')
+        if fs:
+            for i in fs:
+                files[helpers.filename(i)] = fs
+            return files
+        else:
+            return False
+        
         
     def close(self, *event):
         """Actions upon close"""
@@ -78,6 +85,14 @@ class Exceptions:
         f = os.path.join(self.PATH, f)
         exceptions = Replace().load(f)
         return(exceptions)
+
+    def save_exc(self, *e):
+        """Save replacement strings."""
+        strings = self.read_cells()
+        if strings:
+            f = os.path.join(self.PATH, self.active_filename)
+            Replace().save(f, strings)
+            print('saved in', f)
 
     def create_cells(self, exc=False):
         """Create cells for exception text"""
@@ -165,6 +180,15 @@ class Exceptions:
             # the field
             if self.sel_find.get().strip() == '':
                 self.fields_color('gray')
+            # If "replace" string is blank, that
+            # means that the "find" string will
+            # be erased in the target text
+            if self.sel_replace.get().strip() == '':
+                print("replace is blank")
+                if ' ' in self.sel_replace.get():
+                    self.fields_color('orange')
+                else:
+                    self.fields_color('red')
         else:
             raise ValueError("3rd value must be 'select' or 'reset'")
 
@@ -175,43 +199,54 @@ class Exceptions:
         
     def create_buttons(self):
         """Frame for buttons"""
-        button_objects = {}
         # Frames in this window
         frame_buttons = tk.Frame(self.window)
         # Buttons & menus
-        button_array = [('save', self.read_cells),
-                        ('add', self.new_set),
-                        ('remove', self.new_set)]
-        for b, c in button_array:
-            button_objects[b] = tk.Button(frame_buttons, 
-                                          text=self.lng['button_%s' % b],
-                                          command=c)
-            button_objects[b].pack(side='left')
-        #Menu button
+        menu_array = [('saveexc', self.save_exc),
+                        ('addcells', self.new_set),
+                        ('removecells', self.new_set),
+                        ('newexcfile', self.new_set)]
+        #Menu button actions ---------------
+        button_actions = tk.Menubutton(frame_buttons, 
+                                    text=self.lng['button_exc_commands'],
+                                    relief=tk.RAISED,
+                                    width=10)
+        menu_actions = tk.Menu(button_actions, tearoff=0)
+        # Commands in this menu:
+        menu_objects = {}
+        for b, c in menu_array:
+            menu_objects[b] = menu_actions.add_command( \
+                label=self.lng['button_%s' % b],
+                command=c)
+        button_actions.configure(menu=menu_actions)
+        button_actions.pack(side='left', pady=3, padx=5)
+        # Menu button actions end --------------
+
+        # Menu button load ---------------
         button_load = tk.Menubutton(frame_buttons, 
                                     text=self.lng['button_load'],
                                     relief=tk.RAISED,
-                                    width=7)
+                                    width=10)
         menu_load = tk.Menu(button_load, tearoff=0)
         # Standard exceptions
         menu_load.add_command(label=self.lng['button_standardsr'], 
                               command=print)
         # Other exceptions
-        for i in range(5):
-            menu_load.add_command(label='File name %s' % i, command=print)
+        files = self.get_all_exc_files()
+        if files:
+            for i in files.keys():
+                menu_load.add_command(label=self.lng['button_fileexc'] \
+                                          % i, command=print)
         button_load.configure(menu=menu_load)
-        button_load.pack()
+        button_load.pack(pady=3, padx=5)
+        # Menu button end --------------
         frame_buttons.pack(padx=10, pady=10)
-
-    def load_exceptions(self):
-        """Load exceptions"""
-        pass
 
     def new_set(self, *e):
         """Create a blank sheet for values"""
         self.new_filename = self.get_filename()
         if self.new_filename:
-            self.new_filename = self.new_filename + '.json'
+            self.active_filename = self.new_filename + '.json'
             self.frame_fieldsscroll.destroy()
             self.create_cells()
 
