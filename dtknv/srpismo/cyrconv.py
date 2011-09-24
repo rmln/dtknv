@@ -67,16 +67,24 @@ lat_resolutions = {'NJ':'Њ',
                    'DŽ':'Џ',
                    'Dž':'Џ',
                    'dŽ':'дЖ',}
-sample_exc = \
+standard_exc = \
 """
-{
-"find": "replace"
+{"\u0438\u043d\u0458\u0435\u043a\u0446\u0438": "injekci", 
+"\u043d\u0430\u0434\u0436\u0438\u0432\u0459": "nad\u017eivlj", 
+"\u043a\u043e\u043d\u0458\u0443\u0433\u0430": "konjuga", 
+"\u043f\u043e\u0434\u0436\u045a\u0435\u0442\u0438": "pod\u017enjeti", 
+"\u043e\u0434\u0436\u0438\u0432\u0459\u0435\u043d": "od\u017eivljen", 
+"\u043d\u0430\u0434\u0436\u045a\u0435": "nad\u017enje", 
+"\u043e\u0434\u0436\u0438\u0432\u0459": "od\u017eivlj"
 }
 """
 
 class Replace:
     """Loads and saves strings that need to have different
     conversion rules"""
+
+    DEFAULT = 'standarni-izuzeci.json'
+    
     def __init__(self, f=False):
         """Load and save file strings"""
         pass
@@ -91,7 +99,6 @@ class Replace:
         """Save a JSON file"""
         with open(f, mode='w', encoding='utf-8') as f:
             json.dump(exc, f)
-    
 
 
 
