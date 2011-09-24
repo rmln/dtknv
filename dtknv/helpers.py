@@ -122,14 +122,19 @@ def build_directory_tree(dirin, dirout):
     # Change DIROUT to point to a newly created dir:
     dirout = three_path
 
-def getallfiles(path):
+def getallfiles(path, ext=False):
     """Get all files paths from a directory."""
     paths = []
     for i in os.listdir(path):
         # Select files only, filter out folders:
         fullpath = os.path.join(path, i)
         if os.path.isfile(fullpath):
-            paths.append(os.path.join(path, i))
+            # Is there filtering?
+            if ext:
+                if getext(fullpath) == ext:
+                    paths.append(os.path.join(path, i))
+            else:
+                paths.append(os.path.join(path, i))
     return paths
 
 def getfilesizes(files):
