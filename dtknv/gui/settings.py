@@ -36,21 +36,20 @@ _default_settings = """
 "set_encoding": "utf-8",
 "set_warningmb": "100",
 "set_warningn": "100",
-"set_extensions": "docx,odt,txt,htm,html"
+"set_extensions": "docx,odt,txt,htm,html",
+"set_exc_files": "standardni-izuzeci.json"
 }
 """
 
 
-PATH = os.path.join( os.path.dirname(__file__),'..', 'resources', 'settings')
-
 class Settings:
     
-    JPATH = os.path.join(PATH, 'default.json')
-    JPATH = os.path.join(helpers.def_report_path(),
-                         '.dtknvtestinstall/settings/default.json')
+    PATH = os.path.join(helpers.def_report_path(), '_dtknvt')
     
     def __init__(self):
         """Loads the settings for GUI"""
+        self.SETPATH = os.path.join(self.PATH, 'settings', 'default.json')
+        self.DEFEXCPATH = os.path.join(self.PATH, 'exceptions')
         self.numeric  = ('set_failsafe', 'set_recursive', 'set_convertnames', 
                          'set_verbose', 'set_noram', 'set_report', 
                          'set_warningmb', 'set_warningn', 'set_sameinout')
@@ -62,18 +61,39 @@ class Settings:
         # window_filesdir.update_gui
         self.previous_folder = self.NOP
         self.settings_exist()
+        self.standard_exceptions_exist()
         self.load()
         self.load_language()
         # Multilanguage messages
         self.multilanguage = language.multilanguage
 
+
+    def standard_exceptions_exist(self):
+        """
+        Check if standard exceptions file exists, and if
+        not, create it.
+        """
+        if not os.path.exists(self.DEFEXCPATH):
+            # Take settings path and remove the
+            # file name.
+            # Does it exist?
+            try:
+                os.makedirs(self.DEFEXCPATH)
+            except OSError:
+                # Folder is already there, so
+                # skipp the creation.
+                pass
+            f = open(os.path.join(self.DEFEXCPATH, 'standardni-izuzeci.json'), 
+                     encoding='utf-8', mode='w')
+            f.write(cyrconv.standard_exc)
+
     def settings_exist(self):
         """Check if the settings file exists. If not,
         create the path and save default settings"""
-        if not os.path.exists(self.JPATH):
+        if not os.path.exists(self.SETPATH):
             # Take settings path and remove the
             # file name.
-            path = os.path.split(self.JPATH)[0]
+            path = os.path.split(self.SETPATH)[0]
             # Does it exist?
             try:
                 os.makedirs(path)
@@ -88,7 +108,7 @@ class Settings:
     def reset_settings(self, path='', default=False):
         """Reset the settings"""
         if default:
-            path = self.JPATH
+            path = self.SETPATH
         f = open(path, encoding='utf-8', 
                      mode='w')
         f.write(_default_settings)
@@ -105,7 +125,7 @@ class Settings:
     def save(self):
         """Save settings in JSON file"""
         settings =  self.settings_elements_get()
-        with open(self.JPATH, mode='w', encoding='utf-8') as f:
+        with open(self.SETPATH, mode='w', encoding='utf-8') as f:
             json.dump(settings, f)
 
     
@@ -120,7 +140,7 @@ class Settings:
                 
     def load(self):
         """Load settings from JSON file."""
-        with open(self.JPATH, mode='r', encoding='utf-8') as f:
+        with open(self.SETPATH, mode='r', encoding='utf-8') as f:
             settings = json.load(f)
         for i in settings.keys():
             value = settings[i]

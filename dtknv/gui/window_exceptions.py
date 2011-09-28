@@ -23,12 +23,12 @@ from gui.settings import Set
 
 class Exceptions:
     
-    # Default path for exception files
-    PATH = os.path.join(helpers.def_report_path(),'.dtknvtestinstall')
-
+    
     def __init__(self, master):
         self.master = master
         self.set = Set
+        # Path for exceptions
+        self.PATH = self.set.DEFEXCPATH
         self.lng = self.master.lng
         self.window = tk.Toplevel(master)
         self.window.resizable(0,0)

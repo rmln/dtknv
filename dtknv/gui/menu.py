@@ -17,7 +17,6 @@ from gui.settings import Set
 
 class Dmenu:
 
-    PATH = os.path.join(helpers.def_report_path(),'.dtknvtestinstall')
 
     def __init__(self, master):
         self.master = master
@@ -25,6 +24,7 @@ class Dmenu:
         self.main = tk.Menu(master)
         self.file = tk.Menu(self.main, tearoff=0)
         self.set = Set
+        self.PATH = self.set.DEFEXCPATH
         # File
         self.main.add_cascade(label=self.lng['menu_main'], menu=self.file)
         # File: Load file, Load directory, Exit
