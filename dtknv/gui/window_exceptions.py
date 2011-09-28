@@ -16,8 +16,10 @@ from tkinter import messagebox
 from functools import partial
 
 import helpers
+from gui.elements import ExcDropDownMenu
 from srpismo.cyrconv import Replace
 from gui.window_entry import MsgEntry
+from gui.settings import Set
 
 class Exceptions:
     
@@ -26,6 +28,7 @@ class Exceptions:
 
     def __init__(self, master):
         self.master = master
+        self.set = Set
         self.lng = self.master.lng
         self.window = tk.Toplevel(master)
         self.window.resizable(0,0)
@@ -35,9 +38,9 @@ class Exceptions:
         self.main.pack(padx=0, pady=0, fill='both', expand=1)
         self.main.pack_propagate(0)
         # Default pairs
-        self.exc = self.load_exc('standarni-izuzeci.json')
+        #self.exc = self.load_exc_file('standarni-izuzeci.json')
         # Create needed widgets
-        self.create_cells(self.exc)
+        self.create_cells()
         self.create_buttons()
         # Binds
         self.window.bind('<Control-d>', self.append_empty_cell)
@@ -46,6 +49,15 @@ class Exceptions:
         # Grab the window, so main program window
         # is not accessible
         self.window.grab_set()
+
+
+    def load_file_create_cells(self, f):
+        """
+        Load f file and place items into cells.
+        """
+        self.frame_fieldsscroll.destroy()
+        items = self.load_exc_file(f)
+        self.create_cells(items)
 
     def read_cells(self, *e):
         """
@@ -72,18 +84,6 @@ class Exceptions:
                 sr[search] = replace
         return sr
 
-
-    def get_all_exc_files(self):
-        """Return a list of all present exc files"""
-        files = {}
-        fs = helpers.getallfiles(self.PATH, 'json')
-        if fs:
-            for i in fs:
-                files[helpers.filename(i)] = fs
-            return files
-        else:
-            return False
-        
         
     def close(self, *event):
         """Actions upon window closing."""
@@ -91,7 +91,7 @@ class Exceptions:
         self.window.destroy()
 
 
-    def load_exc(self, f):
+    def load_exc_file(self, f):
         """Load replacement strings."""
         f = os.path.join(self.PATH, f)
         exceptions = Replace().load(f)
@@ -186,8 +186,8 @@ class Exceptions:
         frame_fieldsscroll.window_create('insert', window=self.text_fields)
         
         if exc:
-            keys = list(self.exc.keys())
-            values = list(self.exc.values())
+            keys = list(exc.keys())
+            values = list(exc.values())
         else:
             keys = ('',) * 10
             values = ('',) * 10
@@ -292,7 +292,7 @@ class Exceptions:
                 command=c)
         button_actions.configure(menu=menu_actions)
         button_actions.pack(side='left', pady=3, padx=5)
-        # Menu button actions end --------------
+        
 
         # Menu button load ---------------
         button_load = tk.Menubutton(frame_buttons, 
@@ -300,26 +300,15 @@ class Exceptions:
                                     relief=tk.RAISED,
                                     width=10)
         menu_load = tk.Menu(button_load, tearoff=0)
+        ExcDropDownMenu(parent=menu_load, path=self.PATH, 
+                        lng=self.lng, src='from_exc',
+                        main=self)
         # Standard exceptions
-        menu_load.add_command(label=self.lng['button_standardsr'], 
-                              command=print)
-        # Other exceptions
-        files = self.get_all_exc_files()
-        if files:
-            for i in files.keys():
-                menu_load.add_command(label=self.lng['button_fileexc'] \
-                                          % i, command=print)
         button_load.configure(menu=menu_load)
         button_load.pack(pady=3, padx=5)
         # Menu button end --------------
         frame_buttons.pack(padx=10, pady=10)
 
-    def menu_exception_files(self):
-        """
-        Attach a list of all exception files found in
-        the exceptions folder
-        """
-        pass
 
     def new_set(self, *e):
         """Create a blank sheet for values"""

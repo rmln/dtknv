@@ -24,6 +24,7 @@ serbian_cyrillic = {
 'menu_settings_showfilesdir':'Конверзија датотека <F7>',
 'menu_settings_showplaintext':'Конверзија обичног текста <F8>',
 'menu_settings_exceptions':'Изузеци... <F2>',
+'menu_settings_excfiles':'Изузеци у употреби',
 'menu_settings_language':'Језик сучеља',
 'menu_settings_lngcyr':'Српски (ћирлица)',
 'menu_settings_lnglat':'Srpski (latinica)',

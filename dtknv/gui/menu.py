@@ -6,14 +6,19 @@ Menu interface for dtknv.
 
 """
 
+import os
+
 import tkinter as tk
 from tkinter import messagebox
 from functools import partial
-
+import helpers
 from gui import elements
 from gui.settings import Set
 
 class Dmenu:
+
+    PATH = os.path.join(helpers.def_report_path(),'.dtknvtestinstall')
+
     def __init__(self, master):
         self.master = master
         self.lng = self.master.lng
@@ -73,6 +78,14 @@ class Dmenu:
         # Settings -> Exceptions
         self.sett.add_command(label=self.lng['menu_settings_exceptions'], 
                               command=master.show_exceptions)
+        # Settings -> Select exceptions
+        self.menu_exc = tk.Menu(self.main, tearoff=0)
+        self.sett.add_cascade(label=self.lng['menu_settings_excfiles'], 
+                              menu=self.menu_exc)
+        # Call ExcDropDownMenu with parameters to create
+        # a submenu with checkbuttons.
+        elements.ExcDropDownMenu(parent=self.menu_exc, path=self.PATH, 
+                                 lng=self.lng, main=self, src='from_menu')
         self.sett.add_separator()
         # Settings -> Language
         self.menu_language = tk.Menu(self.main, tearoff=0)
