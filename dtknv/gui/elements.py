@@ -48,11 +48,12 @@ class ExcDropDownMenu:
 
     def create_menu(self, mode):
         """Create drop down menu on a button"""
-        self.parent.add_command(label=self.lng['button_standardsr'], 
-                              command=print)
-
-        # Other exceptions
+        label_standard = self.lng['button_standardsr']
         files = self.get_all_exc_files()
+        # Delete menu items, so they do
+        # not repeat after this method
+        # was called twice.
+        self.parent.delete(0, len(files))
         if files:
             for i in files.keys():
                 # Hash a file name, convert it to string; then
@@ -67,7 +68,12 @@ class ExcDropDownMenu:
                 self.tk_files[i] = hashed_name_tk_int
                 # Applies if the class was called from menu
                 if mode == 'from_menu':
-                    label = self.lng['button_fileexc'] % i
+                    # File standardni-izuzeci contains default
+                    # exception strings, so make a special label:
+                    if i.strip().lower() == 'standardni-izuzeci.json':
+                        label = label_standard
+                    else:
+                        label = i
                     self.parent.add_checkbutton(label=label, 
                           command=partial(self.use_file, hashed_name_tk_int),
                           variable=hashed_name_tk_int)

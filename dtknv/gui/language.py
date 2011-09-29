@@ -94,6 +94,7 @@ serbian_cyrillic = {
 'label_fieldsrepeat':'Вриједности у првој колони не смију се понављати.',
 'label_ok':' ОК.',
 'label_error':'Грешка',
+'label_filealreadyexists': 'Датотека %s већ постоји.',
 'ext_html':'хипертекст ',
 'ext_htm':'хипертекст ',
 'ext_odt':'Опенофис / Либреофис документ',

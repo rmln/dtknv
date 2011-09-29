@@ -59,6 +59,7 @@ class Exceptions:
         items = self.load_exc_file(f)
         self.create_cells(items)
 
+
     def read_cells(self, *e):
         """
         Read the content of cells and return a dictionary.
@@ -105,6 +106,10 @@ class Exceptions:
             f = os.path.join(self.PATH, self.active_filename)
             Replace().save(f, strings)
             print('saved in', f)
+            # Recreate the menu in settings menu:
+            self.master.recreate_excetions_menu()
+            # Recreate the menu in this wondow:
+            self.create_dropdown_menu()
 
 
     def set_cell_focus(self, cell=False):
@@ -292,22 +297,32 @@ class Exceptions:
                 command=c)
         button_actions.configure(menu=menu_actions)
         button_actions.pack(side='left', pady=3, padx=5)
-        
-
-        # Menu button load ---------------
         button_load = tk.Menubutton(frame_buttons, 
                                     text=self.lng['button_load'],
                                     relief=tk.RAISED,
                                     width=10)
         menu_load = tk.Menu(button_load, tearoff=0)
-        ExcDropDownMenu(parent=menu_load, path=self.PATH, 
-                        lng=self.lng, src='from_exc',
-                        main=self)
+        # Make public instance of menu_load. This is needed
+        # so menu is accessible outside this method, and used
+        # when files are saved.
+        self.menu_load = menu_load
+        # Populate dropdown menu
+        self.create_dropdown_menu()
         # Standard exceptions
         button_load.configure(menu=menu_load)
         button_load.pack(pady=3, padx=5)
         # Menu button end --------------
         frame_buttons.pack(padx=10, pady=10)
+
+    def create_dropdown_menu(self):
+        """
+        Create a dropdown menu for the "load files"
+        button.
+        """
+        ExcDropDownMenu(parent=self.menu_load,
+                        path=self.PATH, 
+                        lng=self.lng, src='from_exc',
+                        main=self)
 
 
     def new_set(self, *e):
@@ -324,6 +339,7 @@ class Exceptions:
         # TODO: It is possible to close this window
         # while filename message is shown.
         filename = MsgEntry(master=self.master, lng=self.lng, 
-                            text=self.lng['label_enterfilenameexc'])
+                            text=self.lng['label_enterfilenameexc'],
+                            path=self.PATH)
         self.window.wait_window(filename.window)
         return filename.entry

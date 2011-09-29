@@ -104,7 +104,6 @@ class Settings:
             self.reset_settings(path=os.path.join(path, 'default.json'))
             
             
-
     def reset_settings(self, path='', default=False):
         """Reset the settings"""
         if default:

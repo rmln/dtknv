@@ -63,6 +63,9 @@ class DtknvGui(tk.Frame):
         # Create and attach the menu
         self.menu = Dmenu(master)
         self.master.config(menu=self.menu.main)
+        # This is called in window_exceptions.py to 
+        # recreate exceptions menu:
+        self.master.recreate_excetions_menu = self.menu.create_exceptions_menu
         # Plain text / file conversion frames
         self.window_plaintext = PlainText(self)
         self.window_plaintext.window.forget()
@@ -138,9 +141,9 @@ class DtknvGui(tk.Frame):
         # If everything is ready, enable the convert
         # button and bindig:
         if self.are_paths_ready():
-            self.btn_convert.configure(state='normal')
+            self.window_filesdir.btn_convert.configure(state='normal')
             self.bind_all("<F5>", self.convert)
-            self.btn_convert.configure(state='normal')
+            self.window_filesdir.btn_convert.configure(state='normal')
             self.update_status('label_ready', append=0)
         else:
             self.bind_all("<F5>", None)

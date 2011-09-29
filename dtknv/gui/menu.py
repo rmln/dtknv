@@ -82,10 +82,8 @@ class Dmenu:
         self.menu_exc = tk.Menu(self.main, tearoff=0)
         self.sett.add_cascade(label=self.lng['menu_settings_excfiles'], 
                               menu=self.menu_exc)
-        # Call ExcDropDownMenu with parameters to create
-        # a submenu with checkbuttons.
-        elements.ExcDropDownMenu(parent=self.menu_exc, path=self.PATH, 
-                                 lng=self.lng, main=self, src='from_menu')
+        self.create_exceptions_menu()
+#-------------------
         self.sett.add_separator()
         # Settings -> Language
         self.menu_language = tk.Menu(self.main, tearoff=0)
@@ -115,7 +113,15 @@ class Dmenu:
         self.master.bind_all('<Control-o>', self.browse_file)
         self.master.bind_all('<Control-f>', self.browse_dirin)
         self.master.bind_all('<Control-u>', self.browse_dirout)
-    
+
+
+    def create_exceptions_menu(self):
+        """Create exceptions menu."""
+        # Call ExcDropDownMenu with parameters to create
+        # a submenu with checkbuttons.
+        elements.ExcDropDownMenu(parent=self.menu_exc, path=self.PATH, 
+                                 lng=self.lng, main=self,
+                                 src='from_menu')
 
     def browse_file(self, *e):
         """Browse for a file"""
