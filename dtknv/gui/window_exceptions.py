@@ -37,15 +37,16 @@ class Exceptions:
         self.main = tk.Frame(self.window, height=300, width=300)
         self.main.pack(padx=0, pady=0, fill='both', expand=1)
         self.main.pack_propagate(0)
-        # Default pairs
-        #self.exc = self.load_exc_file('standarni-izuzeci.json')
         # Create needed widgets
         self.create_cells()
         self.create_buttons()
         # Binds
         self.window.bind('<Control-d>', self.append_empty_cell)
         self.window.bind('<Control-n>', self.new_set)
-        self.window.bind('<Control-s>', print)
+        self.window.bind('<Control-s>', self.save_exc)
+        # Load default exception
+        self.active_filename = 'standardni-izuzeci.json'
+        self.load_file_create_cells(self.active_filename)
         # Grab the window, so main program window
         # is not accessible
         self.window.grab_set()
@@ -58,6 +59,9 @@ class Exceptions:
         self.frame_fieldsscroll.destroy()
         items = self.load_exc_file(f)
         self.create_cells(items)
+        # Update the title
+        self.window.title(self.lng['window_exceptions'] + ' (%s)' % \
+                              self.active_filename)
 
 
     def read_cells(self, *e):
@@ -81,7 +85,7 @@ class Exceptions:
                 messagebox.showwarning(self.lng['label_error'],
                                    self.lng['label_fieldsrepeat'])
                 return False
-            else:
+            if (search != '') and (replace != ''):
                 sr[search] = replace
         return sr
 
@@ -105,7 +109,6 @@ class Exceptions:
         if strings:
             f = os.path.join(self.PATH, self.active_filename)
             Replace().save(f, strings)
-            print('saved in', f)
             # Recreate the menu in settings menu:
             self.master.recreate_excetions_menu()
             # Recreate the menu in this wondow:

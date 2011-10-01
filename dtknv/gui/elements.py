@@ -50,11 +50,11 @@ class ExcDropDownMenu:
         """Create drop down menu on a button"""
         label_standard = self.lng['button_standardsr']
         files = self.get_all_exc_files()
-        # Delete menu items, so they do
-        # not repeat after this method
-        # was called twice.
-        self.parent.delete(0, len(files))
         if files:
+            # Delete menu items, so they do
+            # not repeat after this method
+            # was called twice.
+            self.parent.delete(0, len(files))
             for i in files.keys():
                 # Hash a file name, convert it to string; then
                 # assign to its name tk.IntVar() to be used

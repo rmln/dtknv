@@ -83,9 +83,9 @@ class Settings:
                 # Folder is already there, so
                 # skipp the creation.
                 pass
-            f = open(os.path.join(self.DEFEXCPATH, 'standardni-izuzeci.json'), 
+        f = open(os.path.join(self.DEFEXCPATH, 'standardni-izuzeci.json'), 
                      encoding='utf-8', mode='w')
-            f.write(cyrconv.standard_exc)
+        f.write(cyrconv.standard_exc)
 
     def settings_exist(self):
         """Check if the settings file exists. If not,
