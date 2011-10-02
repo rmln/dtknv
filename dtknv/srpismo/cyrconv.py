@@ -101,7 +101,6 @@ class Replace:
             json.dump(exc, f)
 
 
-
 class CirConv:
     """Converts Cyrillic script to Latin."""
         
@@ -120,14 +119,6 @@ class CirConv:
         if not isinstance(text, str):
             raise TypeError('CirConv accepts text only, %s is rejected.' \
                                 % type(text))
-        # Load latdiff file.
-        if mode == 'tocyr':
-            cyrlatdiff = self._load_latdif()
-            # Add variants
-            self.cyr_latdiff = cyrlatdiff[0] + \
-                self._make_variants(cyrlatdiff[0])
-            self.lat_latdiff = cyrlatdiff[1] + \
-                self._make_variants(cyrlatdiff[1])
         
     def _load_latdif(self):
         """Load cirlatdif.txt file."""
@@ -143,6 +134,7 @@ class CirConv:
         cyr_words = [c.strip() for c in cyr_words]
         lat_words = [c.strip() for c in lat_words]
         return [cyr_words, lat_words]
+
     
     def _make_variants(self, words):
         """Make variants of the words."""
@@ -152,27 +144,28 @@ class CirConv:
             variants.append(word.capitalize())
         return variants
 
-    def convert(self):
+
+    def convert_to_latin(self):
         """Convert the text and place it into .result. No return."""
         # Make character maps.
         self._make_charkeys()
         # Conversion to Cyrillic needs some preparations
-        if self.mode == 'tocyr':
-            self.text = self._custom_words(self.text)
-            self.text = self._prepare_cyrillic(self.text)
-        #Convert!
-        self.result = self._charreplace(self.text)
+        self.result = self._charreplace(self.text, mode='tolat')
+
+
+    def convert_to_cyrillic(self):
+        """Convert the text and place it into .result. No return."""
+        # Make character maps.
+        self._make_charkeys()
+        self.result = self._charreplace(self.text, mode='tocyr')
 
     
     def _make_charkeys(self):
-        """Make dictionary for character replacement"""
-        if self.mode == "tolat":
-            self.charmap = cyr
-        elif self.mode == "tocyr":
-            self.charmap = dict([v,k] for k,v in cyr.items())
-        else:
-            raise KeyError
-        self.charkeys = self.charmap.keys() 
+        """
+        Make dictionaries for character replacement.
+        """
+        self.charmap_tolat = cyr
+        self.charmap_tocyr = dict([v,k] for k,v in cyr.items())
         
     def _prepare_cyrillic(self, text):
         """Prepare text for conversion to Cyrillic"""
@@ -191,14 +184,23 @@ class CirConv:
         return text
 
 
-    def _charreplace(self, text):
+    def _charreplace(self, text, mode):
         """Replace characters in the input text."""
         if self.calc_stats: # Don't bother with len() if no stats are needed
             len_in = len(text)
+        # Create lists and dictionary
+        if mode == 'tocyr':
+            charkeys = self.charmap_tocyr.keys()
+            charmap = self.charmap_tocyr
+        elif mode == 'tolat':
+            charkeys = self.charmap_tolat.keys()
+            charmap = self.charmap_tolat
+        else:
+            raise ValueError("Mode must be 'tocyr' or 'tolat'.")
         # Replace the characters
-        for letter in self.charkeys:
+        for letter in charkeys:
             if letter in text:
-                text = text.replace(letter, self.charmap[letter])
+                text = text.replace(letter, charmap[letter])
         # Stats needed?
         if self.calc_stats:
             self._stats(len_in, len(text)) 
