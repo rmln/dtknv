@@ -29,12 +29,6 @@ from srpismo.cyrconv import CirConv
         
 from gui.settings import Set
 
-# TODO
-# Report() must receive report path
-# Report strings in tocyr
-
-
-
 class DtknvGui(tk.Frame):
     
     lng = Set.language
@@ -76,7 +70,7 @@ class DtknvGui(tk.Frame):
         self.bind_all("<F7>", self.show_filesdir)
         self.bind_all("<F8>", self.show_plaintext)
         # Select default mode
-        self.show_filesdir()
+        self.show_plaintext()
 
         
     def create_statusbar(self):

@@ -7,8 +7,13 @@ Frame for plain text conversion..
 """
 
 import tkinter as tk
+from srpismo.cyrconv import CirConv
 
 class PlainText:
+    """
+    Plain text conversion, by taking the entry form text field
+    and passing it to cyrconv.
+    """
     def __init__(self, master):
         self.master = master
         self.lng = self.master.lng
@@ -16,6 +21,8 @@ class PlainText:
         self.buttons()
         self.text()
         self.window.pack()
+        # Class for conversion:
+        self.convert = CirConv()
 
     def text(self):
         """Create a text field with a scroll bar"""
@@ -32,19 +39,62 @@ class PlainText:
         
         #Make text field public
         self.field_text = field_text
+
+    def clear_text_field(self, *e):
+        """
+        Erase text from the text field. 
+        """
+        self.field_text.delete('0.1', 'end')
+
+
+    def get_text_field(self, *e):
+        """
+        Get text from the text field. 
+        """
+        return(self.field_text.get('0.1', 'end'))
+
+    def insert_text(self, text):
+        """
+        Insert text into the text field, erasing first.
+        """
+        self.clear_text_field()
+        self.field_text.insert('end', text)
+
+
+    def to_cyrillic(self, *e):
+        """
+        Get text from text field, convert it to Cyrillic and
+        return it to the textfield.
+        """
+        text = self.get_text_field()
+        self.convert.text = text
+        self.convert.convert_to_cyrillic()
+        self.insert_text(self.convert.result)
+
+
+    def to_latin(self, *e):
+        """
+        Get text from text field, convert it to Cyrillic and
+        return it to the textfield.
+        """
+        text = self.get_text_field()
+        self.convert.text = text
+        self.convert.convert_to_latin()
+        self.insert_text(self.convert.result)
+
     
     def buttons(self):
         """Create buttons"""
         frame_buttons = tk.Frame(self.window)
         btn_tolatin = tk.Button(frame_buttons, 
                                 text=self.lng['button_erase'],
-                                command=print)
+                                command=self.clear_text_field)
         btn_tocyr = tk.Button(frame_buttons,
                               text=self.lng['button_tocyr'],
-                              command=print)
+                              command=self.to_cyrillic)
         btn_erase = tk.Button(frame_buttons,
                               text=self.lng['button_tolat'],
-                              command=print)
+                              command=self.to_latin)
         btn_tolatin.pack(side='left', padx=3, pady=3)
         btn_erase.pack(side='left', padx=3, pady=3)
         btn_tocyr.pack(side='left', padx=3, pady=3)
