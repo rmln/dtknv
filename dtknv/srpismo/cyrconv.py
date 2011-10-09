@@ -6,17 +6,14 @@ Use:
 
 cyrillic_text = 'На ливади коњ ућустечен и расћустечен!'
 
-converted = CirConv(text=cyrillic_text, stats=True)
-latin_text =  converted.get_converted()
+converted = CirConv(text=cyrillic_text)
+converted.convert_to_latin()
 
-print(latin_text)
+# Also: converted.convert_to_cyrillic()
+
+print(converted.result)
 > Na livadi konj ućustečen i rasćustečen!
 
-print('Characters in original text: ', converted.stats_char_original)
-> Characters in original text:  38
-
-print('Characters in replaced text: ', converted.stats_char_replaced)
-> Characters in replaced text:  39
 """
 
 #
@@ -44,9 +41,6 @@ import os
 import codecs
 import json
 
-RESPATH = os.path.join(os.path.dirname(__file__), '..', 
-                       'resources', 'cyrlatdiff')
-
 cyr = {'А':'A', 'Б':'B', 'В':'V', 'Г':'G', 'Д':'D', 'Е':'E',
        'Ж':'Ž', 'З':'Z', 'И':'I', 'Ј':'J', 'К':'K', 'Л':'L',
        'М':'M', 'Н':'N', 'Њ':'Nj','О':'O', 'П':'P', 'Р':'R',
@@ -69,21 +63,21 @@ lat_resolutions = {'NJ':'Њ',
                    'dŽ':'дЖ',}
 standard_exc = \
 """
-{"\u0438\u043d\u0458\u0435\u043a\u0446\u0438": "injekci", 
-"\u043d\u0430\u0434\u0436\u0438\u0432\u0459": "nad\u017eivlj", 
-"\u043a\u043e\u043d\u0458\u0443\u0433\u0430": "konjuga", 
-"\u043f\u043e\u0434\u0436\u045a\u0435\u0442\u0438": "pod\u017enjeti", 
-"\u043e\u0434\u0436\u0438\u0432\u0459\u0435\u043d": "od\u017eivljen", 
-"\u043d\u0430\u0434\u0436\u045a\u0435": "nad\u017enje", 
-"\u043e\u0434\u0436\u0438\u0432\u0459": "od\u017eivlj"
+{"injekci": "\u0438\u043d\u0458\u0435\u043a\u0446\u0438", 
+"nad\u017eivlj": "\u043d\u0430\u0434\u0436\u0438\u0432\u0459", 
+"konjuga": "\u043a\u043e\u043d\u0458\u0443\u0433\u0430", 
+"pod\u017enjeti": "\u043f\u043e\u0434\u0436\u045a\u0435\u0442\u0438", 
+"od\u017eivljen": "\u043e\u0434\u0436\u0438\u0432\u0459\u0435\u043d", 
+"nad\u017enje": "\u043d\u0430\u0434\u0436\u045a\u0435", 
+"od\u017eivlj": "\u043e\u0434\u0436\u0438\u0432\u0459"
 }
 """
 
 class Replace:
-    """Loads and saves strings that need to have different
-    conversion rules"""
-
-    DEFAULT = 'standarni-izuzeci.json'
+    """
+    Loads and saves strings that need to have different
+    conversion rules.
+    """
     
     def __init__(self, f=False):
         """Load and save file strings"""
@@ -102,54 +96,61 @@ class Replace:
 
 
 class CirConv:
-    """Converts Cyrillic script to Latin."""
+    """
+    Converts Cyrillic script to Latin.
+    """
         
-    stats = {}
-        
-    def __init__(self, text='', mode="tolat", stats=False):
-        """Initiate the class."""
+    def __init__(self, text='', stats=False, exceptions=[], variants=False,
+                 path=False):
+        """
+        text       - text to be converted
+        stats      - true if statistics is to be calaculated
+        exceptions - list of files with the exception strings
+        """
+        self.path = path
         self.text = text
-        self.mode = mode
-        self.calc_stats = stats
-        self.stats['char_original'] = self.calc_stats
-        self.stats['char_replaced'] = self.calc_stats
-        
+        # Exceptions strings
+        self.load_exceptions(exceptions)
+        # Variants?
+        if variants and len(exceptions):
+            self._make_variants()
         # Raise TypeError if 'text' is not a character
         # object.
         if not isinstance(text, str):
             raise TypeError('CirConv accepts text only, %s is rejected.' \
-                                % type(text))
-        
-    def _load_latdif(self):
-        """Load cirlatdif.txt file."""
-        fcyr = os.path.join(RESPATH, 'cyr_cyrlatdiff.txt')
-        flat = os.path.join(RESPATH, 'lat_cyrlatdiff.txt')
-        cyr_words = codecs.open(fcyr, mode='r', 
-                                   encoding='utf-8').readlines()
-        lat_words = codecs.open(flat, mode='r', 
-                                   encoding='utf-8').readlines()
-        if not len(lat_words) == len(cyr_words):
-            raise ValueError('Cyrlatdiff lists do not match.')
-        # Clean the words from spaces and breaks.
-        cyr_words = [c.strip() for c in cyr_words]
-        lat_words = [c.strip() for c in lat_words]
-        return [cyr_words, lat_words]
+                            % type(text))
 
+    def load_exceptions(self, flist):
+        """
+        Load exceptions strings from flist files.
+        """
+        if isinstance(flist, str):
+            f = os.path.join(self.path, flist)
+            self.exceptions.append(Replace().load(f))
+        else:
+            paths = [os.path.join(self.path, i) for i in flist]
+            self.exceptions = []
+            for f in paths:
+                self.exceptions.append(Replace().load(f))
     
-    def _make_variants(self, words):
-        """Make variants of the words."""
-        variants = []
-        for word in words:
-            variants.append(word.upper())
-            variants.append(word.capitalize())
-        return variants
+    def _make_variants(self):
+        """Make variants of the words.
+        
+        TODO: finish this
+
+        """
+        pass
+        # variants = []
+        # for word in words:
+        #     variants.append(word.upper())
+        #     variants.append(word.capitalize())
+        # return variants
 
 
     def convert_to_latin(self):
         """Convert the text and place it into .result. No return."""
         # Make character maps.
         self._make_charkeys()
-        # Conversion to Cyrillic needs some preparations
         self.result = self._charreplace(self.text, mode='tolat')
 
 
@@ -167,6 +168,7 @@ class CirConv:
         self.charmap_tolat = cyr
         self.charmap_tocyr = dict([v,k] for k,v in cyr.items())
         
+
     def _prepare_cyrillic(self, text):
         """Prepare text for conversion to Cyrillic"""
         lat_keys = lat_resolutions.keys()
@@ -174,20 +176,30 @@ class CirConv:
             if letter in text:
                 text = text.replace(letter, lat_resolutions[letter])
         return text
+
     
-    def _custom_words(self, text):
-        """Replace custom selected words"""
-        w_number = len(self.lat_latdiff)
-        for i in range(w_number):
-            if self.lat_latdiff[i] in text:
-                text = text.replace(self.lat_latdiff[i], self.cyr_latdiff[i])
+    def _excreplace(self, text):
+        """
+        Replace custom strongs.
+        """
+        # Go throught self.exceptions list, that holds
+        # all dictionaries correspondng to files loaded
+        # by Replace in __init__.
+        for exception_dictionary in self.exceptions:
+            # Go through all keys of a dictionary.
+            for string_search in exception_dictionary.keys():
+                # If key is found in text, replace it
+                # by the corresponding value.
+                if string_search in text:
+                    text = text.replace(string_search, 
+                           exception_dictionary[string_search])
         return text
 
 
     def _charreplace(self, text, mode):
         """Replace characters in the input text."""
-        if self.calc_stats: # Don't bother with len() if no stats are needed
-            len_in = len(text)
+        # Replace custom strings ("exceptions")
+        text = self._excreplace(text)
         # Create lists and dictionary
         if mode == 'tocyr':
             charkeys = self.charmap_tocyr.keys()
@@ -201,19 +213,5 @@ class CirConv:
         for letter in charkeys:
             if letter in text:
                 text = text.replace(letter, charmap[letter])
-        # Stats needed?
-        if self.calc_stats:
-            self._stats(len_in, len(text)) 
         return text
 
-    
-    def _stats(self, len_in, len_out):
-        """Stats about conversion"""
-        self.stats['char_original'] = len_in
-        self.stats['char_replaced'] = len_out
-
-
-    def get_converted(self):
-        """"Return the converted text."""
-        self.convert()
-        return self.result
