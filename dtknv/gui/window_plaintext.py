@@ -66,10 +66,7 @@ class PlainText:
         Get text from text field, convert it to Cyrillic and
         return it to the textfield.
         """
-        text = self.get_text_field()
-        self.convert.text = text
-        self.convert.convert_to_cyrillic()
-        self.insert_text(self.convert.result)
+        self._convert('to_cyrillic')
 
 
     def to_latin(self, *e):
@@ -77,9 +74,26 @@ class PlainText:
         Get text from text field, convert it to Cyrillic and
         return it to the textfield.
         """
-        text = self.get_text_field()
+        self._convert('to_latin')
+    
+
+    def _convert(self, mode):
+        """
+        Call conversion class.
+        """
+        # Get exception files from settings
+        files = self.master.set.set_exc_files
+        # Load them into the class
+        self.convert.path = self.master.set.DEFEXCPATH
+        self.convert.load_exceptions(files)
+        text = self.get_text_field()[:-1]
         self.convert.text = text
-        self.convert.convert_to_latin()
+        if mode == 'to_cyrillic':
+            self.convert.convert_to_cyrillic()
+        elif mode == 'to_latin':
+            self.convert.convert_to_latin()
+        else:
+            raise ValueError('Mode must be "to_cyrillic" or "to_latin"')
         self.insert_text(self.convert.result)
 
     
