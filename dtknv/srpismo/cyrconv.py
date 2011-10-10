@@ -109,8 +109,11 @@ class CirConv:
         """
         self.path = path
         self.text = text
-        # Exceptions strings
-        self.load_exceptions(exceptions)
+        self.exceptions = []
+        # Exceptions strings. Don't load if path is
+        # not present.
+        if path and len(exceptions):
+            self.load_exceptions(exceptions)
         # Variants?
         if variants and len(exceptions):
             self._make_variants()
