@@ -10,10 +10,8 @@ New interface for dtknv.
 import tkinter as tk
 from tkinter import messagebox
 
-import threading
 import time
-
-
+import threading
 
 from gui.menu import Dmenu
 from gui.window_exceptions import Exceptions
@@ -26,7 +24,6 @@ from convert import tocyr
 from convert.tocyr import ToCyr
 from srpismo.cyrconv import CirConv
 
-        
 from gui.settings import Set
 
 class DtknvGui(tk.Frame):
@@ -78,6 +75,7 @@ class DtknvGui(tk.Frame):
         self.status = tk.Label(self, relief='sunken', anchor='w')
         self.status.pack(side='bottom', fill='x', padx=1, pady=1)
     
+
     def update_status(self, text, append=True):
         """Update status text"""
         if append:
@@ -87,6 +85,7 @@ class DtknvGui(tk.Frame):
         # Update this widget, so the message is visible
         # during loops.
         self.status.update()
+        
 
     def show_newversion(self, *e):
         """Check if new version is available, and if yes
@@ -102,23 +101,27 @@ class DtknvGui(tk.Frame):
             self.master.windows_opened.append('window_exceptions')
             Exceptions(self.master)
 
+
     def show_options(self, *event):
         """Show the options window."""
         if 'window_options' not in self.master.windows_opened:
             self.master.windows_opened.append('window_options')
             Options(self.master)
+
         
     def show_filesdir(self, *event):
         """Show file conversion mode"""
         self.window_plaintext.window.forget()
         self.window_filesdir.window.pack(anchor='w', fill='both', expand=1)
         self.update_status('status_mode_filesdir')
+
         
     def show_plaintext(self, *event):
         """Show plain text mode"""
         self.window_filesdir.window.forget()
         self.window_plaintext.window.pack()
         self.update_status('status_mode_plaintext')
+
     
     def update_gui(self):
         """Update GUI stuff"""
@@ -141,6 +144,7 @@ class DtknvGui(tk.Frame):
             self.update_status('label_ready', append=0)
         else:
             self.bind_all("<F5>", None)
+
             
     def explicit_save_in_same_folder(self):
         """ Converted files can be saved in the same folder
@@ -160,6 +164,7 @@ class DtknvGui(tk.Frame):
                 # folder, reset the output folder:
                 self.set.set_dirout = self.set.NOP
 
+
     def are_paths_ready(self):
         """Check if paths are ready"""
         input_path_selected = (self.set.set_dir != self.set.NOP) or \
@@ -175,12 +180,13 @@ class DtknvGui(tk.Frame):
             return True
         else:
             return False
+
     
     def convert(self, *e):
         """Start the convertsion"""
         # Disable the button and remove the bind
         # end override
-        self.btn_convert.configure(state='disabled')
+        self.window_filesdir.btn_convert.configure(state='disabled')
         self.bind_all("<F5>", None)
         print("I'm converting now...")
         print('ENC', self.set.set_encoding)

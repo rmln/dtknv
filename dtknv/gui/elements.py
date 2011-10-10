@@ -151,8 +151,13 @@ class Browse:
     def show(self, mode, initpath):
         """Open directory or file"""
         if mode == 'file':
-            path = os.path.split(initpath)[0]
+            #path = os.path.split(initpath)[0]
             self.path = filedialog.askopenfilenames(multiple=False)
+            # If a folder is selected, followed by
+            # canceling the dialogue, tkinter returns (),
+            # which causes errors.
+            if len(self.path) == 0:
+                self.path = ''
             # On NT tkinter returns string, on Linux tuple.
             if os.name != 'nt' and self.path != '':
                 self.path = self.path[0]                

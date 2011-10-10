@@ -11,12 +11,12 @@ import os
 import tkinter as tk
 from tkinter import messagebox
 from functools import partial
+
 import helpers
 from gui import elements
 from gui.settings import Set
 
 class Dmenu:
-
 
     def __init__(self, master):
         self.master = master
@@ -42,14 +42,14 @@ class Dmenu:
         # Settings
         self.sett = tk.Menu(self.main, tearoff=0)
         self.main.add_cascade(label=self.lng['menu_settings'], menu=self.sett)
-        #Setting variables
+        # Settings variables
         self.var_sett_sameinout = tk.IntVar()
         self.var_sett_convertnames = tk.IntVar()
         self.var_sett_recursive = tk.IntVar()
         self.var_sett_lng = tk.IntVar()
         self.var_sett_lnglat = tk.IntVar()
         self.var_sett_lngeng = tk.IntVar()
-        # Assign
+        # Assign from the settings file
         self.var_sett_convertnames.set(self.set.set_convertnames)
         self.var_sett_recursive.set(self.set.set_recursive)
         self.var_sett_sameinout.set(self.set.set_sameinout)
@@ -128,6 +128,8 @@ class Dmenu:
         self.set.set_file = elements.Browse(mode='file').path
         self.set.set_dir = self.set.NOP
         self.master.update_gui()
+        self.master.show_filesdir()
+
     
     def browse_dirin(self, *e):
         self.set.set_dir = elements.Browse(mode='dir',
@@ -135,12 +137,16 @@ class Dmenu:
         self.set.set_file = self.set.NOP
         self.assign_same('in')
         self.master.update_gui()
+        self.master.show_filesdir()
+
         
     def browse_dirout(self, *e):
         self.set.set_dirout = elements.Browse(mode='dir',
                               initpath=r'/home/marw/.dtest/out').path
         self.assign_same('out')
         self.master.update_gui()
+        self.master.show_filesdir()
+
     
     def languagechanged(self, to):
         """Inform a user that language will be active after restart"""
@@ -162,7 +168,6 @@ class Dmenu:
         else:
             raise ValueError("src must be 'in' or 'out'")
         
-
 
     def assign_chk(self, v):
         """Assign value from menu to global settings.

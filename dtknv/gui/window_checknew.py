@@ -82,7 +82,7 @@ class NewVersion:
             ver['version'] =  new_version[0]
             ver['date'] =  new_version[1]
             ver['info'] =  new_version[2]
-            ver['version'] =  '0.5.5 beta'
+            #ver['version'] =  '0.5.5 beta'
             if os.name != 'posix':
                 ver['url'] =  new_version[3]
             else:

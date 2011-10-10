@@ -50,7 +50,7 @@ class FilesDir:
         elif self.set.set_dir != self.set.NOP:
             # Calculate file number and size:
             #if self.set.set_dir != self.set.previous_folder:
-            if 1:
+            if 1: # overrided for time being
                 # Inform user that this migh take time:
                 self.master.update_status('label_pleasewait', 0)
                 # Pass the extension list
