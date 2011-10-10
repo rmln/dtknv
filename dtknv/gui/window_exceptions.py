@@ -22,8 +22,10 @@ from gui.window_entry import MsgEntry
 from gui.settings import Set
 
 class Exceptions:
-    
-    
+    """
+    Class Exceptions is a GUI for managing JSON files that store
+    find and replace strings.
+    """
     def __init__(self, master):
         self.master = master
         self.set = Set
@@ -254,18 +256,25 @@ class Exceptions:
             self.cells_color('white')
             # If there's no value in "find", gray out
             # the field
-            if self.sel_find.get().strip() == '':
+            if (self.sel_find.get().strip() and \
+                    self.sel_replace.get().strip()) == '':
+                self.cells_color('gray')
+            # If values are same, gray the fields,
+            # since that cells will not be saved.
+            if (self.sel_find.get() == self.sel_replace.get()):
                 self.cells_color('gray')
             # If "replace" string is blank, that
             # means that the "find" string will
             # be erased in the target text
-            if self.sel_replace.get().strip() == '':
+            if self.sel_replace.get().strip() == '' and \
+               self.sel_find.get().strip() != '':
                 if ' ' in self.sel_replace.get():
                     self.cells_color('orange')
                 else:
                     self.cells_color('red')
         else:
             raise ValueError("3rd value must be 'select' or 'reset'")
+
 
     def cells_color(self, color1, color2=False):
         """Set colors in the fields"""
@@ -276,6 +285,7 @@ class Exceptions:
             color2 = color1
         self.sel_replace.configure(bg=color1)
         self.sel_find.configure(bg=color2)
+
         
     def create_buttons(self):
         """Frame for buttons"""
@@ -317,6 +327,7 @@ class Exceptions:
         # Menu button end --------------
         frame_buttons.pack(padx=10, pady=10)
 
+
     def create_dropdown_menu(self):
         """
         Create a dropdown menu for the "load files"
@@ -335,6 +346,7 @@ class Exceptions:
             self.active_filename = self.new_filename + '.json'
             self.frame_fieldsscroll.destroy()
             self.create_cells()
+
 
     def get_filename(self, *e):
         """Show a message box and ask for a file name"""
