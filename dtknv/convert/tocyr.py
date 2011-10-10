@@ -86,7 +86,7 @@ class ToCyr:
     # A switch to prevent too much partying by the script.
     FAILSAFE = True
     # Default file name for simple report after the conversion.
-    REPORT = 'dtknv-'
+    REPORTNAME = 'dtknv-'
     # Unpack type
     USERAM = True
     # Suffix added to the converted file where
@@ -118,7 +118,6 @@ class ToCyr:
         # Remains false if no error occurs during
         # conversion.
         self.errors_during_work = False
-        print('tocyr: ', self.PATHOUT)
         if os.path.isdir(self.PATHIN):
             self.conversiontype = 'dir'
         elif os.path.isfile(self.PATHIN):
@@ -368,11 +367,10 @@ class ToCyr:
                 self.pcounter['all'], pround))
                 
 
-
     def _converttext(self, text):
         """Convert the text to Latin and return it."""
         self.convertor.text = text
-        self.convertor.convert()
+        self.convertor.convert_to_latin()
         return self.convertor.result
 
 

@@ -64,7 +64,7 @@ class Report:
     
     def _filename(self):
         """Return filename"""
-        return self.cn.REPORT  + self.dt + '.txt'
+        return self.cn.REPORTNAME  + self.dt + '.txt'
     
     def _saveinitial(self):
         """Save initial text"""
