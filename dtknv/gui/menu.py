@@ -49,10 +49,12 @@ class Dmenu:
         self.var_sett_lng = tk.IntVar()
         self.var_sett_lnglat = tk.IntVar()
         self.var_sett_lngeng = tk.IntVar()
+        self.var_sett_convmode = tk.StringVar() # Conversion mode
         # Assign from the settings file
         self.var_sett_convertnames.set(self.set.set_convertnames)
         self.var_sett_recursive.set(self.set.set_recursive)
         self.var_sett_sameinout.set(self.set.set_sameinout)
+        self.var_sett_convmode.set(self.set.set_convmode)
         #self.set.set_convertnames = self.var_sett_convertnames.get()
         # Settings: Save in same, Convert names, Recursive
         # Exceptions, Mode1, Mode2, Advanced
@@ -75,6 +77,16 @@ class Dmenu:
         self.sett.add_command(label=self.lng['menu_settings_showplaintext'], 
                                   command=master.show_plaintext)
         self.sett.add_separator()
+        # Settings -> Conversion mode
+        self.sett.add_radiobutton(label=self.lng['menu_settings_tolat'],
+                                  variable = self.var_sett_convmode,
+                                  command=partial(self.assign_convmode,
+                                                  'tolat'))
+        self.sett.add_radiobutton(label=self.lng['menu_settings_tocyr'],
+                                  variable = self.var_sett_convmode,
+                                  command=partial(self.assign_convmode,
+                                                  'tocyr'))
+        self.sett.add_separator()
         # Settings -> Exceptions
         self.sett.add_command(label=self.lng['menu_settings_exceptions'], 
                               command=master.show_exceptions)
@@ -83,7 +95,6 @@ class Dmenu:
         self.sett.add_cascade(label=self.lng['menu_settings_excfiles'], 
                               menu=self.menu_exc)
         self.create_exceptions_menu()
-#-------------------
         self.sett.add_separator()
         # Settings -> Language
         self.menu_language = tk.Menu(self.main, tearoff=0)
@@ -113,6 +124,14 @@ class Dmenu:
         self.master.bind_all('<Control-o>', self.browse_file)
         self.master.bind_all('<Control-f>', self.browse_dirin)
         self.master.bind_all('<Control-u>', self.browse_dirout)
+        # Invoke index 7 is conversion mode is tolat, otherwise
+        # index 8.
+        if self.set.set_convmode == 'tolat':
+            self.sett.invoke(7)
+        elif self.set.set_convmode == 'tocyr':
+            self.sett.invoke(8)
+        else:
+            raise ValueError('Convmode must be tocyr or tolat.')
 
 
     def create_exceptions_menu(self):
@@ -167,10 +186,17 @@ class Dmenu:
                 self.set.set_dir =  self.set.set_dirout
         else:
             raise ValueError("src must be 'in' or 'out'")
+    
         
+    def assign_convmode(self, v):
+        """
+        Assign correct conversion mode string.
+        """
+        self.set.set_convmode = v
 
     def assign_chk(self, v):
-        """Assign value from menu to global settings.
+        """
+        Assign value from menu to global settings.
         This is to pass values into the self.set, which
         is then saved in settings.py.
         

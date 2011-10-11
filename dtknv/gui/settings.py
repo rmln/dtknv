@@ -37,7 +37,9 @@ _default_settings = """
 "set_warningmb": "100",
 "set_warningn": "100",
 "set_extensions": "docx,odt,txt,htm,html",
-"set_exc_files": "standardni-izuzeci.json"
+"set_extensions_tocyr": "txt",
+"set_exc_files": "standardni-izuzeci.json",
+"set_convmode": "tolat"
 }
 """
 
@@ -125,7 +127,7 @@ class Settings:
         """Save settings in JSON file"""
         settings =  self.settings_elements_get()
         with open(self.SETPATH, mode='w', encoding='utf-8') as f:
-            json.dump(settings, f)
+            json.dump(settings, f, indent=4)
 
     
     def settings_elements_get(self):

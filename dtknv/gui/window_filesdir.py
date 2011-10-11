@@ -53,8 +53,13 @@ class FilesDir:
             if 1: # overrided for time being
                 # Inform user that this migh take time:
                 self.master.update_status('label_pleasewait', 0)
-                # Pass the extension list
-                self.master.tocyr.EXT = self.set.extensions
+                # Pass the extension list, depending on the
+                # conversion mode:
+                if self.set.set_convmode == 'tolat':
+                    extensions = self.set.set_extensions
+                else:
+                    extensions = self.set.set_extensions_tocyr
+                self.master.tocyr.EXT = extensions
                 # Calculate
                 self.master.tocyr.RECURSIVE = self.set.set_recursive
                 self.filecount, self.filesize = \
@@ -68,5 +73,5 @@ class FilesDir:
             text = text +  '\n' + self.lng['label_size'] %  \
                    '%0.2f' % self.filesize 
             text = text +  '\n' + self.lng['options_extensions'] + \
-                   self.set.set_extensions.replace(",", ", ")
+                   extensions.replace(",", ", ")
         self.label_selection.configure(text=text, justify='left')

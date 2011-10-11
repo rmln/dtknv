@@ -35,6 +35,7 @@ class Options:
         self.var_set_warningn = tk.IntVar()
         self.var_set_reportpath = tk.StringVar()
         self.var_set_extensions = tk.StringVar()
+        self.var_set_extensions_tocyr = tk.StringVar()
         self.settings_load()
         # Create elements
         self.create_elements()
@@ -107,7 +108,8 @@ class Options:
                 (self.var_set_encoding, 'encoding'),
                 (self.var_set_warningmb, 'warningmb'),
                 (self.var_set_warningn, 'warningn'),
-                (self.var_set_extensions, 'extensions')]
+                (self.var_set_extensions, 'extensions'),
+                (self.var_set_extensions_tocyr, 'extensions_tocyr')]
         # Checkbuttons ---------------------------
         checkbuttons = {}
         for e, n in chks:
@@ -123,8 +125,13 @@ class Options:
                               text=self.lng['options_%s' % n],
                               justify='left')
             box = tk.Entry(checkbuttons[n], width='5', textvariable=e)
-            if n in ('reportpath', 'extensions'):
+            if n in ('reportpath', 'extensions', 'extensions_tocyr'):
                 box.configure(width='30')
+                # In Cyrillic to Latin conversion, only
+                # txt files are supported, so disable entry
+                # to this field.
+                if n == 'extensions_tocyr':
+                    box.configure(state='disabled')
             if n == 'reportpath':
                 box.bind('<Double-Button-1>', self.browse_folder)
                 self.txt_reportpath = box
