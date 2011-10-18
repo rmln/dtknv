@@ -71,7 +71,7 @@ class ToCyr:
     # True if file nemes are converted.
     CONVERTFNAMES = False
     # Go into all directories.
-    RECURSIVE = True
+    RECURSIVE = False
     # Show percentage counter while running.
     COUNTER = True
     # Show info about conversion while running. On Windows this causes an
