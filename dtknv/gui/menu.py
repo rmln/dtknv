@@ -193,6 +193,14 @@ class Dmenu:
         Assign correct conversion mode string.
         """
         self.set.set_convmode = v
+        # Refresh the interface
+        try:
+            self.master.update_gui()
+        except AttributeError:
+            # This probably means that the rest of the interface
+            # is not created on the program startup.
+            pass
+
 
     def assign_chk(self, v):
         """
@@ -213,6 +221,9 @@ class Dmenu:
         if v == 'sameinout' and not self.set.set_sameinout:
             self.set.set_dirout =  self.set.NOP
             self.master.update_gui()
+        if v == 'recursive':
+            self.master.update_gui()
+
         
             
             

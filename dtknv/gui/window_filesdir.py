@@ -2,7 +2,9 @@
 
 """
 
-Frame for file conversion..
+Frame for file conversion. It holds labels and a button
+to start conversion, enablen if conditions for running
+are fulfilled.
 
 """
 
@@ -69,9 +71,15 @@ class FilesDir:
                     self.master.update_status('label_nosupportedfiles', 0)
                 else:
                     self.master.update_status('label_ok', 0)
+            # The number of files
             text = text +   '\n' + self.lng['label_number'] % self.filecount
+            # The size of file(s)
             text = text +  '\n' + self.lng['label_size'] %  \
-                   '%0.2f' % self.filesize 
+                   '%0.2f' % self.filesize
+            # The list of recognised extensions
             text = text +  '\n' + self.lng['options_extensions'] + \
                    extensions.replace(",", ", ")
+            # Conversion mode
+            text = text +  '\n' + self.lng['label_conv%s' % \
+                                               self.set.set_convmode]
         self.label_selection.configure(text=text, justify='left')
