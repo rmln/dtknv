@@ -142,7 +142,7 @@ class Link:
 
 class Browse:
     """Browse for file or folder"""
-    def __init__(self, mode, initpath=None):
+    def __init__(self, mode, initpath=None, extpaths=None):
         """Start the class."""
         if initpath == (None or '(?)'):
             initpath = helpers.def_report_path()

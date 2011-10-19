@@ -6,6 +6,10 @@ New interface for dtknv.
 
 """
 
+# BUGS/TODO
+# - Select L>Ć and the output is in Latin.
+#
+#
 
 import tkinter as tk
 from tkinter import messagebox
@@ -67,7 +71,8 @@ class DtknvGui(tk.Frame):
         self.bind_all("<F7>", self.show_filesdir)
         self.bind_all("<F8>", self.show_plaintext)
         # Select default mode
-        self.show_plaintext()
+        #self.show_plaintext()
+        self.show_filesdir()
 
         
     def create_statusbar(self):
@@ -222,7 +227,11 @@ class DtknvGui(tk.Frame):
         self.tocyr.CONVERTFNAMES = self.set.set_convertnames
         self.tocyr.REPORTPATH = self.set.set_reportpath
         self.tocyr.REPORT = self.set.set_reportname
-        self.tocyr.EXTENSIONS = self.set.extensions
+        # Extensions are conversion mode dependant
+        if self.set.set_convmode == 'tolat':
+            self.tocyr.EXT = self.set.extensions
+        else:
+            self.tocyr.EXT = self.set.extensions_tocyr
         self.tocyr.SAMEOUTPATH = self.set.set_sameinout
         self.tocyr.SHOW = self.set.set_verbose
         self.tocyr.CALLEDFROM = 'dtknv new interface'

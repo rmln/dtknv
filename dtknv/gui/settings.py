@@ -164,9 +164,16 @@ class Settings:
     
     def get_extensions(self):
         """Format extensions"""
-        self.extensions =   self.set_extensions.split(",")
-        if '' in self.extensions: 
-            self.extensions.remove('')
+        self.extensions = self._format_extensions(self.set_extensions)
+        self.extensions_tocyr = \
+            self._format_extensions(self.set_extensions_tocyr)
+
+    def _format_extensions(self, what):
+        """Return neat extension list"""
+        what = what.split(",")
+        if '' in what: 
+            what.remove('')
+        return what
  
  
     def latin(self):

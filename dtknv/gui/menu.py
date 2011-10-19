@@ -224,6 +224,31 @@ class Dmenu:
         if v == 'recursive':
             self.master.update_gui()
 
-        
-            
-            
+
+    def get_file_descriptions(self):
+        """
+        Return a file extension/description object to be used
+        in identifying patterns within dialogues.
+        """
+        if self.set.set_convmode == 'tocyr':
+            extensions = self.set.extensions_tocyr
+        elif self.set.set_convmode == 'tolat':
+            extensions = self.set.extensions
+        else:
+            raise ValueError('set_convmode must be "tolat" or "tocyr".')
+        # Compile the extension filter
+        cext = []
+        # Add option for all extensions
+        cext.append((self.lng['ext_*'], '.*'))
+        # Go through the extensions and add corresponding
+        # description from the language file/dictionary. If
+        # no description is found, add generic one.
+        for e in extensions:
+            pattern = '*.%s' % e
+            try:
+                description = self.lng['ext_%s' % e]
+            except:
+                description = self.lng['ext_?generic'] + e
+            cext.append((description, pattern))
+        return cext
+

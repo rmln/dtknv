@@ -51,6 +51,7 @@ class FilesDir:
             text =   text + '\n' + self.lng['label_type'] + ext
         elif self.set.set_dir != self.set.NOP:
             # Calculate file number and size:
+            # TODO: Add an option to override this.
             #if self.set.set_dir != self.set.previous_folder:
             if 1: # overrided for time being
                 # Inform user that this migh take time:
@@ -59,9 +60,10 @@ class FilesDir:
                 # conversion mode:
                 if self.set.set_convmode == 'tolat':
                     extensions = self.set.set_extensions
+                    self.master.tocyr.EXT = self.set.extensions
                 else:
                     extensions = self.set.set_extensions_tocyr
-                self.master.tocyr.EXT = extensions
+                    self.master.tocyr.EXT = self.set.extensions_tocyr
                 # Calculate
                 self.master.tocyr.RECURSIVE = self.set.set_recursive
                 self.filecount, self.filesize = \

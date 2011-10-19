@@ -98,11 +98,15 @@ serbian_cyrillic = {
 'label_ok':' ОК.',
 'label_error':'Грешка',
 'label_filealreadyexists': 'Датотека %s већ постоји.',
+'label_convtolat':'Конверзија у латиницу.',
+'label_convtocyr':'Конверзија у ћирилицу.',
 'ext_html':'хипертекст ',
 'ext_htm':'хипертекст ',
 'ext_odt':'Опенофис / Либреофис документ',
-'ext_docx':'Ворд 2007+  документ',
-'ext_txt':'обичан текст '
+'ext_docx':'Ворд 2007+ документ',
+'ext_txt':'обичан текст ',
+'ext_*':'све датотеке ',
+'ext_?generic':'датотеке типа '
 }
 
 
