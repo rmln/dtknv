@@ -140,12 +140,13 @@ class DtknvGui(tk.Frame):
         self.set.reload()
         self.window_filesdir.update_gui()
         self.status.configure(bg='gray')
+        # By default, block the run button.
+        self.window_filesdir.btn_convert.configure(state='disabled')
         # If everything is ready, enable the convert
         # button and bindig:
         if self.are_paths_ready():
             self.window_filesdir.btn_convert.configure(state='normal')
             self.bind_all("<F5>", self.convert)
-            self.window_filesdir.btn_convert.configure(state='normal')
             self.update_status('label_ready', append=0)
         else:
             self.bind_all("<F5>", None)
@@ -190,7 +191,6 @@ class DtknvGui(tk.Frame):
     def convert(self, *e):
         """Start the convertsion"""
         # Disable the button and remove the bind
-        # end override
         self.window_filesdir.btn_convert.configure(state='disabled')
         self.bind_all("<F5>", None)
         print("I'm converting now...")
