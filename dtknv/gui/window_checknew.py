@@ -2,9 +2,27 @@
 
 """
 
-Frame for plain text conversion..
+Shows a small window and offers download links,
+if new version is available.
 
 """
+
+#
+#    Copyright (C) 2011  Romeo Mlinar (mlinar [a] languagebits.com)
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 
 import os
 import time
@@ -46,9 +64,9 @@ class NewVersion:
         self.main.update()
         
         
-
     def check_version(self):
-        """Compare current and new verison and show
+        """
+        Compare current and new verison and show
         appropriate links, if a newer version is available.
         """
         utext = self.get_newversion()
@@ -73,8 +91,10 @@ class NewVersion:
 
 
     def get_newversion(self, *e):
-        """Check if new version is available, and if yes
-        show details / download link."""
+        """
+        Check if new version is available, and if yes
+        show details / download link.
+        """
         try:
             new_version = urllib.request.urlopen(self.URL).read()
             new_version = new_version.decode('utf-8').split('|')

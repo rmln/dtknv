@@ -2,9 +2,39 @@
 
 """
 
-New interface for dtknv.
+New, menu-based interface for dtknv. 
+
+It consists of several parts:
+
+DtknvGui   - main frame that holds everything else;
+Dmenu      - menus,
+Options    - top window with options,
+PlainText  - a frame with a text field, used for plain text
+             conversions,
+FilesDir   - a frame with labels/info for converting files, and
+             a button that starts the conversion,
+NewVersion - a small top window with links to download new version,
+             if available. 
 
 """
+
+#
+#    Copyright (C) 2011  Romeo Mlinar (mlinar [a] languagebits.com)
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
 
 # BUGS/TODO
 # - Select L>Ć and the output is in Latin.
