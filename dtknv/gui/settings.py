@@ -109,6 +109,7 @@ class Settings:
                      encoding='utf-8', mode='w')
         f.write(cyrconv.standard_exc)
 
+
     def settings_exist(self):
         """Check if the settings file exists. If not,
         create the path and save default settings"""
@@ -134,6 +135,7 @@ class Settings:
                      mode='w')
         f.write(_default_settings)
         f.close()
+
                 
     def load_language(self):
         """Apply settings"""
@@ -188,6 +190,7 @@ class Settings:
         self.extensions_tocyr = \
             self._format_extensions(self.set_extensions_tocyr)
 
+
     def _format_extensions(self, what):
         """Return neat extension list"""
         what = what.split(",")
@@ -198,11 +201,12 @@ class Settings:
  
     def latin(self):
         """Convert Cyrillic Serbian to Latin."""
-        conv = cyrconv.CirConv(mode="tolat")
+        conv = cyrconv.CirConv()
         source = copy.deepcopy(language.serbian_cyrillic)
         for i in source.keys():
              conv.text = source[i]
-             source[i] = conv.get_converted()
+             conv.convert_to_latin()
+             source[i] = conv.result
         return source
 
     def reload(self):
