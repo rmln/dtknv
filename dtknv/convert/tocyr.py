@@ -78,7 +78,7 @@ class ToCyr:
     # error if messages are in UTF.
     SHOW = False
     # Not implemented yet: from Lat to Cyr or vice versa.
-    MODE = 'tolat'
+    CONVMODE = 'tolat'
     # Show percentage counter while running.
     SHOWPERC = True
     # For debugging, to see how the script was called (GUI or console).
@@ -101,7 +101,11 @@ class ToCyr:
 
     def __init__(self):
         """Convert between Latin and Cyrillic scripts."""
+        # Load and attach the CirConv class to a class
+        # method.
         self.convertor = CirConv()
+        # conversiontype defines wether the conversion
+        # is done no file or folder level.
         self.conversiontype = None
 
     def run(self):
@@ -368,9 +372,17 @@ class ToCyr:
                 
 
     def _converttext(self, text):
-        """Convert the text to Latin and return it."""
+        """
+        Convert the text to a specified script and return the
+        result.
+        """
         self.convertor.text = text
-        self.convertor.convert_to_latin()
+        if self.CONVMODE == 'tolat':
+            self.convertor.convert_to_latin()
+        elif self.CONVMODE == 'tocyr':
+            self.convertor.convert_to_cyrillic()
+        else:
+            raise ValueError('CONVMODE must be "tolat" to "tocyr".')
         return self.convertor.result
 
 

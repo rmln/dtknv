@@ -218,6 +218,7 @@ class DtknvGui(tk.Frame):
             self.tocyr.PATHIN = self.set.set_dir
         self.tocyr.PATHOUT =  self.set.set_dirout
         self.tocyr.RECURSIVE = self.set.set_recursive
+        self.tocyr.CONVMODE = self.set.set_convmode
         self.tocyr.SHOW = self.set.set_verbose 
         self.tocyr.FAILSAFE =  0 if self.set.set_failsafe else 1
         # This has to be negated, since the user was
