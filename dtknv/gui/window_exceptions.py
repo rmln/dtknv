@@ -41,6 +41,13 @@ class Exceptions:
     """
     Class Exceptions is a GUI for managing JSON files that store
     find and replace strings.
+
+    Some of the class elements:
+
+    .allcells
+    Alias for .entry_sr, and contains a dictonary
+    with search and replace cells. 
+    
     """
     def __init__(self, master):
         self.master = master
@@ -62,8 +69,9 @@ class Exceptions:
         self.window.bind('<Control-d>', self.append_empty_cell)
         self.window.bind('<Control-n>', self.new_set)
         self.window.bind('<Control-s>', self.save_exc)
+        self.window.bind('<Control-i>', self.delete_selected_cells)
         # Load default exception
-        self.active_filename = 'standardni-izuzeci.json'
+        self.active_filename = self.set.set_defaultexc
         self.load_file_create_cells(self.active_filename)
         # Grab the window, so main program window
         # is not accessible
@@ -133,15 +141,6 @@ class Exceptions:
             self.create_dropdown_menu()
 
 
-    def set_cell_focus(self, cell=False):
-        """Set focus on a particular cell"""
-        # False means that the last cell
-        # should be selected
-        if not cell:
-            lastcell = list(self.allcells.keys())
-            #lastcell[-1].focus_set()
-
-
     def append_empty_cell(self, *e):
         """Add an empty cell to the list"""
         keys = values = ('',)
@@ -204,8 +203,10 @@ class Exceptions:
         Create cells for exception text, where exc can
         be False or contain a dictionary of values. False
         will create default 10 blank cell pairs.
+
+        This method calls draw_cells(), where the cells are
+        actually created by tk.
         """
-        # ----------------------------------------------
         frame_fieldsscroll = tk.Text(self.main, relief='flat')
         self.frame_fieldsscroll = frame_fieldsscroll
         self.text_fields = tk.Text(frame_fieldsscroll, relief='flat')
@@ -234,7 +235,7 @@ class Exceptions:
         # Don't allow any changes in parent text field.
         self.text_fields.configure(state='disabled')
         frame_fieldsscroll.configure(state='disabled')
-
+        
 
     def selected_content(self, *w):
         """
@@ -302,16 +303,34 @@ class Exceptions:
         self.sel_replace.configure(bg=color1)
         self.sel_find.configure(bg=color2)
 
+
+    def delete_selected_cells(self, *e):
+        """
+        Delete the content of the active cells.
+        """
+        # This causes an error if user has not selected
+        # a cell, so make sure .delete has  an object
+        # to be called from:
+        if 'sel_find' in dir(self):
+            for field in (self.sel_find, self.sel_replace):
+                field.delete(0, 'end')
         
+
     def create_buttons(self):
         """Frame for buttons"""
         # Frames in this window
         frame_buttons = tk.Frame(self.window)
         # Buttons & menus
-        menu_array = [('saveexc', self.save_exc),
-                        ('addcells', self.append_empty_cell),
-                        ('removecells', self.new_set),
-                        ('newexcfile', self.new_set)]
+        menu_array = [('newexcfile', self.new_set),
+                      ('saveexc', self.save_exc),
+                      ('separator',''),
+                      ('addcells', self.append_empty_cell),
+                      ('removecells', self.delete_selected_cells)
+                      # Let's leave this for next version:
+                      #('separator',''),
+                      #('csv_import', print),
+                      #('csv_export', print)
+                      ]
         #Menu button actions ---------------
         button_actions = tk.Menubutton(frame_buttons, 
                                     text=self.lng['button_exc_commands'],
@@ -321,9 +340,12 @@ class Exceptions:
         # Commands in this menu:
         menu_objects = {}
         for b, c in menu_array:
-            menu_objects[b] = menu_actions.add_command( \
-                label=self.lng['button_%s' % b],
-                command=c)
+            if b != 'separator':
+                menu_objects[b] = menu_actions.add_command( \
+                    label=self.lng['button_%s' % b],
+                    command=c)
+            else:
+                menu_objects[b] = menu_actions.add_separator()
         button_actions.configure(menu=menu_actions)
         button_actions.pack(side='left', pady=3, padx=5)
         button_load = tk.Menubutton(frame_buttons, 
@@ -356,7 +378,9 @@ class Exceptions:
 
 
     def new_set(self, *e):
-        """Create a blank sheet for values"""
+        """
+        Create a blank sheet for values.
+        """
         self.new_filename = self.get_filename()
         if self.new_filename:
             self.active_filename = self.new_filename + '.json'
@@ -365,7 +389,9 @@ class Exceptions:
 
 
     def get_filename(self, *e):
-        """Show a message box and ask for a file name"""
+        """
+        Show a message box and ask for a file name.
+        """
         # Disable closing of the corrent windows
         # TODO: It is possible to close this window
         # while filename message is shown.

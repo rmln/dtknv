@@ -37,7 +37,8 @@ NewVersion - a small top window with links to download new version,
 
 
 # BUGS/TODO
-# - Select L>Ć and the output is in Latin.
+# - An ID for standard exceptions should not be hardcoded in 
+#   elements.py, but passed from the class.
 #
 #
 

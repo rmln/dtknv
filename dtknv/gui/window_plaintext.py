@@ -41,6 +41,8 @@ class PlainText:
         self.window.pack()
         # Class for conversion:
         self.convert = CirConv()
+        # Focus
+        self.field_text.focus_set()
 
     def text(self):
         """Create a text field with a scroll bar"""

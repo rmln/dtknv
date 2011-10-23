@@ -59,7 +59,8 @@ _default_settings = """
 "set_extensions": "docx,odt,txt,htm,html",
 "set_extensions_tocyr": "txt",
 "set_exc_files": "standardni-izuzeci.json",
-"set_convmode": "tolat"
+"set_convmode": "tolat",
+"set_defaultexc": "standardni-izuzeci.json",
 }
 """
 
