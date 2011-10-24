@@ -57,7 +57,7 @@ serbian_cyrillic = {
 'window_options':'Подешавања',
 'options_verbose':'Приказуј детаље у конзоли',
 'options_failsafe':'Обустави након прве грешке',
-'options_noram':'Користи хард диск за распакивање\n(успорава рад програма!)',
+'options_noram':'Користи хард диск за распакивање (није препоручљиво)',
 'options_report':'Прави извјештаје о раду',
 'options_reportname':'Име датотеке за извјештај:',
 'options_encoding':'Кодна страна:',

@@ -40,8 +40,12 @@ NewVersion - a small top window with links to download new version,
 # - An ID for standard exceptions should not be hardcoded in 
 #   elements.py, but passed from the class.
 #
+# - If no file is selected in the file dialogue, all paths
+#   are reset.
 #
-
+# - Error in single file conversion (re self.window_filesdir.filecount)
+#
+#
 import tkinter as tk
 from tkinter import messagebox
 

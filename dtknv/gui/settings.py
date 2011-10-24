@@ -60,7 +60,7 @@ _default_settings = """
 "set_extensions_tocyr": "txt",
 "set_exc_files": "standardni-izuzeci.json",
 "set_convmode": "tolat",
-"set_defaultexc": "standardni-izuzeci.json",
+"set_defaultexc": "standardni-izuzeci.json"
 }
 """
 
@@ -176,10 +176,16 @@ class Settings:
             if i == 'set_reportpath':
                 if value.strip() == 'default':
                     value = helpers.def_report_path()
-            # A note that nothing is selected for paths
+            # Verifications of paths (does they exist, are they
+            # paths at all).
             if i in self.checkpaths:
-                if not os.path.exists(value):
+                # This is to deal with instances where tk sends an
+                # empty list, so os.path.exists fails.
+                if isinstance(value ,list) and len(value) == 0:
                     value = self.NOP
+                if isinstance(value, list):
+                    if not os.path.exists(value):
+                        value = self.NOP
             setattr(self, i, value)
         # Place the extensions
         self.get_extensions()
