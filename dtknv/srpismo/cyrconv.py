@@ -98,6 +98,7 @@ class Replace:
 class CirConv:
     """
     Converts Cyrillic script to Latin.
+    TODO: Remove repetitions.
     """
         
     def __init__(self, text='', stats=False, exceptions=[], variants=False,

@@ -36,12 +36,11 @@ Komande:
 #
 # A checklist before deployment:
 #
-#    - zip mode on?
 #    - failsafe on?
 #    - testing args commented?
 #    - readme updated?
 #    - info about changes updated?
-#    - runs on Linux?
+#    - runs on Windows?
 #
 
 __url__ = "https://gitorious.org/dtknv"
@@ -84,7 +83,7 @@ def usage():
         info_file = 'info-latinica.txt'
     else:
         info_file = 'info-latinica-cl.txt'
-    # Comile path and show it onto the screen
+    # Compile path and show it onto the screen
     info_file = os.path.join(RESPATH, info_file)
     print(codecs.open(info_file, encoding='utf-8').read())
     print('v.', version.__version__)
@@ -112,14 +111,18 @@ if __name__ == '__main__':
         c.SHOW = False
         c.RECURSIVE = False
     except:
-        raise RuntimeError('Could not initialise TocCyr.')
+        raise RuntimeError('Could not initialise ToCyr.')
     # Gui variable can override command calls
     SHOWGUI = False
     # Command line arguments
     try:
-        supplied, r = getopt.getopt(args, 'i:o:e:c:vnrhfmgs', ['pathin=',
-                    'pathout=', 'encoding=', 'conversionreportname=', 'verbose',
-                    'names', 'recursive', 'help', 'nofailsafe', 'noram', 'gui', 'sameoutpath'])
+        supplied, r = getopt.getopt(args, 
+                                    'i:o:e:c:vnrhfmgs',
+                                    ['pathin=', 'pathout=', 'encoding=',
+                                     'conversionreportname=', 'verbose',
+                                     'names', 'recursive', 'help', 
+                                     'nofailsafe', 'noram', 'gui',
+                                     'sameoutpath'])
     except:
         usage()
         sys.exit(2)
