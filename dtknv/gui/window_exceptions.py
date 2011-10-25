@@ -49,6 +49,7 @@ class Exceptions:
     with search and replace cells. 
     
     """
+
     def __init__(self, master):
         self.master = master
         self.set = Set
@@ -73,6 +74,7 @@ class Exceptions:
         # Load default exception
         self.active_filename = self.set.set_defaultexc
         self.load_file_create_cells(self.active_filename)
+        self.colorise()
         # Grab the window, so main program window
         # is not accessible
         self.window.grab_set()
@@ -85,6 +87,7 @@ class Exceptions:
         self.frame_fieldsscroll.destroy()
         items = self.load_exc_file(f)
         self.create_cells(items)
+        self.colorise()
         # Update the title
         self.window.title(self.lng['window_exceptions'] + ' (%s)' % \
                               self.active_filename)
@@ -239,20 +242,7 @@ class Exceptions:
 
     def selected_content(self, *w):
         """
-        Determine  which cells are selected, and then
-        format them by color:
-        
-        red      a warning to user that "find" string will
-                 be deleted in the target text;
-
-        orange   a warning to user that "find" string will
-                 be deleted in the target text by blanks;
-
-        gray     a warning to user that "find" and "replace"
-                 were removed from the list and will be deleted
-                 from the current exceptions file
-
-        yellow   currently selected cells.
+        Determine  which cells are selected.
         
         """
         if w[1] == 'f':
@@ -268,40 +258,74 @@ class Exceptions:
         #      self.sel_replace.get())
         # Configure
         if w[2] == 'select':
-            self.cells_color('yellow')
+            self.set_cells_color(self.sel_find, self.sel_replace,
+                                 color1='yellow')
         elif w[2] == 'reset':
-            self.cells_color('white')
-            # If there's no value in "find", gray out
-            # the field
-            if (self.sel_find.get().strip() and \
-                    self.sel_replace.get().strip()) == '':
-                self.cells_color('gray')
-            # If values are same, gray the fields,
-            # since that cells will not be saved.
-            if (self.sel_find.get() == self.sel_replace.get()):
-                self.cells_color('gray')
-            # If "replace" string is blank, that
-            # means that the "find" string will
-            # be erased in the target text
-            if self.sel_replace.get().strip() == '' and \
-               self.sel_find.get().strip() != '':
-                if ' ' in self.sel_replace.get():
-                    self.cells_color('orange')
-                else:
-                    self.cells_color('red')
+            self.deterimine_cells_color(self.sel_find, self.sel_replace)
         else:
             raise ValueError("3rd value must be 'select' or 'reset'")
 
 
-    def cells_color(self, color1, color2=False):
-        """Set colors in the fields"""
+    def set_cells_color(self, find, replace, color1='green', color2=False):
+        """
+        Set colors in the fields.
+        
+        If only the first cell color is supplied, then use
+        the same color for the second cell.
+        """
         # If there's no argument for color2,
         # then both cells should have same
         # color.
         if not color2:
             color2 = color1
-        self.sel_replace.configure(bg=color1)
-        self.sel_find.configure(bg=color2)
+        # Configure the colors
+        replace.configure(bg=color1)
+        find.configure(bg=color2)
+
+
+    def deterimine_cells_color(self, find, replace):
+        """
+        Return conditional colors.
+
+        
+        red      a warning to user that "find" string will
+                 be deleted in the target text;
+
+        orange   a warning to user that "find" string will
+                 be deleted in the target text by blanks;
+
+        gray     a warning to user that "find" and "replace"
+                 were removed from the list and will be deleted
+                 from the current exceptions file
+
+        yellow   currently selected cells.
+        """
+        # TODO: This can be optimised by replacing
+        # repetitive replace.get()
+        # First, reset them to white:
+        self.set_cells_color(find, replace, color1='white')
+        # Then, mark them if they contain white space:
+        if ' ' in find.get():
+            self.set_cells_color(find, replace, color1='green')
+        if ' ' in replace.get():
+            self.set_cells_color(find, replace, color1='green')
+       
+        # If there's no value in "find", gray out
+        # the field.
+        if (find.get().strip() and replace.get().strip()) == '':
+            self.set_cells_color(find, replace, color1='gray')
+        # If values are same, gray out the fields,
+        # since that cells will not be saved.
+        if (find.get() == replace.get()):
+            self.set_cells_color(find, replace, color1='gray')
+        # If "replace" string is blank, that
+        # means that the "find" string will
+        # be erased in the target text
+        if find.get() != '' and replace.get().strip() == '':
+            self.set_cells_color(find, replace, color1='red')
+            if ' ' in replace.get():
+                self.set_cells_color(find, replace, color1='red',
+                                     color2='orange')
 
 
     def delete_selected_cells(self, *e):
@@ -386,6 +410,16 @@ class Exceptions:
             self.active_filename = self.new_filename + '.json'
             self.frame_fieldsscroll.destroy()
             self.create_cells()
+
+
+    def colorise(self):
+        """
+        Colorise cells. Iterate over the ___ and call 
+        deterimine_cells_color. Thi method is called after
+        a JSON exception file is loaded / cells created.
+        """
+        for search in self.allcells.keys():
+            self.deterimine_cells_color(search, self.allcells[search]) 
 
 
     def get_filename(self, *e):
