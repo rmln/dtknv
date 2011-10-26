@@ -27,6 +27,8 @@ text. They function as search and replace.
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
+import copy
+
 import tkinter as tk
 from tkinter import messagebox
 from functools import partial
@@ -84,8 +86,17 @@ class Exceptions:
         """
         Load f file and place items into cells.
         """
+        try:
+            self.see_if_cells_are_changed()
+        except AttributeError:
+            # This (probably) means that the method was
+            # called from __init__
+            pass
         self.frame_fieldsscroll.destroy()
         items = self.load_exc_file(f)
+        # Create a copy of items, so it is possible
+        # to chek later if the items are changed
+        self.items_orig = copy.deepcopy(items)
         self.create_cells(items)
         self.colorise()
         # Update the title
@@ -120,14 +131,30 @@ class Exceptions:
 
         
     def close(self, *event):
-        """Actions upon window closing."""
+        """
+        Actions upon window closing.
+        """
+        self.see_if_cells_are_changed()    
         self.master.windows_opened.remove('window_exceptions')
         self.window.destroy()
 
+    
+    def see_if_cells_are_changed(self):
+        """
+        Check if cells are saved, and if yes,
+        offer to save them.
+        """
+        if self.items_orig != self.read_cells():
+            ask = messagebox.askyesno(self.lng['label_save'], 
+                                      self.lng['msg_savechanges'])
+            if ask:
+                self.save_exc()
+        
 
     def load_exc_file(self, f):
         """Load replacement strings."""
         f = os.path.join(self.PATH, f)
+        self.active_filename = f
         exceptions = Replace().load(f)
         return(exceptions)
 
@@ -140,7 +167,7 @@ class Exceptions:
             Replace().save(f, strings)
             # Recreate the menu in settings menu:
             self.master.recreate_excetions_menu()
-            # Recreate the menu in this wondow:
+            # Recreate the menu in this window:
             self.create_dropdown_menu()
 
 
