@@ -160,27 +160,35 @@ class Dmenu:
 
     def browse_file(self, *e):
         """Browse for a file"""
-        self.set.set_file = elements.Browse(mode='file').path
-        self.set.set_dir = self.set.NOP
-        self.master.update_gui()
-        self.master.show_filesdir()
+        path  = elements.Browse(mode='file').path
+        if path != '':
+            self.set.set_file = path 
+            self.set.set_dir = self.set.NOP
+            self.master.update_gui()
+            self.master.show_filesdir()
 
     
     def browse_dirin(self, *e):
-        self.set.set_dir = elements.Browse(mode='dir',
-                           initpath=r'/home/marw/.dtest/in').path
-        self.set.set_file = self.set.NOP
-        self.assign_same('in')
-        self.master.update_gui()
-        self.master.show_filesdir()
+        path = elements.Browse(mode='dir', 
+                               initpath=r'/home/marw/.dtest/out').path
+        if path != '':
+            # The path is OK, so assign it to the variable,
+            # and reset the file variable.
+            self.set.set_dir = path
+            self.set.set_file = self.set.NOP
+            self.assign_same('in')
+            self.master.update_gui()
+            self.master.show_filesdir()
 
         
     def browse_dirout(self, *e):
-        self.set.set_dirout = elements.Browse(mode='dir',
-                              initpath=r'/home/marw/.dtest/out').path
-        self.assign_same('out')
-        self.master.update_gui()
-        self.master.show_filesdir()
+        path = elements.Browse(mode='dir', 
+                               initpath=r'/home/marw/.dtest/out').path
+        if path != '':
+            self.set.set_dirout = path
+            self.assign_same('out')
+            self.master.update_gui()
+            self.master.show_filesdir()
 
     
     def languagechanged(self, to):
