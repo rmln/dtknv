@@ -101,7 +101,7 @@ class Exceptions:
         self.colorise()
         # Update the title
         self.window.title(self.lng['window_exceptions'] + ' (%s)' % \
-                              self.active_filename)
+                              helpers.filename(self.active_filename))
 
 
     def read_cells(self, *e):
