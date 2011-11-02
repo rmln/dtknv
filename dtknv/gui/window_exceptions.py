@@ -65,8 +65,6 @@ class Exceptions:
         self.main = tk.Frame(self.window, height=300, width=300)
         self.main.pack(padx=0, pady=0, fill='both', expand=1)
         self.main.pack_propagate(0)
-        # Create needed widgets
-        self.create_cells()
         self.create_buttons()
         # Binds
         self.window.bind('<Control-d>', self.append_empty_cell)
@@ -75,32 +73,41 @@ class Exceptions:
         self.window.bind('<Control-i>', self.delete_selected_cells)
         # Load default exception
         self.active_filename = self.set.set_defaultexc
-        self.load_file_create_cells(self.active_filename)
-        self.colorise()
+        self.load_file_create_cells(self.active_filename, initial=True)
+        #self.colorise()
         # Grab the window, so main program window
         # is not accessible
         self.window.grab_set()
 
 
-    def load_file_create_cells(self, f):
+    def load_file_create_cells(self, f=False, initial=False):
         """
         Load f file and place items into cells.
         """
-        try:
+        # These are not available during the first
+        # load, so not point in calling the destroy
+        # attributes.
+        if not initial:
             self.see_if_cells_are_changed()
-        except AttributeError:
-            # This (probably) means that the method was
-            # called from __init__
-            pass
-        self.frame_fieldsscroll.destroy()
-        items = self.load_exc_file(f)
+            self.canvas.destroy()
+            self.vsb.destroy()
+        # Create canvas
+        self.create_cells_container()
+        # Load search and replace strings
+        if f:
+            items = self.load_exc_file(f)
+        else:
+            items = False
         # Create a copy of items, so it is possible
         # to chek later if the items are changed
         self.items_orig = copy.deepcopy(items)
-        self.create_cells(items)
+        # Place cells in the canvas
+        self.draw_cells(exc=items)
+        self.container_finalise()
+        # Colorise the cells if needed
         self.colorise()
         # Update the title
-        self.window.title(self.lng['window_exceptions'] + ' (%s)' % \
+        self.window.title(self.lng['window_exceptions'] + ' (%sy)' % \
                               helpers.filename(self.active_filename))
 
 
@@ -165,41 +172,53 @@ class Exceptions:
         if strings:
             f = os.path.join(self.PATH, self.active_filename)
             Replace().save(f, strings)
-            # Recreate the menu in settings menu:
+            # Recreate the menu in settings menu.
             self.master.recreate_excetions_menu()
-            # Recreate the menu in this window:
+            # Recreate the menu in this window.
             self.create_dropdown_menu()
+            # This here is needed so see_if_cells_are_changed()
+            # would not bother user.
+            self.items_orig = strings
 
 
     def append_empty_cell(self, *e):
         """Add an empty cell to the list"""
-        keys = values = ('',)
-        self.draw_cells(keys, values, appendempty=True)
-        #self.set_cell_focus()
+        self.draw_cells({'':''}, appendempty=True)
 
 
-    def draw_cells(self,  keys, values, appendempty=False):
+    def draw_cells(self, exc=False, appendempty=False):
         """
         Create new paris of cells. To add new cells at the end
         appendempty must be True, and key/values have the same
         number of empty items.
         """
+        if exc:
+            keys = list(exc.keys())
+            values = list(exc.values())
+        else:
+            keys = ('',) * 10
+            values = ('',) * 10
+
         if appendempty:
             tf = self.allcells
+            cells_number = range(len(keys))
         else:
+            cells_number = range(len(keys))
             tf = {}
         # Master is inherited from the parent widget in
-        # create_cells().
-        master = self.text_fields
-        for item in range(len(keys)):
-            e_find = tk.Entry(master, width=16)
-            e_replace = tk.Entry(master, width=16)
+        # create_cells_container().
+        master = self.container
+        for item in cells_number:
+
+            e_find = tk.Entry(master)
+            e_replace = tk.Entry(master)
+
             e_find.insert(0, keys[item])
             e_replace.insert(0, values[item])
-            e_find.grid(row=0, column=0)
-            e_replace.grid(row=0, column=1)
-            master.window_create('insert', window=e_find)
-            master.window_create('insert', window=e_replace)
+
+            e_find.grid(row=len(tf)+1, column=0, sticky='ew')
+            e_replace.grid(row=len(tf)+1, column=1, sticky='ew')
+
             # Put cell widgets into dictionary.
             tf[e_find] = e_replace
             # Bind function that discovers which cells have
@@ -218,7 +237,6 @@ class Exceptions:
             e_replace.bind('<FocusOut>', 
                            partial(self.selected_content, 
                            e_replace, 'r', 'reset'))
-            master.insert('end', '\n')
         # self.entry_sr and self.entry_rs are the same
         # dictionary, but with swapped keys and values.
         # Ordered by search, replace
@@ -226,9 +244,14 @@ class Exceptions:
         # Ordered by replace, search
         self.entry_rs = {tf[i]: i for i in tf}
         self.allcells = tf
+        #
+        # self.allcells contains all cells and it is accessible
+        # throughout the class. This attribute is important in
+        # draw_cells().
+        tf = self.allcells
     
 
-    def create_cells(self, exc=False):
+    def create_cells_container(self):
         """
         Create cells for exception text, where exc can
         be False or contain a dictionary of values. False
@@ -236,41 +259,47 @@ class Exceptions:
 
         This method calls draw_cells(), where the cells are
         actually created by tk.
-        """
-        frame_fieldsscroll = tk.Text(self.main, relief='flat')
-        self.frame_fieldsscroll = frame_fieldsscroll
-        self.text_fields = tk.Text(frame_fieldsscroll, relief='flat')
-        frame_fieldsscroll.window_create('insert', window=self.text_fields)
-        
-        if exc:
-            keys = list(exc.keys())
-            values = list(exc.values())
-        else:
-            keys = ('',) * 10
-            values = ('',) * 10
 
-        self.draw_cells(keys, values)
-        # self.allcells contains all cells and it is accessible
-        # throughout the class. This attribute is important in
-        # draw_cells().
-        tf = self.allcells
-        # Add scrollbar and attach it to the text field that holds
-        # the cells pairs.
-        scrollbar = tk.Scrollbar(self.frame_fieldsscroll, width=15)
-        scrollbar.config(command=self.text_fields.yview)
-        self.text_fields.config(yscrollcommand=scrollbar.set)
-        frame_fieldsscroll.pack()
-        scrollbar.pack(side='right', fill='y')
-        self.text_fields.pack(fill='both')
-        # Don't allow any changes in parent text field.
-        self.text_fields.configure(state='disabled')
-        frame_fieldsscroll.configure(state='disabled')
+        This part of code was initially written by using Text widget,
+        but since it was impossible to scale Entries properly, it
+        needed a redesign. I would like to thank Bryan Oakley from
+        stackoverflow.com for helping me writting the code by
+        using Canvas widget (he actually wrote down the whole idea
+        and OnCanvasConfigure method, and what you see here is more
+        or less copy/paste).
+        
+        """
+        self.canvas = tk.Canvas(self.main, highlightthickness=0)
+        self.vsb = tk.Scrollbar(self.main, orient="vertical",
+                                command=self.canvas.yview)
+        self.canvas.configure(yscrollcommand=self.vsb.set)
+        self.vsb.pack(side="right", fill="y")
+        self.canvas.pack(side="left", fill="both", expand=True)
+        self.container = tk.Frame(self.canvas, borderwidth=0, 
+                                  highlightthickness=0)
+        self.container.grid_columnconfigure(0, weight=1)
+        self.container.grid_columnconfigure(1, weight=1)
+        
+
+    def container_finalise(self):
+        """
+        Finalise the cell container creation.
+        """
+        # Widget initialisation ends------------------------------------
+        self.canvas.create_window((0,0), anchor="nw", 
+                                  window=self.container, tags="container")
+        self.canvas.configure(scrollregion=self.canvas.bbox("all"))
+        self.canvas.bind("<Configure>", self.OnCanvasConfigure)
+        
+        
+    def OnCanvasConfigure(self, event):
+        self.canvas.itemconfigure("container", width=event.width)
+        self.canvas.configure(scrollregion=self.canvas.bbox("all"))     
         
 
     def selected_content(self, *w):
         """
         Determine  which cells are selected.
-        
         """
         if w[1] == 'f':
             self.sel_find = w[0]
@@ -435,8 +464,7 @@ class Exceptions:
         self.new_filename = self.get_filename()
         if self.new_filename:
             self.active_filename = self.new_filename + '.json'
-            self.frame_fieldsscroll.destroy()
-            self.create_cells()
+            self.load_file_create_cells(f=False)
 
 
     def colorise(self):
