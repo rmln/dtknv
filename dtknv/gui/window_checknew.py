@@ -54,7 +54,9 @@ class NewVersion:
         
 
     def widgets(self):
-        """Create a text field with a scroll bar"""
+        """
+        Create a label for text.
+        """
         self.update_text = tk.Label(self.main, 
                                     wraplength=250,
                                     justify='left')
@@ -118,7 +120,9 @@ class NewVersion:
 
     
     def buttons(self):
-        """Create buttons"""
+        """
+        Create buttons.
+        """
         frame_buttons = tk.Frame(self.window)
         btn_close = tk.Button(frame_buttons, 
                                 text=self.lng['button_close'], 
@@ -126,7 +130,10 @@ class NewVersion:
         btn_close.pack(side='left', padx=3, pady=3)
         frame_buttons.pack(side='bottom')
 
+
     def close(self, *e):
-        """Close this window"""
+        """
+        Close this window.
+        """
         self.master. windows_opened.remove('window_newversion')
         self.window.destroy()

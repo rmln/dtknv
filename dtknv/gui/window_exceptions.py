@@ -59,7 +59,7 @@ class Exceptions:
         self.PATH = self.set.DEFEXCPATH
         self.lng = self.master.lng
         self.window = tk.Toplevel(master)
-        self.window.resizable(0,0)
+        #self.window.resizable(0,0)
         self.window.title(self.lng['window_exceptions'])
         self.window.protocol("WM_DELETE_WINDOW", self.close)
         self.main = tk.Frame(self.window, height=300, width=300)
@@ -103,11 +103,10 @@ class Exceptions:
         self.items_orig = copy.deepcopy(items)
         # Place cells in the canvas
         self.draw_cells(exc=items)
-        self.container_finalise()
         # Colorise the cells if needed
         self.colorise()
         # Update the title
-        self.window.title(self.lng['window_exceptions'] + ' (%sy)' % \
+        self.window.title(self.lng['window_exceptions'] + ' (%s)' % \
                               helpers.filename(self.active_filename))
 
 
@@ -184,6 +183,7 @@ class Exceptions:
     def append_empty_cell(self, *e):
         """Add an empty cell to the list"""
         self.draw_cells({'':''}, appendempty=True)
+        self.canvas.event_generate('<Configure>')
 
 
     def draw_cells(self, exc=False, appendempty=False):
@@ -205,9 +205,11 @@ class Exceptions:
         else:
             cells_number = range(len(keys))
             tf = {}
+
         # Master is inherited from the parent widget in
         # create_cells_container().
         master = self.container
+
         for item in cells_number:
 
             e_find = tk.Entry(master)
@@ -269,7 +271,8 @@ class Exceptions:
         or less copy/paste).
         
         """
-        self.canvas = tk.Canvas(self.main, highlightthickness=0)
+        self.canvas = tk.Canvas(self.main, width=200, highlightthickness=0)
+        self.canvas.bind("<Configure>", self.on_canvas_configure)
         self.vsb = tk.Scrollbar(self.main, orient="vertical",
                                 command=self.canvas.yview)
         self.canvas.configure(yscrollcommand=self.vsb.set)
@@ -279,20 +282,16 @@ class Exceptions:
                                   highlightthickness=0)
         self.container.grid_columnconfigure(0, weight=1)
         self.container.grid_columnconfigure(1, weight=1)
-        
-
-    def container_finalise(self):
-        """
-        Finalise the cell container creation.
-        """
-        # Widget initialisation ends------------------------------------
         self.canvas.create_window((0,0), anchor="nw", 
                                   window=self.container, tags="container")
         self.canvas.configure(scrollregion=self.canvas.bbox("all"))
-        self.canvas.bind("<Configure>", self.OnCanvasConfigure)
         
         
-    def OnCanvasConfigure(self, event):
+        
+    def on_canvas_configure(self, event):
+        """
+        Reconfigure the widget.
+        """
         self.canvas.itemconfigure("container", width=event.width)
         self.canvas.configure(scrollregion=self.canvas.bbox("all"))     
         

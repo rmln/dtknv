@@ -151,7 +151,9 @@ class Dmenu:
 
 
     def create_exceptions_menu(self):
-        """Create exceptions menu."""
+        """
+        Create exceptions menu.
+        """
         # Call ExcDropDownMenu with parameters to create
         # a submenu with checkbuttons.
         elements.ExcDropDownMenu(parent=self.menu_exc, path=self.PATH, 
@@ -159,7 +161,9 @@ class Dmenu:
                                  src='from_menu')
 
     def browse_file(self, *e):
-        """Browse for a file"""
+        """
+        Browse for a file.
+        """
         path  = elements.Browse(mode='file').path
         if path != '':
             self.set.set_file = path 
@@ -169,8 +173,10 @@ class Dmenu:
 
     
     def browse_dirin(self, *e):
-        path = elements.Browse(mode='dir', 
-                               initpath=r'/home/marw/.dtest/out').path
+        """
+        Browse for an input directory.
+        """
+        path = elements.Browse(mode='dir').path
         if path != '':
             # The path is OK, so assign it to the variable,
             # and reset the file variable.
@@ -182,8 +188,10 @@ class Dmenu:
 
         
     def browse_dirout(self, *e):
-        path = elements.Browse(mode='dir', 
-                               initpath=r'/home/marw/.dtest/out').path
+        """
+        Browse for an output directory.
+        """
+        path = elements.Browse(mode='dir').path
         if path != '':
             self.set.set_dirout = path
             self.assign_same('out')
@@ -192,7 +200,10 @@ class Dmenu:
 
     
     def languagechanged(self, to):
-        """Inform a user that language will be active after restart"""
+        """
+        Inform user that the language change will be active
+        after restart.
+        """
         self.set.set_language = to
         self.set.reload()
         key = '%s_msg_restart' % to
@@ -201,7 +212,9 @@ class Dmenu:
 
     
     def assign_same(self, src='in'):
-        """Check if folders are the same"""
+        """
+        Check if folders are the same.
+        """
         if src == 'in':
             if self.set.set_sameinout:
                 self.set.set_dirout =  self.set.set_dir

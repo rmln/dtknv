@@ -45,6 +45,8 @@ NewVersion - a small top window with links to download new version,
 #
 # - Error in single file conversion (re self.window_filesdir.filecount)
 #
+# - File/dir dialogue should return path or False, and nothing else!
+#
 #
 import tkinter as tk
 from tkinter import messagebox
@@ -111,13 +113,17 @@ class DtknvGui(tk.Frame):
 
         
     def create_statusbar(self):
-        """Status bar"""
+        """
+        Status bar.
+        """
         self.status = tk.Label(self, relief='sunken', anchor='w')
         self.status.pack(side='bottom', fill='x', padx=1, pady=1)
     
 
     def update_status(self, text, append=True):
-        """Update status text"""
+        """
+        Update status text.
+        """
         if append:
             self.status.configure(text= '  ' + self.lng[text])
         else:
@@ -128,43 +134,55 @@ class DtknvGui(tk.Frame):
         
 
     def show_newversion(self, *e):
-        """Check if new version is available, and if yes
-        show details and the download link."""
+        """
+        Check if new version is available, and if yes
+        show details and the download link.
+        """
         if 'window_newversion' not in self.master.windows_opened:
             self.master.windows_opened.append('window_newversion')
             NewVersion(self.master)
         
         
     def show_exceptions(self, *event):
-        """Show the exceptions window."""
+        """
+        Show the exceptions window.
+        """
         if 'window_exceptions' not in self.master.windows_opened:
             self.master.windows_opened.append('window_exceptions')
             Exceptions(self.master)
 
 
     def show_options(self, *event):
-        """Show the options window."""
+        """
+        Show the options window.
+        """
         if 'window_options' not in self.master.windows_opened:
             self.master.windows_opened.append('window_options')
             Options(self.master)
 
         
     def show_filesdir(self, *event):
-        """Show file conversion mode"""
+        """
+        Show file conversion mode.
+        """
         self.window_plaintext.window.forget()
         self.window_filesdir.window.pack(anchor='w', fill='both', expand=1)
         self.update_status('status_mode_filesdir')
 
         
     def show_plaintext(self, *event):
-        """Show plain text mode"""
+        """
+        Show plain text mode.
+        """
         self.window_filesdir.window.forget()
         self.window_plaintext.window.pack()
         self.update_status('status_mode_plaintext')
 
     
     def update_gui(self):
-        """Update GUI stuff"""
+        """
+        Update GUI stuff.
+        """
         # Check if in and out dirs are the same,
         # and ask for the confirmation to continue.
         self.explicit_save_in_same_folder()
@@ -188,10 +206,12 @@ class DtknvGui(tk.Frame):
 
             
     def explicit_save_in_same_folder(self):
-        """ Converted files can be saved in the same folder
+        """
+        Converted files can be saved in the same folder
         only if explicitly allowed. The message to allow
         it will pop up if 1) the paths are same 2) the option
-        to save in same folder is off."""
+        to save in same folder is off.
+        """
         same = self.set.set_dir ==  self.set.set_dirout
         selected = (self.set.set_dir != self.set.NOP) and \
                    (self.set.set_dirout != self.set.NOP)
@@ -207,7 +227,9 @@ class DtknvGui(tk.Frame):
 
 
     def are_paths_ready(self):
-        """Check if paths are ready"""
+        """
+        Check if paths are ready.
+        """
         input_path_selected = (self.set.set_dir != self.set.NOP) or \
                               (self.set.set_file != self.set.NOP)
         output_path_selected = self.set.set_dirout != self.set.NOP
@@ -228,20 +250,21 @@ class DtknvGui(tk.Frame):
         # Disable the button and remove the bind
         self.window_filesdir.btn_convert.configure(state='disabled')
         self.bind_all("<F5>", None)
-        print("I'm converting now...")
-        print('ENC', self.set.set_encoding)
-        print('file', self.set.set_file)
-        print('dirout', self.set.set_dirout)
-        print('dir', self.set.set_dir)
-        print('recursive', self.set.set_recursive)
-        print('verbose', self.set.set_verbose)
-        print('failsafe', self.set.set_failsafe)
-        print('noram', self.set.set_noram)
-        print('convertnames', self.set.set_convertnames)
-        print('reportpath', self.set.set_reportpath)
-        print('reportname', self.set.set_reportname)
-        print('extensions', self.set.extensions)
-        print('sameinout', self.set.set_sameinout)
+        # Dev stuff messages:
+        # print("I'm converting now...")
+        # print('ENC', self.set.set_encoding)
+        # print('file', self.set.set_file)
+        # print('dirout', self.set.set_dirout)
+        # print('dir', self.set.set_dir)
+        # print('recursive', self.set.set_recursive)
+        # print('verbose', self.set.set_verbose)
+        # print('failsafe', self.set.set_failsafe)
+        # print('noram', self.set.set_noram)
+        # print('convertnames', self.set.set_convertnames)
+        # print('reportpath', self.set.set_reportpath)
+        # print('reportname', self.set.set_reportname)
+        # print('extensions', self.set.extensions)
+        # print('sameinout', self.set.set_sameinout)
         # -------------- Set up the conversion class
         self.tocyr.ENC = self.set.set_encoding
         # After the checks in the gui, of of the
@@ -299,7 +322,9 @@ class DtknvGui(tk.Frame):
                 
 
     def kill_program(self, *e):
-        """Save settings and exit."""
+        """
+        Save settings and exit.
+        """
         # Reset paths:
         self.set.set_file = self.set.NOP
         self.set.set_dirin = self.set.NOP

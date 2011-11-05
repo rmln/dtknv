@@ -3,7 +3,7 @@
 """
 
 Frame for plain text conversion. The frame has it own
-convertor instance, independent from the one used in file
+convertor instances, independent from the one used in file
 conversion.
 
 """
@@ -44,10 +44,14 @@ class PlainText:
         # Focus
         self.field_text.focus_set()
 
+
     def text(self):
-        """Create a text field with a scroll bar"""
+        """
+        Create a text field with a scroll bar.
+        """
         frame_text = tk.Frame(self.window)
         field_text = tk.Text(frame_text)
+        
         # The following rebind is not necessary, but it helps
         # because Tk uses different shortcut for "select all"
         # (Ctrl + /).
@@ -61,7 +65,7 @@ class PlainText:
         field_text.pack()
         frame_text.pack(side='top')
         
-        #Make text field public
+        # Make text field public
         self.field_text = field_text
 
 
@@ -84,6 +88,7 @@ class PlainText:
         Get text from the text field. 
         """
         return(self.field_text.get('0.1', 'end'))
+
 
     def insert_text(self, text):
         """

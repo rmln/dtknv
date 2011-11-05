@@ -31,7 +31,9 @@ from gui.settings import Set
 import helpers
 
 class FilesDir:
-    """Shows and calculates information for file/directory conversion"""
+    """
+    Shows and calculates information for file/directory conversion.
+    """
     def __init__(self, master):
         self.master = master
         self.lng = self.master.lng
@@ -50,8 +52,12 @@ class FilesDir:
         self.window.pack(fill='both', anchor='w', expand=1)
         self.update_gui()
     
+
     def update_gui(self):
-        """Update label text"""
+        """
+        Update label text,  with info about paths and file 
+        size and number.
+        """
         text = self.lng['label_file'] + str(self.set.set_file) + '\n' +  \
                self.lng['label_dir'] + str(self.set.set_dir) + '\n' +  \
                self.lng['label_dirout'] + str(self.set.set_dirout) 

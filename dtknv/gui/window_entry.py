@@ -29,7 +29,9 @@ from tkinter import messagebox
 class MsgEntry:
 
     def __init__(self, master, lng, text, path):
-        """Show a message box with an entry"""
+        """
+        Show a message box with an entry.
+        """
         self.path = path
         self.entry = False
         self.lng = lng
@@ -60,12 +62,16 @@ class MsgEntry:
 
 
     def close(self, *e):
-        """Verify if needed, and close"""
+        """
+        Verify if needed, and close.
+        """
         self.window.destroy()
         self.entry = False
 
     def verify(self, text):
-        """See if text contains invalid character"""
+        """
+        See if text contains an invalid character.
+        """
         invalid_chars = """\/:*?"<>|'"""
         for i in text:
             if i in invalid_chars:
@@ -76,7 +82,9 @@ class MsgEntry:
         return text
 
     def confirm(self, *e):
-        """Conform entry end return value"""
+        """
+        Conform entry end return the value.
+        """
         text = self.var_entered.get().strip()
         try:
             # See if text is valid. If not,

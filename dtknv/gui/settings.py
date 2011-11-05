@@ -3,7 +3,7 @@
 """
 
 Loads and saves the settings. The class is instantiated once on the 
-runtime and use extensively by the program. 
+runtime and used extensively by the program. 
 
 """
 
@@ -70,7 +70,9 @@ class Settings:
     PATH = os.path.join(helpers.def_report_path(), '_dtknvt')
     
     def __init__(self):
-        """Loads the settings for GUI"""
+        """
+        Loads the settings for GUI.
+        """
         self.SETPATH = os.path.join(self.PATH, 'settings', 'default.json')
         self.DEFEXCPATH = os.path.join(self.PATH, 'exceptions')
         self.numeric  = ('set_failsafe', 'set_recursive', 'set_convertnames', 
@@ -112,8 +114,10 @@ class Settings:
 
 
     def settings_exist(self):
-        """Check if the settings file exists. If not,
-        create the path and save default settings"""
+        """
+        Check if the settings file exists. If not,
+        create the path and save default settings.
+        """
         if not os.path.exists(self.SETPATH):
             # Take settings path and remove the
             # file name.
@@ -129,7 +133,9 @@ class Settings:
             
             
     def reset_settings(self, path='', default=False):
-        """Reset the settings"""
+        """
+        Reset the settings.
+        """
         if default:
             path = self.SETPATH
         f = open(path, encoding='utf-8', 
@@ -139,7 +145,9 @@ class Settings:
 
                 
     def load_language(self):
-        """Apply settings"""
+        """
+        Load the language strings.
+        """
         if self.set_language == 'lnglat':
             self.language = self.latin()
         if self.set_language == 'lngcyr':
@@ -147,14 +155,19 @@ class Settings:
 
         
     def save(self):
-        """Save settings in JSON file"""
+        """
+        Save settings in JSON file.
+        """
         settings =  self.settings_elements_get()
         with open(self.SETPATH, mode='w', encoding='utf-8') as f:
             json.dump(settings, f, indent=4)
 
     
     def settings_elements_get(self):
-        """Get all attributes that contain settings"""
+        """
+        Get all attributes that contain the settings
+        string.
+        """
         settings = {}
         for i in dir(self):
             if i.startswith('set_'):
@@ -163,7 +176,9 @@ class Settings:
 
                 
     def load(self):
-        """Load settings from JSON file."""
+        """
+        Load settings from JSON file.
+        """
         with open(self.SETPATH, mode='r', encoding='utf-8') as f:
             settings = json.load(f)
         for i in settings.keys():
@@ -192,14 +207,18 @@ class Settings:
  
     
     def get_extensions(self):
-        """Format extensions"""
+        """
+        Format extensions.
+        """
         self.extensions = self._format_extensions(self.set_extensions)
         self.extensions_tocyr = \
             self._format_extensions(self.set_extensions_tocyr)
 
 
     def _format_extensions(self, what):
-        """Return neat extension list"""
+        """
+        Return neat extension list.
+        """
         what = what.split(",")
         if '' in what: 
             what.remove('')
@@ -215,6 +234,7 @@ class Settings:
              conv.convert_to_latin()
              source[i] = conv.result
         return source
+
 
     def reload(self):
         """Save and load settings"""

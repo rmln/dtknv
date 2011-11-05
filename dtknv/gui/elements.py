@@ -42,7 +42,7 @@ class ExcDropDownMenu:
     """
     Create menues of the json file in the path
     folder and attach the commands/options
-    for their use.
+    for use.
 
     The class is called by the main.py and 
     window_exceptions.py.
@@ -54,12 +54,13 @@ class ExcDropDownMenu:
     3. Create an item ID, and put it into the dictionary (i.e. 
        {'exaple.json': ID})
     
-    
     """
 
     def __init__(self, parent=None, path=None, lng=None, src='from_menu', 
                  main=None):
-        """Create menu"""
+        """
+        Create menu.
+        """
         self.lng = lng
         self.path = path
         self.parent = parent
@@ -69,7 +70,9 @@ class ExcDropDownMenu:
 
 
     def create_menu(self, mode):
-        """Create drop down menu on a button"""
+        """
+        Create drop down menu on a button.
+        """
         label_standard = self.lng['button_standardsr']
         files = self.get_all_exc_files()
         if files:
@@ -107,6 +110,7 @@ class ExcDropDownMenu:
                 else:
                     raise ValueError('Mode must be "from_menu" or "from_exc"')
 
+
     def use_file(self, e):
         """
         Set file that corresponds with menu variable
@@ -124,7 +128,6 @@ class ExcDropDownMenu:
         # passed when whis class was called.
         self.main.set.set_exc_files = files_in_use 
                 
-
     
     def load_file(self, f):
         """
@@ -134,7 +137,9 @@ class ExcDropDownMenu:
         
     
     def get_all_exc_files(self):
-        """Return a list of all present exc files"""
+        """
+        Return a list of all present exc files.
+        """
         files = {}
         fs = helpers.getallfiles(self.path, 'json')
         if fs:
@@ -147,7 +152,9 @@ class ExcDropDownMenu:
 
 
 class Link:
-    """Clicable HTTP link that opens default browser"""
+    """
+    Clicable HTTP link that opens default browser.
+    """
     def __init__(self, master, text='text', link='localhost',
                  anchor='w', padx=10, pady=1):
         self.link = link
@@ -156,22 +163,29 @@ class Link:
         self.label.bind('<Button-1>', self.browse)
         self.label.pack(anchor=anchor, padx=padx, pady=pady)
 
+
     def browse(self, *e):
-        """Open browser"""
+        """
+        Open a browser and load the page.
+        """
         browser = webbrowser.get()
         browser.open(self.link)
 
 
 class Browse:
-    """Browse for file or folder"""
+    """
+    Browse for file or folder.
+    """
     def __init__(self, mode, initpath=None, extpaths=None):
         """Start the class."""
-        if initpath == (None or '(?)'):
+        if initpath in (None, '(?)'):
             initpath = helpers.def_report_path()
         self.show(mode, initpath)
     
     def show(self, mode, initpath):
-        """Open directory or file"""
+        """
+        Open directory or file.
+        """
         if mode == 'file':
             #path = os.path.split(initpath)[0]
             self.path = filedialog.askopenfilenames(multiple=False)
@@ -185,7 +199,7 @@ class Browse:
                 self.path = self.path[0]                
         elif mode == 'dir':
             self.path = filedialog.askdirectory(initialdir=initpath)
+            #print("dir path is: '%s'" % path)
+            #self.path = path
         else:
             raise ValueError("Mode must be 'dir' of 'file'")
-        
-            

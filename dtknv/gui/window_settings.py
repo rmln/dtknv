@@ -60,7 +60,9 @@ class Options:
 
 
     def settings_load(self): 
-        """Get all attributes that contain settings"""
+        """
+        Get all attributes that contain settings.
+        """
         self.set.load()
         for i in dir(self):
             if i.startswith('var_set_'):
@@ -70,7 +72,9 @@ class Options:
 
 
     def settings_save(self, *event): 
-        """Get all attributes that contain settings"""
+        """
+        Get all attributes that contain settings.
+        """
         for i in dir(self):
             if i.startswith('var_set_'):
                 key = i[4:]
@@ -81,7 +85,9 @@ class Options:
 
 
     def are_settings_changed(self, *event): 
-        """Get all attributes that contain settings"""
+        """
+        Get all attributes that contain settings.
+        """
         for i in dir(self):
             if i.startswith('var_set_'):
                 key = i[4:]
@@ -91,14 +97,11 @@ class Options:
                     return True
         return False
 
-        
-    def check_entries(self, *event):
-        """Check all entries"""
-        print('I checked the entries...')
-
-    
+     
     def create_buttons(self):
-        """Create buttons"""
+        """
+        Create buttons.
+        """
         frame = tk.Frame(self.main)
         button_ok = tk.Button(frame, text=self.lng['button_ok'],
                               command=self.settings_save)
@@ -113,7 +116,9 @@ class Options:
         
         
     def create_elements(self):
-        """Create elements"""
+        """
+        Create elements.
+        """
         frame = tk.Frame(self.main)
         chks = [(self.var_set_verbose, 'verbose'),
                 (self.var_set_failsafe, 'failsafe'),
@@ -156,8 +161,11 @@ class Options:
             checkbuttons[n].pack(anchor='w')
         frame.pack(anchor='w', padx=7)
         
+
     def close(self, *event):
-        """Close, but check for changes"""
+        """
+        Close, but check for changes.
+        """
         if self.are_settings_changed():
             ask = messagebox.askyesno(self.lng['window_options'], 
                                       self.lng['msg_settingschanged'])
@@ -166,6 +174,7 @@ class Options:
                 self.master.update_gui()
         self.master.windows_opened.remove('window_options')
         self.window.destroy()
+
     
     def browse_folder(self, *e):
         """Browse for folder and place path in the entry"""
@@ -173,6 +182,7 @@ class Options:
         if path != '':
             self.txt_reportpath.delete(0, 'end')
             self.txt_reportpath.insert('end', path)
+
 
     def reset_settings(self, *e):
         """Reset the settings"""
