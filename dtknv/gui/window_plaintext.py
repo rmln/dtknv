@@ -48,6 +48,10 @@ class PlainText:
         """Create a text field with a scroll bar"""
         frame_text = tk.Frame(self.window)
         field_text = tk.Text(frame_text)
+        # The following rebind is not necessary, but it helps
+        # because Tk uses different shortcut for "select all"
+        # (Ctrl + /).
+        field_text.bind_class("Text","<Control-a>", self.select_all)
         
         scrollbar = tk.Scrollbar(frame_text, width=15)
         scrollbar.config(command=field_text.yview)
@@ -59,6 +63,14 @@ class PlainText:
         
         #Make text field public
         self.field_text = field_text
+
+
+    def select_all(self, *e):
+        """
+        Select all text in the text widget.
+        """
+        self.field_text.tag_add("sel","1.0","end")
+
 
     def clear_text_field(self, *e):
         """
