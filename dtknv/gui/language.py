@@ -36,6 +36,7 @@ serbian_cyrillic = {
 'menu_help_update':'Нова верзија...',
 'menu_help_about':'О програму',
 'window_exceptions':'Изузеци',
+'window_about':'О програму',
 'button_ok':'Потврди',
 'button_convert':'Конвертуј <F5>',
 'button_cancel':'Откажи',
@@ -104,6 +105,14 @@ serbian_cyrillic = {
 'label_filealreadyexists': 'Датотека %s већ постоји.',
 'label_convtolat':'Конверзија у латиницу.',
 'label_convtocyr':'Конверзија у ћирилицу.',
+'label_about_desc':'Дткнв, латинично-ћирилични конвертор (верзија %s).',
+'label_about_author':'Ромео Млинар',
+'label_about_year':'2010-2011',
+'label_about_license':'Овај програм је бесплатан и слободан, објављен под ' + \
+    'условима GPL3 лиценце. Молимо упознајте се са уредбама ове лиценце, као и ' + \
+    'о GNU покрету уопште.',
+'label_about_mail':'Све предлоге и грешке пошаљите на ' + \
+    'mlinar--a--languagebits.com Хвала! :)',
 'ext_html':'хипертекст ',
 'ext_htm':'хипертекст ',
 'ext_odt':'Опенофис / Либреофис документ',

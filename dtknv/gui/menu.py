@@ -133,9 +133,10 @@ class Dmenu:
         self.main.add_cascade(label=self.lng['menu_help'], menu=self.help)
         # Help: Instructions, About
         self.help.add_command(label=self.lng['menu_help_help'], command=print)
-        self.help.add_command(label=self.lng['menu_help_about'], command=print)
         self.help.add_command(label=self.lng['menu_help_update'],
                               command=self.master.show_newversion)
+        self.help.add_command(label=self.lng['menu_help_about'],
+                              command=self.master.show_aboutwindow)
         # Shortcuts
         self.master.bind_all('<Control-o>', self.browse_file)
         self.master.bind_all('<Control-f>', self.browse_dirin)

@@ -60,6 +60,7 @@ from gui.window_settings import Options
 from gui.window_plaintext import PlainText
 from gui.window_filesdir import FilesDir
 from gui.window_checknew import NewVersion
+from gui.window_about import AboutWindow
 
 from convert import tocyr
 from convert.tocyr import ToCyr
@@ -87,6 +88,7 @@ class DtknvGui(tk.Frame):
         self.master.show_filesdir = self.show_filesdir
         self.master.show_plaintext = self.show_plaintext
         self.master.show_newversion = self.show_newversion
+        self.master.show_aboutwindow = self.show_aboutwindow
         self.master.convert = self.convert
         self.master.update_gui = self.update_gui
         self.master.kill_program = self.kill_program
@@ -150,6 +152,15 @@ class DtknvGui(tk.Frame):
         if 'window_exceptions' not in self.master.windows_opened:
             self.master.windows_opened.append('window_exceptions')
             Exceptions(self.master)
+
+            
+    def show_aboutwindow(self, *e):
+        """
+        Show About window
+        """
+        if 'window_about' not in self.master.windows_opened:
+            self.master.windows_opened.append('window_about')
+            AboutWindow(self.master)
 
 
     def show_options(self, *event):
