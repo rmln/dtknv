@@ -164,6 +164,11 @@ def getext(f):
     return os.path.splitext(f)[1].lower()[1:]
 
 
+def getf_witout_ext(f):
+    """Return the extension."""
+    return os.path.splitext(f)[0]
+
+
 def filename(f):
     """Return filename."""
     return os.path.split(f)[1]
