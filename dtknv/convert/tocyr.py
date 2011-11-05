@@ -98,6 +98,9 @@ class ToCyr:
     REPORTPATH = helpers.def_report_path()
     # Are reports on?
     REPORT = True
+    # If EXT_NO_CONVERSION is false, then all extensions are
+    # converted as well as the actuall file name.
+    EXT_NO_CONVERSION = True
 
     def __init__(self):
         """Convert between Latin and Cyrillic scripts."""
@@ -313,12 +316,20 @@ class ToCyr:
         """Sees if filename/dirname needs conversion, and converts if yes."""
         if self.CONVERTFNAMES:
             path, f = os.path.split(path)
-            cf = self._converttext(f)
+            if self.EXT_NO_CONVERSION:
+                cf_fn = helpers.getf_witout_ext(f)
+                cf_ext = getext(f)
+                cf = self._converttext(cf_fn) + '.' +  cf_ext
+            else:
+                cf = self._converttext(f)
             is_same = (cf == f)
             if not is_same:
                 if self.SHOW:
+                    # TODO:Thsi must go into the active
+                    # report file.
+                    pass
                     # "File name converted to Latin."
-                    print('Naziv datoteke prebacen u latinicu...')
+                    #print('Naziv datoteke prebacen u latinicu...')
             return os.path.join(path, cf)
         else:
             return path
