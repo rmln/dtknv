@@ -85,6 +85,15 @@ class Replace:
 
     def load(self, f):
         """Load a JSON file"""
+        try:
+            return(self._load(f))
+        except:
+            return(False)
+
+    def _load(self, f):
+        """Load a JSON file"""
+        # TODO: Add more elaborate check and
+        # introduce a warning.
         with open(f, mode='r', encoding='utf-8') as f:
             c = json.load(f)
         return(c)
