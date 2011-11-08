@@ -70,13 +70,13 @@ class AboutWindow:
         Link(self.window, text='Languagebits.com', 
              link=r'http://www.languagebits.com/',
              padx=20)
-        Link(self.window, text='Izvorni kod', 
+        Link(self.window, text=self.lng['label_about_source'], 
              link=r'https://gitorious.org/dtknv/',
              padx=20)
-        Link(self.window, text='GNU filozofija', 
+        Link(self.window, text=self.lng['label_about_gnu'], 
              link=r'http://www.gnu.org/philosophy/philosophy.html',
              padx=20)
-        Link(self.window, text='GP3 licenca', 
+        Link(self.window, text=self.lng['label_about_gpl'], 
              link=r'http://serbian.languagebits.com/gpl.txt',
              padx=20)
 
