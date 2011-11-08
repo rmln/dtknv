@@ -83,12 +83,11 @@ class Replace:
         """Load and save file strings"""
         pass
 
+
     def load(self, f):
         """Load a JSON file"""
-        try:
-            return(self._load(f))
-        except:
-            return(False)
+        return(self._load(f))
+        
 
     def _load(self, f):
         """Load a JSON file"""
@@ -139,12 +138,29 @@ class CirConv:
         """
         if isinstance(flist, str):
             f = os.path.join(self.path, flist)
-            self.exceptions.append(Replace().load(f))
+            exc_content = self._load_exc_file(f)
+            if exc_content:
+                self.exceptions.append()
         else:
             paths = [os.path.join(self.path, i) for i in flist]
             self.exceptions = []
             for f in paths:
-                self.exceptions.append(Replace().load(f))
+                exc_content = self._load_exc_file(f)
+                if exc_content:
+                    self.exceptions.append()
+                
+    def _load_exc_file(self, s):
+        """
+        Load exception file or return false if
+        there was an error.
+        """
+        try:
+            exc_content = Replace().load(f)
+        except:
+            exc_content = False
+        
+        return(exc_content)
+        
     
     def _make_variants(self):
         """Make variants of the words.
