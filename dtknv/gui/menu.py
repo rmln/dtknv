@@ -165,7 +165,8 @@ class Dmenu:
         """
         Browse for a file.
         """
-        path  = elements.Browse(mode='file').path
+        filetypes = self.get_file_descriptions()
+        path  = elements.Browse(mode='file', filetypes=filetypes).path
         if path != '':
             self.set.set_file = path 
             self.set.set_dir = self.set.NOP
@@ -276,8 +277,6 @@ class Dmenu:
             raise ValueError('set_convmode must be "tolat" or "tocyr".')
         # Compile the extension filter
         cext = []
-        # Add option for all extensions
-        cext.append((self.lng['ext_*'], '.*'))
         # Go through the extensions and add corresponding
         # description from the language file/dictionary. If
         # no description is found, add generic one.
@@ -288,5 +287,7 @@ class Dmenu:
             except:
                 description = self.lng['ext_?generic'] + e
             cext.append((description, pattern))
+        # Add option for all extensions
+        cext.append((self.lng['ext_*'], '.*'))
         return cext
 

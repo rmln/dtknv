@@ -176,19 +176,23 @@ class Browse:
     """
     Browse for file or folder.
     """
-    def __init__(self, mode, initpath=None, extpaths=None):
-        """Start the class."""
+    def __init__(self, mode, initpath=None, extpaths=None,
+                 filetypes=()):
+        """
+        Start the class.
+        """
         if initpath in (None, '(?)'):
             initpath = helpers.def_report_path()
-        self.show(mode, initpath)
+        self.show(mode, initpath, filetypes)
     
-    def show(self, mode, initpath):
+    def show(self, mode, initpath, filetypes):
         """
         Open directory or file.
         """
         if mode == 'file':
             #path = os.path.split(initpath)[0]
-            self.path = filedialog.askopenfilenames(multiple=False)
+            self.path = filedialog.askopenfilenames(multiple=False,
+                                                    filetypes=filetypes)
             # If a folder is selected, followed by
             # canceling the dialogue, tkinter returns (),
             # which causes errors.
