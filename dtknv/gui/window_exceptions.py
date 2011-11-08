@@ -37,7 +37,7 @@ import helpers
 from gui.elements import ExcDropDownMenu
 from srpismo.cyrconv import Replace
 from gui.window_entry import MsgEntry
-from gui.settings import Set
+
 
 class Exceptions:
     """
@@ -53,8 +53,13 @@ class Exceptions:
     """
 
     def __init__(self, master):
+        """
+        1. Draw widgets.
+        2. Load file.
+        3. Wait for an input.
+        """
         self.master = master
-        self.set = Set
+        self.set = self.master.main_settings
         # Path for exceptions
         self.PATH = self.set.DEFEXCPATH
         self.lng = self.master.lng
@@ -124,11 +129,10 @@ class Exceptions:
         # Update the title
         self.window.title(self.lng['window_exceptions'] + ' (%s)' % \
                               helpers.filename(self.active_filename))
-        # Block the frame if there was an error in loading the file:
+        # Hide the frame if there was an error in loading the file:
         if self.SAVINGBLOCKED:
             self.canvas.pack_forget()
         
-
 
     def read_cells(self, *e):
         """

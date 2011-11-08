@@ -48,6 +48,7 @@ NewVersion - a small top window with links to download new version,
 # - File/dir dialogue should return path or False, and nothing else!
 #
 #
+
 import tkinter as tk
 from tkinter import messagebox
 
@@ -66,15 +67,15 @@ from convert import tocyr
 from convert.tocyr import ToCyr
 from srpismo.cyrconv import CirConv
 
-from gui.settings import Set
+from gui.settings import Settings
 
 class DtknvGui(tk.Frame):
-    
-    lng = Set.language
 
     def __init__(self, master=None):
         tk.Frame.__init__(self, master, height=270, width=500)
-        self.set = Set
+        # Settings
+        self.main_settings = Settings()
+        self.lng = self.main_settings.language
         self.master.title('dtknv 0.5 alfa')
         self.pack(padx=0,pady=0,fill=tk.BOTH, expand=0)
         self.pack_propagate(0)
@@ -82,6 +83,7 @@ class DtknvGui(tk.Frame):
         # Conversion class
         self.tocyr = ToCyr()
         # Commands for interfaces
+        self.master.main_settings = self.main_settings
         self.master.lng = self.lng
         self.master.show_exceptions = self.show_exceptions
         self.master.show_options = self.show_options
@@ -198,10 +200,10 @@ class DtknvGui(tk.Frame):
         # and ask for the confirmation to continue.
         self.explicit_save_in_same_folder()
         # Refresh extensions:
-        self.tocyr.EXTENSIONS = self.set.extensions
+        self.tocyr.EXTENSIONS = self.main_settings.extensions
         # Save and load the settings, and then update the
         # gui:
-        self.set.reload()
+        self.main_settings.reload()
         self.window_filesdir.update_gui()
         self.status.configure(bg='gray')
         # By default, block the run button.
@@ -223,30 +225,33 @@ class DtknvGui(tk.Frame):
         it will pop up if 1) the paths are same 2) the option
         to save in same folder is off.
         """
-        same = self.set.set_dir ==  self.set.set_dirout
-        selected = (self.set.set_dir != self.set.NOP) and \
-                   (self.set.set_dirout != self.set.NOP)
+        same = self.main_settings.set_dir ==  self.main_settings.set_dirout
+        selected = (self.main_settings.set_dir != self.main_settings.NOP) and \
+                   (self.main_settings.set_dirout != self.main_settings.NOP)
 
-        if (same and selected) and not self.set.set_sameinout:
+        if (same and selected) and not self.main_settings.set_sameinout:
             ask = messagebox.askyesno('', self.lng['msg_sameinout'])
             if ask:
-                self.set.set_sameinout = 1
+                self.main_settings.set_sameinout = 1
             else:
                 # If a user declines to save in the same
                 # folder, reset the output folder:
-                self.set.set_dirout = self.set.NOP
+                self.main_settings.set_dirout = self.main_settings.NOP
 
 
     def are_paths_ready(self):
         """
         Check if paths are ready.
         """
-        input_path_selected = (self.set.set_dir != self.set.NOP) or \
-                              (self.set.set_file != self.set.NOP)
-        output_path_selected = self.set.set_dirout != self.set.NOP
+        input_path_selected = (self.main_settings.set_dir != \
+                                   self.main_settings.NOP) or \
+                              (self.main_settings.set_file != \
+                                   self.main_settings.NOP)
+        output_path_selected = self.main_settings.set_dirout != \
+            self.main_settings.NOP
         # If directory conversion is selected, the number of files
         # must be higher than zero.
-        if (self.set.set_dir != self.set.NOP) and \
+        if (self.main_settings.set_dir != self.main_settings.NOP) and \
            (self.window_filesdir.filecount == 0):
             return False
         # Check the paths.
@@ -263,47 +268,47 @@ class DtknvGui(tk.Frame):
         self.bind_all("<F5>", None)
         # Dev stuff messages:
         # print("I'm converting now...")
-        # print('ENC', self.set.set_encoding)
-        # print('file', self.set.set_file)
-        # print('dirout', self.set.set_dirout)
-        # print('dir', self.set.set_dir)
-        # print('recursive', self.set.set_recursive)
-        # print('verbose', self.set.set_verbose)
-        # print('failsafe', self.set.set_failsafe)
-        # print('noram', self.set.set_noram)
-        # print('convertnames', self.set.set_convertnames)
-        # print('reportpath', self.set.set_reportpath)
-        # print('reportname', self.set.set_reportname)
-        # print('extensions', self.set.extensions)
-        # print('sameinout', self.set.set_sameinout)
+        # print('ENC', self.main_settings.set_encoding)
+        # print('file', self.main_settings.set_file)
+        # print('dirout', self.main_settings.set_dirout)
+        # print('dir', self.main_settings.set_dir)
+        # print('recursive', self.main_settings.set_recursive)
+        # print('verbose', self.main_settings.set_verbose)
+        # print('failsafe', self.main_settings.set_failsafe)
+        # print('noram', self.main_settings.set_noram)
+        # print('convertnames', self.main_settings.set_convertnames)
+        # print('reportpath', self.main_settings.set_reportpath)
+        # print('reportname', self.main_settings.set_reportname)
+        # print('extensions', self.main_settings.extensions)
+        # print('sameinout', self.main_settings.set_sameinout)
         # -------------- Set up the conversion class
-        self.tocyr.ENC = self.set.set_encoding
+        self.tocyr.ENC = self.main_settings.set_encoding
         # After the checks in the gui, of of the
         # following ar this stage should be
         # a correct path.
-        if self.set.set_file != self.set.NOP:
-            self.tocyr.PATHIN = self.set.set_file
+        if self.main_settings.set_file != self.main_settings.NOP:
+            self.tocyr.PATHIN = self.main_settings.set_file
         else:
-            self.tocyr.PATHIN = self.set.set_dir
-        self.tocyr.PATHOUT =  self.set.set_dirout
-        self.tocyr.RECURSIVE = self.set.set_recursive
-        self.tocyr.CONVMODE = self.set.set_convmode
-        self.tocyr.SHOW = self.set.set_verbose 
-        self.tocyr.FAILSAFE =  0 if self.set.set_failsafe else 1
+            self.tocyr.PATHIN = self.main_settings.set_dir
+        self.tocyr.PATHOUT =  self.main_settings.set_dirout
+        self.tocyr.RECURSIVE = self.main_settings.set_recursive
+        self.tocyr.CONVMODE = self.main_settings.set_convmode
+        self.tocyr.SHOW = self.main_settings.set_verbose 
+        self.tocyr.FAILSAFE =  0 if self.main_settings.set_failsafe else 1
         # This has to be negated, since the user was
         # asked whether NOT to use RAM, but the scrips
         # expects answer on whether to USE it.
-        self.tocyr.USERAM = 0 if self.set.set_noram else 1
-        self.tocyr.CONVERTFNAMES = self.set.set_convertnames
-        self.tocyr.REPORTPATH = self.set.set_reportpath
-        self.tocyr.REPORT = self.set.set_reportname
+        self.tocyr.USERAM = 0 if self.main_settings.set_noram else 1
+        self.tocyr.CONVERTFNAMES = self.main_settings.set_convertnames
+        self.tocyr.REPORTPATH = self.main_settings.set_reportpath
+        self.tocyr.REPORT = self.main_settings.set_reportname
         # Extensions are conversion mode dependant
-        if self.set.set_convmode == 'tolat':
-            self.tocyr.EXT = self.set.extensions
+        if self.main_settings.set_convmode == 'tolat':
+            self.tocyr.EXT = self.main_settings.extensions
         else:
-            self.tocyr.EXT = self.set.extensions_tocyr
-        self.tocyr.SAMEOUTPATH = self.set.set_sameinout
-        self.tocyr.SHOW = self.set.set_verbose
+            self.tocyr.EXT = self.main_settings.extensions_tocyr
+        self.tocyr.SAMEOUTPATH = self.main_settings.set_sameinout
+        self.tocyr.SHOW = self.main_settings.set_verbose
         self.tocyr.CALLEDFROM = 'dtknv new interface'
         # Start the thread
         self.th = threading.Thread(target = self.tocyr.run)
@@ -337,11 +342,11 @@ class DtknvGui(tk.Frame):
         Save settings and exit.
         """
         # Reset paths:
-        self.set.set_file = self.set.NOP
-        self.set.set_dirin = self.set.NOP
-        self.set.set_dir = self.set.NOP
+        self.main_settings.set_file = self.main_settings.NOP
+        self.main_settings.set_dirin = self.main_settings.NOP
+        self.main_settings.set_dir = self.main_settings.NOP
         # Save the settings
-        self.set.save()
+        self.main_settings.save()
         # Destroy all windows
         self.destroy()
         self.master.destroy()

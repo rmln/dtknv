@@ -25,13 +25,12 @@ Settings interface.
 import tkinter as tk
 from tkinter import messagebox
 
-from gui.settings import Set
 from gui.elements import Browse
 
 class Options:
     def __init__(self, master):
-        self.set = Set
         self.master = master
+        self.set = self.master.main_settings
         self.lng = self.master.lng
         self.window = tk.Toplevel(master)
         self.window.resizable(0,0)

@@ -26,7 +26,6 @@ are fulfilled.
 
 
 import tkinter as tk
-from gui.settings import Set
 
 import helpers
 
@@ -37,7 +36,7 @@ class FilesDir:
     def __init__(self, master):
         self.master = master
         self.lng = self.master.lng
-        self.set = Set
+        self.set = self.master.main_settings
         self.window = tk.Frame(master, relief='groove', borderwidth=0)
         # The label for basic info
         self.label_selection = tk.Label(self.window)

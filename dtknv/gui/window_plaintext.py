@@ -53,7 +53,7 @@ class PlainText:
         field_text = tk.Text(frame_text)
         
         # The following rebind is not necessary, but it helps
-        # because Tk uses different shortcut for "select all"
+        # because Tk uses a different shortcut for "select all"
         # (Ctrl + /).
         field_text.bind_class("Text","<Control-a>", self.select_all)
         
@@ -119,10 +119,10 @@ class PlainText:
         Call conversion class.
         """
         # Get exception files from settings
-        files = self.master.set.set_exc_files
+        exc_files = self.master.set.set_exc_files
         # Load them into the class
         self.convert.path = self.master.set.DEFEXCPATH
-        self.convert.load_exceptions(files)
+        self.convert.load_exceptions(exc_files)
         text = self.get_text_field()[:-1]
         self.convert.text = text
         if mode == 'to_cyrillic':

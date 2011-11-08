@@ -27,7 +27,6 @@ import os
 import time
 import tkinter as tk
 
-
 from gui.elements import Link
 
 import version
@@ -79,7 +78,6 @@ class AboutWindow:
         Link(self.window, text=self.lng['label_about_gpl'], 
              link=r'http://serbian.languagebits.com/gpl.txt',
              padx=20)
-
 
     
     def buttons(self):

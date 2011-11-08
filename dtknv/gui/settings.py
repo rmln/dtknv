@@ -152,6 +152,8 @@ class Settings:
             self.language = self.latin()
         if self.set_language == 'lngcyr':
             self.language = language.serbian_cyrillic
+        if self.set_language == 'lngeng':
+            self.language = language.english
 
         
     def save(self):
@@ -240,5 +242,3 @@ class Settings:
         """Save and load settings"""
         self.save()
         self.load()
-             
-Set = Settings()        

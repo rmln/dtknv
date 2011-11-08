@@ -30,7 +30,7 @@ from functools import partial
 
 import helpers
 from gui import elements
-from gui.settings import Set
+
 
 class Dmenu:
 
@@ -39,7 +39,7 @@ class Dmenu:
         self.lng = self.master.lng
         self.main = tk.Menu(master)
         self.file = tk.Menu(self.main, tearoff=0)
-        self.set = Set
+        self.set = master.main_settings
         self.PATH = self.set.DEFEXCPATH
         # File
         self.main.add_cascade(label=self.lng['menu_main'], menu=self.file)
