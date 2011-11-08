@@ -109,47 +109,52 @@ class CirConv:
     TODO: Remove repetitions.
     """
         
-    def __init__(self, text='', stats=False, exceptions=[], variants=False,
+    def __init__(self, text='', stats=False, exception_files=[], variants=False,
                  path=False):
         """
         text       - text to be converted
         stats      - true if statistics is to be calaculated
         exceptions - list of files with the exception strings
         """
-        self.path = path
-        self.text = text
-        self.exceptions = []
-        # Exceptions strings. Don't load if path is
-        # not present.
-        if path and len(exceptions):
-            self.load_exceptions(exceptions)
-        # Variants?
-        if variants and len(exceptions):
-            self._make_variants()
         # Raise TypeError if 'text' is not a character
         # object.
         if not isinstance(text, str):
             raise TypeError('CirConv accepts text only, %s is rejected.' \
                             % type(text))
+        # Variables
+        self.path = path
+        self.text = text
+        self.exception_elements = []
+        # Exceptions strings. Don't load if path is
+        # not present.
+        if path and len(exception_files):
+            self.load_exceptions(exception_files)
+        # Variants?
+        if variants and len(exception_files):
+            self._make_variants()
+        # Make character maps.
+        self._make_charkeys()
+        
 
     def load_exceptions(self, flist):
         """
         Load exceptions strings from flist files.
         """
+        self.exception_elements = []
         if isinstance(flist, str):
             f = os.path.join(self.path, flist)
             exc_content = self._load_exc_file(f)
             if exc_content:
-                self.exceptions.append()
+                self.exception_elements.append()
         else:
             paths = [os.path.join(self.path, i) for i in flist]
-            self.exceptions = []
             for f in paths:
                 exc_content = self._load_exc_file(f)
                 if exc_content:
-                    self.exceptions.append()
-                
-    def _load_exc_file(self, s):
+                    self.exception_elements.append(exc_content)
+           
+     
+    def _load_exc_file(self, f):
         """
         Load exception file or return false if
         there was an error.
@@ -178,15 +183,11 @@ class CirConv:
 
     def convert_to_latin(self):
         """Convert the text and place it into .result. No return."""
-        # Make character maps.
-        self._make_charkeys()
         self.result = self._charreplace(self.text, mode='tolat')
 
 
     def convert_to_cyrillic(self):
         """Convert the text and place it into .result. No return."""
-        # Make character maps.
-        self._make_charkeys()
         self.result = self._charreplace(self.text, mode='tocyr')
 
     
@@ -214,7 +215,7 @@ class CirConv:
         # Go throught self.exceptions list, that holds
         # all dictionaries correspondng to files loaded
         # by Replace in __init__.
-        for exception_dictionary in self.exceptions:
+        for exception_dictionary in self.exception_elements:
             # Go through all keys of a dictionary.
             for string_search in exception_dictionary.keys():
                 # If key is found in text, replace it
