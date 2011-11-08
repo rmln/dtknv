@@ -84,6 +84,8 @@ class Exceptions:
         """
         Load f file and place items into cells.
         """
+        # Just a lame way to pass some lame code
+        self.SAVINGBLOCKED = False
         # These are not available during the first
         # load, so not point in calling the destroy
         # attributes.
@@ -95,9 +97,23 @@ class Exceptions:
         self.create_cells_container()
         # Load search and replace strings
         if f:
-            items = self.load_exc_file(f)
+            # Call the method for loading the jsnon files
+            # and see if it will fail
+            try:
+                items = self.load_exc_file(f)
+            except:
+                # Oops, an error. Inform the user and prevent from
+                # saving, or the corrupt file may be overwritten (which
+                # may or may not be a good idea, but it's up to the 
+                # user's choice)
+                messagebox.showwarning(self.lng['label_error_loadingexc'],
+                                   self.lng['label_error'])
+                items = False
+                self.menu_actions.entryconfigure(1, state='disabled')
+                self.SAVINGBLOCKED = True
         else:
             items = False
+            self.menu_actions.entryconfigure(1, state='normal')
         # Create a copy of items, so it is possible
         # to chek later if the items are changed
         self.items_orig = copy.deepcopy(items)
@@ -108,6 +124,10 @@ class Exceptions:
         # Update the title
         self.window.title(self.lng['window_exceptions'] + ' (%s)' % \
                               helpers.filename(self.active_filename))
+        # Block the frame if there was an error in loading the file:
+        if self.SAVINGBLOCKED:
+            self.canvas.pack_forget()
+        
 
 
     def read_cells(self, *e):
@@ -140,7 +160,8 @@ class Exceptions:
         """
         Actions upon window closing.
         """
-        self.see_if_cells_are_changed()    
+        if not self.SAVINGBLOCKED:
+            self.see_if_cells_are_changed()    
         self.master.windows_opened.remove('window_exceptions')
         self.window.destroy()
 
@@ -443,6 +464,9 @@ class Exceptions:
         button_load.pack(pady=3, padx=5)
         # Menu button end --------------
         frame_buttons.pack(padx=10, pady=10)
+        # Make menu_actions public, so it's accessible from
+        # load_file_create_cells().
+        self.menu_actions = menu_actions
 
 
     def create_dropdown_menu(self):
