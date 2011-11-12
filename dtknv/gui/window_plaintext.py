@@ -34,6 +34,7 @@ class PlainText:
     """
     def __init__(self, master):
         self.master = master
+        self.set = self.master.main_settings
         self.lng = self.master.lng
         self.window = tk.Frame(master)
         self.buttons()
@@ -119,9 +120,9 @@ class PlainText:
         Call conversion class.
         """
         # Get exception files from settings
-        exc_files = self.master.set.set_exc_files
+        exc_files = self.set.set_exc_files
         # Load them into the class
-        self.convert.path = self.master.set.DEFEXCPATH
+        self.convert.path = self.set.DEFEXCPATH
         self.convert.load_exceptions(exc_files)
         text = self.get_text_field()[:-1]
         self.convert.text = text
