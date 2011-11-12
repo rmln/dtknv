@@ -145,7 +145,7 @@ class CirConv:
             f = os.path.join(self.path, flist)
             exc_content = self._load_exc_file(f)
             if exc_content:
-                self.exception_elements.append()
+                self.exception_elements.append(exc_content)
         else:
             paths = [os.path.join(self.path, i) for i in flist]
             for f in paths:
