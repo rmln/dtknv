@@ -36,16 +36,20 @@ from time import strftime
 import version
 
 def get_version(v=version.__version__):
-    """Separate the version tag into tuple numbers
-    and string description"""
+    """
+    Separate the version tag into tuple numbers
+    and string description.
+    """
     ver = v.split(" ")
     vtag = ver[1]
     vnum = [int(i) for i in ver[0].split('.')]
     return(vnum, vtag)
 
 def get_version_comparison(v1=None, v2=None):
-    """Return lower, higher or same
-    version, when compared v1 to v2."""
+    """
+    Return lower, higher or same
+    version, when compared v1 to v2.
+    """
     # If v1 is None, then compare to the corrent version
     if v1 == None:
         v1 = get_version()[0]
@@ -72,7 +76,9 @@ def get_version_comparison(v1=None, v2=None):
                 
 
 def def_report_path():
-    """Return the default report path"""
+    """
+    Return the default report path.
+    """
     if os.name == 'nt':
         return(getwindoc())
     else:
@@ -80,7 +86,8 @@ def def_report_path():
 
 
 def getwindoc():
-    """Get Windows document folder
+    """
+    Get Windows document folder
 
     From Josh Purvis on <http://stackoverflow.com/
     questions/3927259/how-do-you-get-the-exact-path-to-my-documents>
@@ -95,6 +102,7 @@ def getwindoc():
     dll.SHGetSpecialFolderPathW(None, buf, 0x0005, False)
     return(buf.value)
 
+
 def getstampnewdir(path):
     """Get time/date stamped name"""
     d = 'rkonv-%s' % getdatetime()
@@ -102,8 +110,11 @@ def getstampnewdir(path):
     os.mkdir(d)
     return d
 
+
 def build_directory_tree(dirin, dirout):
-    """Build directory tree in DIROUT, based on DIRIN"""
+    """
+    Build directory tree in DIROUT, based on DIRIN.
+    """
     # We won't allow making directories in the
     # DIROUT directory, but in newly created one.
     # This is to prevent possible deletion.
@@ -122,8 +133,11 @@ def build_directory_tree(dirin, dirout):
     # Change DIROUT to point to a newly created dir:
     dirout = three_path
 
+
 def getallfiles(path, ext=False):
-    """Get all files paths from a directory."""
+    """
+    Get all files paths from a directory.
+    """
     paths = []
     for i in os.listdir(path):
         # Select files only, filter out folders:
@@ -137,15 +151,21 @@ def getallfiles(path, ext=False):
                 paths.append(os.path.join(path, i))
     return paths
 
+
 def getfilesizes(files):
-    """Calculate size of the files"""
+    """
+    Calculate size of the files
+    """
     filessize = 0
     for i in files:
         filessize = filessize + os.path.getsize(i)
     return filessize
 
+
 def getfreespace(path):
-    """Get free space of a drive path points to."""
+    """
+    Get free space of a drive path points to.
+    """
     # Code by Frankovskyi Bogdan
     # at: <http://stackoverflow.com/questions/51658/
     #     cross-platform-space-remaining-on-volume-using-python>
@@ -159,18 +179,31 @@ def getfreespace(path):
         # logic in the programme:
         return os.statvfs(path).f_bfree * os.statvfs(path).f_bsize
 
+
 def getext(f):
-    """Return the extension."""
+    """
+    Return the extension.
+    """
     return os.path.splitext(f)[1].lower()[1:]
+
+def get_file_path(f):
+    """
+    Return the path for a file f.
+    """
+    return os.path.split(f)[0]
 
 
 def getf_witout_ext(f):
-    """Return the extension."""
+    """
+    Return file name without extension.
+    """
     return os.path.splitext(f)[0]
 
 
 def filename(f):
-    """Return filename."""
+    """
+    Return the filename.
+    """
     return os.path.split(f)[1]
 
 
@@ -198,7 +231,9 @@ def makesubdir(tpmdir, add):
     return dir
 
 def makefullpath(path):
-    """Make full path. MUST BE A PATH TO A FILE."""
+    """
+    Make full path. MUST BE A PATH TO A FILE.
+    """
     try:
         os.makedirs(os.path.split(path)[0])
     except:
@@ -206,7 +241,8 @@ def makefullpath(path):
 
 
 def get_paths(what, path):
-    """Get all files or directory paths in path.
+    """
+    Get all files or directory paths in path.
     Thanks to jerub at
     http://stackoverflow.com/questions/120656/directory-listing-in-python
     """
