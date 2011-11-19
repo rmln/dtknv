@@ -147,8 +147,7 @@ class ExcDropDownMenu:
                 files[helpers.filename(i)] = fs
             return files
         else:
-            return False
-        
+            return False        
 
 
 class Link:
@@ -190,9 +189,9 @@ class Browse:
         Open directory or file.
         """
         if mode == 'file':
-            #path = os.path.split(initpath)[0]
             self.path = filedialog.askopenfilenames(multiple=False,
-                                                    filetypes=filetypes)
+                                                    filetypes=filetypes,
+                                                    initialdir=initpath)
             # If a folder is selected, followed by
             # canceling the dialogue, tkinter returns (),
             # which causes errors.
