@@ -39,9 +39,9 @@ import helpers
 
 _default_settings = """
 {
-"set_file": "None", 
-"set_dirout": "None", 
-"set_dir": "None", 
+"set_file": "(?)", 
+"set_dirout": "(?)", 
+"set_dir": "(?)", 
 "set_sameinout": "0",
 "set_language": "lngcyr",
 "set_recursive": "0",
@@ -60,19 +60,24 @@ _default_settings = """
 "set_extensions_tocyr": "txt",
 "set_exc_files": "standardni-izuzeci.json",
 "set_convmode": "tolat",
-"set_defaultexc": "standardni-izuzeci.json"
+"set_defaultexc": "standardni-izuzeci.json",
+"set_last_dirin":"(?)",
+"set_last_dirout":"(?)",
+"set_last_filepath":"(?)"
 }
 """
 
 
 class Settings:
     
-    PATH = os.path.join(helpers.def_report_path(), '_dtknvt')
-    
     def __init__(self):
         """
         Loads the settings for GUI.
         """
+        self.URL_HELP = r'http:\\serbian.languagebits.com\dtknv\doc2\uputstvo.php'
+        self.INST_DIR = '.dtknvinstall'
+        self.SET_DIR = '.dtknv'
+        self.PATH = os.path.join(helpers.def_report_path(), self.SET_DIR)
         self.SETPATH = os.path.join(self.PATH, 'settings', 'default.json')
         self.DEFEXCPATH = os.path.join(self.PATH, 'exceptions')
         self.numeric  = ('set_failsafe', 'set_recursive', 'set_convertnames', 
