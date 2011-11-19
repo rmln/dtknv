@@ -23,6 +23,7 @@ Menu interface for dtknv.
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
+import webbrowser 
 
 import tkinter as tk
 from tkinter import messagebox
@@ -31,6 +32,7 @@ from functools import partial
 import helpers
 from gui import elements
 
+import version
 
 class Dmenu:
 
@@ -132,7 +134,8 @@ class Dmenu:
         self.help = tk.Menu(self.main, tearoff=0)
         self.main.add_cascade(label=self.lng['menu_help'], menu=self.help)
         # Help: Instructions, About
-        self.help.add_command(label=self.lng['menu_help_help'], command=print)
+        self.help.add_command(label=self.lng['menu_help_help'], 
+                              command=self.open_help)
         self.help.add_command(label=self.lng['menu_help_update'],
                               command=self.master.show_newversion)
         self.help.add_command(label=self.lng['menu_help_about'],
@@ -161,15 +164,49 @@ class Dmenu:
                                  lng=self.lng, main=self,
                                  src='from_menu')
 
+    def open_help(self, *e):
+        """
+        Open help file in locally, and if it fails
+        try the online version.
+        """
+        browser = webbrowser.get()
+        language = self.set.set_language
+        # If GUI language is in English, default to
+        # Serbian.
+        if language == 'lngeng':
+            language = 'lnglat'
+            messagebox.showinfo('', self.lng['msg_nohelpinenglish'])
+        # Local path, determined by the GUI language.
+        help_file_name = 'uputstvo-%s.html' % language
+        help_local_path = os.path.join(self.set.INST_DIR,
+                                       'doc', help_file_name)        
+        if os.path.exists(help_local_path):
+            # Open browser
+            browser.open(help_local_path)
+        else:
+            open_homepage = messagebox.askyesno(self.lng['label_error'], 
+                                                self.lng['msg_nolocalhelp'])
+            if open_homepage:
+                browser.open(self.set.URL_HELP + '?pismo=%s&ver=%s' % \
+                                 (language, version.__version__))
+                
+
     def browse_file(self, *e):
         """
         Browse for a file.
         """
         filetypes = self.get_file_descriptions()
-        path  = elements.Browse(mode='file', filetypes=filetypes).path
+        path  = elements.Browse(mode='file', filetypes=filetypes,
+                                initpath=self.set.set_last_filepath).path
         if path != '':
-            self.set.set_file = path 
+            path_to_file = helpers.get_file_path(self.set.set_file)
+            self.set.set_file = path
+            self.set.set_last_filepath = path_to_file
             self.set.set_dir = self.set.NOP
+            # If same/in out is selected, set the proper
+            # out path:
+            if self.set.set_sameinout:
+                self.set.set_dirout = path_to_file
             self.master.update_gui()
             self.master.show_filesdir()
 
@@ -178,11 +215,13 @@ class Dmenu:
         """
         Browse for an input directory.
         """
-        path = elements.Browse(mode='dir').path
+        path = elements.Browse(initpath=self.set.set_last_dirin,
+                               mode='dir').path
         if path != '':
             # The path is OK, so assign it to the variable,
             # and reset the file variable.
             self.set.set_dir = path
+            self.set.set_last_dirin = path
             self.set.set_file = self.set.NOP
             self.assign_same('in')
             self.master.update_gui()
@@ -193,9 +232,11 @@ class Dmenu:
         """
         Browse for an output directory.
         """
-        path = elements.Browse(mode='dir').path
+        path = elements.Browse(initpath=self.set.set_last_dirout,
+            mode='dir').path
         if path != '':
             self.set.set_dirout = path
+            self.set.set_last_dirout = path
             self.assign_same('out')
             self.master.update_gui()
             self.master.show_filesdir()
@@ -249,13 +290,18 @@ class Dmenu:
         
         I.e.:
 
-        self.set.set_racursive = self.var_sett_recursive.get()
+        self.set.set_recursive = self.var_sett_recursive.get()
         
         """
         setattr(self.set, 'set_%s' % v,
                 getattr(self, 'var_sett_%s' % v).get())
         if v == 'sameinout' and self.set.set_sameinout:
-            self.set.set_dir =  self.set.set_dirout
+            # "Save in same dir" option is on, so set the paths
+            if self.set.set_dir != self.set.NOP:
+                self.set.set_dirout = self.set.set_dir
+            # Same as above, but for a file:
+            if self.set.set_file != self.set.NOP:
+                self.set.set_dirout = helpers.get_file_path(self.set.set_file)
             self.master.update_gui()
         if v == 'sameinout' and not self.set.set_sameinout:
             self.set.set_dirout =  self.set.NOP
