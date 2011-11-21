@@ -263,7 +263,8 @@ class Dmenu:
                 self.set.set_dirout =  self.set.set_dir
         elif src == 'out':
             if self.set.set_sameinout:
-                self.set.set_dir =  self.set.set_dirout
+                if self.set.set_dir != self.set.NOP: 
+                    self.set.set_dir =  self.set.set_dirout
         else:
             raise ValueError("src must be 'in' or 'out'")
     
