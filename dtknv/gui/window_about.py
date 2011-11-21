@@ -59,24 +59,15 @@ class AboutWindow:
         self.about_text = tk.Label(self.main, justify='left', wraplength=400)
         # Format about text
         text = self.lng['label_about_desc'] % version.__version__ + '\n\n'
-        text = text + self.lng['label_about_license'] + '\n\n'
+        text = text + self.lng['label_about_license'] + ' '
         text = text + self.lng['label_about_mail'].replace('--a--', '@') + '\n\n'
         text = text + self.lng['label_about_author'] + ' © ' +  \
                self.lng['label_about_year']
         self.about_text.configure(text=text)
         self.about_text.pack(padx=20, pady=10, anchor='w')
         # Links
-        Link(self.window, text='Languagebits.com', 
+        Link(self.window, text='Language bits', 
              link=r'http://www.languagebits.com/',
-             padx=20)
-        Link(self.window, text=self.lng['label_about_source'], 
-             link=r'https://gitorious.org/dtknv/',
-             padx=20)
-        Link(self.window, text=self.lng['label_about_gnu'], 
-             link=r'http://www.gnu.org/philosophy/philosophy.html',
-             padx=20)
-        Link(self.window, text=self.lng['label_about_gpl'], 
-             link=r'http://serbian.languagebits.com/gpl.txt',
              padx=20)
 
     
