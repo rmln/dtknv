@@ -199,8 +199,8 @@ class Dmenu:
         path  = elements.Browse(mode='file', filetypes=filetypes,
                                 initpath=self.set.set_last_filepath).path
         if path != '':
-            path_to_file = helpers.get_file_path(self.set.set_file)
             self.set.set_file = path
+            path_to_file = helpers.get_file_path(self.set.set_file)
             self.set.set_last_filepath = path_to_file
             self.set.set_dir = self.set.NOP
             # If same/in out is selected, set the proper
