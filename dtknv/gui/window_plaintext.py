@@ -64,7 +64,7 @@ class PlainText:
         
         scrollbar.pack(side='right', fill='y')
         field_text.pack()
-        frame_text.pack(side='top')
+        frame_text.pack(side='top', padx=5, pady=2)
         
         # Make text field public
         self.field_text = field_text
@@ -124,6 +124,7 @@ class PlainText:
         # Load them into the class
         self.convert.path = self.set.DEFEXCPATH
         self.convert.load_exceptions(exc_files)
+        # Get all text
         text = self.get_text_field()[:-1]
         self.convert.text = text
         if mode == 'to_cyrillic':
