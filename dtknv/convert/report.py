@@ -46,7 +46,7 @@ class Report:
         if not os.path.exists(reppath):
             raise OSError("Report path does not exist.")
         if not os.path.isdir(reppath):
-            raise ValueError("Report path must be a dirictory.")
+            raise ValueError("Report path must be a directory.")
         self.reppath = reppath
 
         self.dt = helpers.getdatetime(f='long')

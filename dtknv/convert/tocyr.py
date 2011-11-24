@@ -147,9 +147,16 @@ class ToCyr:
         # call the loop for conversion.
         if self.conversiontype == 'files':
             self.files_space = os.path.getsize(self.PATHIN)
-            # Open lf log file, try converting and save
-            # the report.
-            self.report = Report(cn=self)
+            # Acces the log file. If this fails
+            # turn off the reports.
+            try:
+                self.report = Report(cn=self)
+            except:
+                print("Greska prilikom pristupa fascikli za izvjestaj:")
+                print(self.REPORTPATH)
+                print("Izvjestaj je iskljucen!")
+                self.report = False
+            # --------------------------------------
             try:
                 self._convertfile(self.PATHIN)
                 msg = 'Konvertovana datoteka %s' % self.PATHIN
@@ -158,7 +165,10 @@ class ToCyr:
                 msg = 'Greska, nije konvertovano: %s' % self.PATHIN
                 if self.SHOW:
                     print(msg)
-            self.report.write(msg)
+            # If report is not false (successfully opened),
+            # seve the string.
+            if self.report:
+                self.report.write(msg)
         elif self.conversiontype == 'dir':
             self._convertdir()
         else:
@@ -357,12 +367,14 @@ class ToCyr:
                 try:
                     self._convertfile(f)
                     if self.REPORT:
-                        self.report.write('OK: %s\r\n' % f)
+                        if self.report:
+                            self.report.write('OK: %s\r\n' % f)
                 except:
                     # "Ooops! This file was not converted..."
                     print('\tOps, greska! Ova datoteka nije konvertovana...')
                     # "ERROR: "
-                    self.report.write('GREŠKA: %s\r\n' % f)
+                    if self.report:
+                        self.report.write('GREŠKA: %s\r\n' % f)
                     self.errors_during_work = True
             else:
                 self._convertfile(f)
