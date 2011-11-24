@@ -76,8 +76,8 @@ class Exceptions:
         self.window.bind('<Control-n>', self.new_set)
         self.window.bind('<Control-s>', self.save_exc)
         self.window.bind('<Control-i>', self.delete_selected_cells)
-        # Load default exception
-        self.active_filename = self.set.set_defaultexc
+        # Load last edited exception file.
+        self.active_filename = self.set.set_last_excfile
         self.load_file_create_cells(self.active_filename, initial=True)
         #self.colorise()
         # Grab the window, so main program window
@@ -106,6 +106,8 @@ class Exceptions:
             # and see if it will fail
             try:
                 items = self.load_exc_file(f)
+                # Set this file as the last edited one
+                self.set.set_last_excfile = f
             except:
                 # Oops, an error. Inform the user and prevent from
                 # saving, or the corrupt file may be overwritten (which

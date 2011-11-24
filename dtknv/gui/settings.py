@@ -63,7 +63,8 @@ _default_settings = """
 "set_defaultexc": "standardni-izuzeci.json",
 "set_last_dirin":"(?)",
 "set_last_dirout":"(?)",
-"set_last_filepath":"(?)"
+"set_last_filepath":"(?)",
+"set_last_excfile":"standardni-izuzeci.json"
 }
 """
 
