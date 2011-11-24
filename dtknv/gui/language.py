@@ -116,6 +116,7 @@ serbian_cyrillic = {
     'условима GPL3 лиценце.',
 'label_about_mail':'Све предлоге и грешке пошаљите на ' + \
     'mlinar--a--languagebits.com. Хвала! :)',
+'label_about_name':'Дткнв',
 'ext_html':'хипертекст ',
 'ext_htm':'хипертекст ',
 'ext_odt':'Опенофис / Либреофис документ',

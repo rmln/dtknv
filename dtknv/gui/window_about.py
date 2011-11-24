@@ -53,7 +53,8 @@ class AboutWindow:
         """
         # Program title
         self.label_title = tk.Label(self.main, justify='left')
-        self.label_title.configure(text='Dtknv', font=('Ubuntu', 16))
+        self.label_title.configure(text=self.lng['label_about_name'],
+                                   font=('Ubuntu', 16))
         self.label_title.pack(padx=20, pady=5, anchor='w')
         # About text
         self.about_text = tk.Label(self.main, justify='left', wraplength=400)
