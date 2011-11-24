@@ -77,7 +77,7 @@ class ToCyr:
     # Show info about conversion while running. On Windows this causes an
     # error if messages are in UTF.
     SHOW = False
-    # Not implemented yet: from Lat to Cyr or vice versa.
+    # From Lat to Cyr or vice versa.
     CONVMODE = 'tolat'
     # Show percentage counter while running.
     SHOWPERC = True
@@ -101,6 +101,10 @@ class ToCyr:
     # If EXT_NO_CONVERSION is false, then all extensions are
     # converted as well as the actuall file name.
     EXT_NO_CONVERSION = True
+    # Default exception files path
+    DEFEXCPATH = False
+    # Exception files
+    EXCFILES = []
 
     def __init__(self):
         """Convert between Latin and Cyrillic scripts."""
@@ -110,6 +114,7 @@ class ToCyr:
         # conversiontype defines wether the conversion
         # is done no file or folder level.
         self.conversiontype = None
+        
 
     def run(self):
         """Start the conversion."""
@@ -118,6 +123,10 @@ class ToCyr:
         # a file was left undeleted due to a crash.
         self.DIRTMP = tempfile.mkdtemp(prefix='dtknv_')
         
+        # Exception files (search and replace strings)
+        self.convertor.path = self.DEFEXCPATH
+        self.convertor.load_exceptions(self.EXCFILES)
+
         # Percentage counter based on file sizes, to indicate
         # the conversion progress.
         self.pcounter = {'p':0, 'f':None, 'i':0}
@@ -164,8 +173,7 @@ class ToCyr:
             shutil.rmtree(self.DIRTMP)
         except:
             #'Could not remove tmp dir. Gracefully ignoring this...'
-            print("Tmp fasickla nije mogla bit uklonjena. Psssssst!")
-
+            print("Tmp fasickla nije mogla biti uklonjena. Psssssst!")
 
     def _outpathrec(self, f):
         """Compile path where content will be saved."""
