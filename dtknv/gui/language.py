@@ -229,7 +229,7 @@ english = {
 'label_about_author':'Romeo Mlinar',
 'label_about_year':'2010-2011',
 'label_about_license':'This program is free, published under the terms of ' + \
-    'the GPL3 license.',
+    'GPL3 license.',
 'label_about_mail':'Please send all your suggestions or bug reports to ' + \
     'mlinar--a--languagebits.com. Thank you! :)',
 'label_about_name':'Dtknv',
@@ -239,7 +239,11 @@ english = {
 'ext_docx':'Word 2007+ document',
 'ext_txt':'plain text ',
 'ext_*':'all files ',
-'ext_?generic':'a file of the type '
+'ext_?generic':'a file of the type ',
+
+#This one is for English only
+'msg_nohelpinenglish':'Help files are available in Serbian only.'
+
 }
 
 
