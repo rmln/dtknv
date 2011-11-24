@@ -61,6 +61,8 @@ from srpismo.cyrconv import CirConv
 
 from gui.settings import Settings
 
+import version
+
 class DtknvGui(tk.Frame):
 
     def __init__(self, master=None):
@@ -69,7 +71,8 @@ class DtknvGui(tk.Frame):
         self.main_settings = Settings()
         self.set = self.main_settings
         self.lng = self.set.language
-        self.master.title('dtknv 0.5 alfa')
+        self.master.title(self.lng['label_about_name'] + ' ' + \
+                              version.__version__)
         self.pack(padx=0,pady=0,fill=tk.BOTH, expand=0)
         self.pack_propagate(0)
         self.master.windows_opened = []
@@ -305,7 +308,10 @@ class DtknvGui(tk.Frame):
             self.tocyr.EXT = self.set.extensions_tocyr
         self.tocyr.SAMEOUTPATH = self.set.set_sameinout
         self.tocyr.SHOW = self.set.set_verbose
-        self.tocyr.CALLEDFROM = 'dtknv new interface'
+        self.tocyr.CALLEDFROM = 'dtknv tk interface'
+        # Exceptio files and the path
+        self.tocyr.DEFEXCPATH = self.set.DEFEXCPATH
+        self.tocyr.EXCFILES  = self.set.set_exc_files
         # Start the thread
         self.th = threading.Thread(target = self.tocyr.run)
         self.th.start()
