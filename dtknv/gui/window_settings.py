@@ -104,13 +104,13 @@ class Options:
         frame = tk.Frame(self.main)
         button_ok = tk.Button(frame, text=self.lng['button_ok'],
                               command=self.settings_save)
-        button_ok.pack(side='left')
+        button_ok.pack(side='left', padx=3)
         button_cancel = tk.Button(frame, text=self.lng['button_close'],
                                   command=self.close)
-        button_cancel.pack(side='left')
+        button_cancel.pack(side='left', padx=3)
         button_cancel = tk.Button(frame, text=self.lng['button_default'],
                                   command=self.reset_settings)
-        button_cancel.pack(side='left')
+        button_cancel.pack(side='left', padx=3)
         frame.pack(pady=10)
         
         
