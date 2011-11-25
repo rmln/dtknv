@@ -149,13 +149,7 @@ class ToCyr:
             self.files_space = os.path.getsize(self.PATHIN)
             # Acces the log file. If this fails
             # turn off the reports.
-            try:
-                self.report = Report(cn=self)
-            except:
-                print("Greska prilikom pristupa fascikli za izvjestaj:")
-                print(self.REPORTPATH)
-                print("Izvjestaj je iskljucen!")
-                self.report = False
+            self.report = self._initreporfile()
             # --------------------------------------
             try:
                 self._convertfile(self.PATHIN)
@@ -352,13 +346,28 @@ class ToCyr:
         else:
             return path
 
+    
+    def _initreporfile(self):
+        """
+        Initialise the report file.
+        """
+        try:
+            report = Report(cn=self)
+        except:
+            print("Greska prilikom pristupa fascikli za izvjestaj:")
+            print(self.REPORTPATH)
+            print("Izvjestaj je iskljucen!")
+            report = False
+            self.errors_during_work = True
+        return report
+
 
     def _conversionloop(self, loopover):
         """Iterate over items and convert."""
         # Convert all files in the loop:
         if self.FAILSAFE:
             if self.REPORT:
-                self.report = Report(cn=self)
+                self.report = self._initreporfile()
         for f in loopover:
             if self.SHOW:
                 # "Loading %s"
