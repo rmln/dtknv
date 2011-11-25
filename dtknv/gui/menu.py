@@ -23,6 +23,7 @@ Menu interface for dtknv.
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
+import sys
 import webbrowser 
 
 import tkinter as tk
@@ -178,8 +179,7 @@ class Dmenu:
             messagebox.showinfo('', self.lng['msg_nohelpinenglish'])
         # Local path, determined by the GUI language.
         help_file_name = 'uputstvo-%s.html' % language
-        help_local_path = os.path.join(self.set.INST_DIR,
-                                       'doc', help_file_name)        
+        help_local_path = os.path.join(self.set.APPDIR, 'doc', help_file_name) 
         if os.path.exists(help_local_path):
             # Open browser
             browser.open(help_local_path)

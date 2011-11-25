@@ -25,6 +25,7 @@ runtime and used extensively by the program.
 
 
 import os
+import sys
 import json
 import copy
 
@@ -75,12 +76,20 @@ class Settings:
         """
         Loads the settings for GUI.
         """
-        self.URL_HELP = r'http:\\serbian.languagebits.com\dtknv\doc2\uputstvo.php'
-        self.INST_DIR = '.dtknvinstall'
+        # This URL path is called when About > Help is selected
+        self.URL_HELP = \
+            r'http:\\serbian.languagebits.com\dtknv\doc\uputstvo.php'
+        # Loacal help files should be in self.APPDIR\doc 
+        self.APPDIR = os.path.split(sys.argv[0])[0]
+        # The settings directory
         self.SET_DIR = '.dtknv'
+        # The settings directory in home
         self.PATH = os.path.join(helpers.def_report_path(), self.SET_DIR)
+        # Full path to the settings file
         self.SETPATH = os.path.join(self.PATH, 'settings', 'default.json')
+        # The path where search and replace files are located
         self.DEFEXCPATH = os.path.join(self.PATH, 'exceptions')
+        # These items are the integer values
         self.numeric  = ('set_failsafe', 'set_recursive', 'set_convertnames', 
                          'set_verbose', 'set_noram', 'set_report', 
                          'set_warningmb', 'set_warningn', 'set_sameinout')
