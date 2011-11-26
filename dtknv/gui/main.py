@@ -265,22 +265,7 @@ class DtknvGui(tk.Frame):
         # Disable the button and remove the bind
         self.window_filesdir.btn_convert.configure(state='disabled')
         self.bind_all("<F5>", None)
-        # Dev stuff messages:
-        # print("I'm converting now...")
-        # print('ENC', self.set.set_encoding)
-        # print('file', self.set.set_file)
-        # print('dirout', self.set.set_dirout)
-        # print('dir', self.set.set_dir)
-        # print('recursive', self.set.set_recursive)
-        # print('verbose', self.set.set_verbose)
-        # print('failsafe', self.set.set_failsafe)
-        # print('noram', self.set.set_noram)
-        # print('convertnames', self.set.set_convertnames)
-        # print('reportpath', self.set.set_reportpath)
-        # print('reportname', self.set.set_reportname)
-        # print('extensions', self.set.extensions)
-        # print('sameinout', self.set.set_sameinout)
-        # -------------- Set up the conversion class
+        # Set up the conversion class
         self.tocyr.ENC = self.set.set_encoding
         # After the checks in the gui, of of the
         # following ar this stage should be
@@ -300,7 +285,8 @@ class DtknvGui(tk.Frame):
         self.tocyr.USERAM = 0 if self.set.set_noram else 1
         self.tocyr.CONVERTFNAMES = self.set.set_convertnames
         self.tocyr.REPORTPATH = self.set.set_reportpath
-        self.tocyr.REPORT = self.set.set_reportname
+        self.tocyr.REPORTNAME = self.set.set_reportname
+        self.tocyr.REPORT = self.set.set_report
         # Extensions are conversion mode dependant
         if self.set.set_convmode == 'tolat':
             self.tocyr.EXT = self.set.extensions
@@ -337,6 +323,7 @@ class DtknvGui(tk.Frame):
                     repcol = "green"
                 self.status.configure(text=reptext, bg=repcol)
                 break
+
 
     def kill_program(self, *e):
         """

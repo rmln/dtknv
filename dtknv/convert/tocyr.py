@@ -97,7 +97,7 @@ class ToCyr:
     # Path to save reports
     REPORTPATH = helpers.def_report_path()
     # Are reports on?
-    REPORT = True
+    REPORT = False
     # If EXT_NO_CONVERSION is false, then all extensions are
     # converted as well as the actuall file name.
     EXT_NO_CONVERSION = True
@@ -351,6 +351,10 @@ class ToCyr:
         """
         Initialise the report file.
         """
+        # The report if off
+        if not self.REPORT:
+            return False
+        # It is no, try opening it.
         try:
             report = Report(cn=self)
         except:
@@ -366,8 +370,7 @@ class ToCyr:
         """Iterate over items and convert."""
         # Convert all files in the loop:
         if self.FAILSAFE:
-            if self.REPORT:
-                self.report = self._initreporfile()
+            self.report = self._initreporfile()
         for f in loopover:
             if self.SHOW:
                 # "Loading %s"
@@ -375,9 +378,8 @@ class ToCyr:
             if self.FAILSAFE:
                 try:
                     self._convertfile(f)
-                    if self.REPORT:
-                        if self.report:
-                            self.report.write('OK: %s\r\n' % f)
+                    if self.report:
+                        self.report.write('OK: %s\r\n' % f)
                 except:
                     # "Ooops! This file was not converted..."
                     print('\tOps, greska! Ova datoteka nije konvertovana...')
