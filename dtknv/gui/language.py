@@ -52,7 +52,7 @@ serbian_cyrillic = {
 'button_erase':'Избриши',
 'button_tolat':'У латиницу',
 'button_default':'Врати подешавања',
-'button_tocyr':'У ћилирцу',
+'button_tocyr':'У ћирилицу',
 'button_exc_commands':'Команде... ↓',
 'button_standardsr':'Стандардни ћирилични изузеци',
 'window_options':'Подешавања',
