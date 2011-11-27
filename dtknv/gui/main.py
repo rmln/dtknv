@@ -63,6 +63,8 @@ from gui.settings import Settings
 
 import version
 
+import helpers
+
 class DtknvGui(tk.Frame):
 
     def __init__(self, master=None):
@@ -200,7 +202,16 @@ class DtknvGui(tk.Frame):
         # and ask for the confirmation to continue.
         self.explicit_save_in_same_folder()
         # Refresh extensions:
-        self.tocyr.EXTENSIONS = self.set.extensions
+        if self.set.set_convmode == 'tolat':
+            self.tocyr.EXTENSIONS = self.set.extensions
+        else:
+            self.tocyr.EXTENSIONS = self.set.extensions_tocyr
+        # If file is slected, but the converson mode cannot be
+        # applied to it, reset the path.
+        if self.set.set_file != self.set.NOP:
+            if helpers.getext(self.set.set_file) not in \
+                    self.tocyr.EXTENSIONS:
+                self.set.set_file = self.set.NOP
         # Save and load the settings, and then update the
         # gui:
         self.set.reload()
