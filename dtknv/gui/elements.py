@@ -201,7 +201,7 @@ class Browse:
             # On NT tkinter returns string, on Linux tuple.
             if os.name != 'nt' and self.path != '':
                 self.path = self.path[0]
-            if os.name == 'nt':
+            if os.name == 'nt' and self.path != '':
                 # On Windows a path has {} if there's a spece
                 # in file name.
                 if self.path[0] == '{' and self.path[-1] == '}':
