@@ -183,6 +183,7 @@ class Browse:
         if initpath in (None, '(?)'):
             initpath = helpers.def_report_path()
         self.show(mode, initpath, filetypes)
+
     
     def show(self, mode, initpath, filetypes):
         """
@@ -199,7 +200,13 @@ class Browse:
                 self.path = ''
             # On NT tkinter returns string, on Linux tuple.
             if os.name != 'nt' and self.path != '':
-                self.path = self.path[0]                
+                self.path = self.path[0]
+            if os.name == 'nt':
+                # On Windows a path has {} if there's a spece
+                # in file name.
+                if self.path[0] == '{' and self.path[-1] == '}':
+                    self.path = self.path[1:-1]
+                
         elif mode == 'dir':
             self.path = filedialog.askdirectory(initialdir=initpath)
             #print("dir path is: '%s'" % path)
