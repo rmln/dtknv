@@ -25,6 +25,8 @@ are fulfilled.
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+import os
+
 import tkinter as tk
 
 import helpers
@@ -39,7 +41,11 @@ class FilesDir:
         self.set = self.master.main_settings
         self.window = tk.Frame(master, relief='groove', borderwidth=0)
         # The label for basic info
-        self.label_selection = tk.Label(self.window)
+        if os.name == 'nt':
+            wraplength=500
+        else:
+            wraplength=200
+        self.label_selection = tk.Label(self.window, wraplength=wraplength)
         self.label_selection.pack(anchor='w', padx=5, pady=5)
         # The conversion button
         self.btn_convert = tk.Button(self.window, 
