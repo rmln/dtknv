@@ -1,40 +1,47 @@
-0.3.4.5 beta [3 September 2011]
+0.5 beta [Decembar 2011]
 --------------
-* An option to save converted files in the input directory(es).
-* The reports are saved in home folder (or My Documents, on Windows).
-* Changes in switches.
-* Bug removed: wrong free space calculation on Linux.
-* Bug removed: crash in Windows console.
+* Redizajniran i pobošljan interfejs (pisan "od nule").
+* Dvosmjerna konverzija (iz ćirilice i u ćirilicu).
+* Dodati izuzeci (search and replace).
+* Domen na <http:\\serbian.languagebits.com>.
 
-0.3.4 beta [26 July 2011]
+0.3.4.5 beta [3 septembar 2011.]
 --------------
-* Initial support for Latin to Cyrillic (in GUI's text box only).
-* Improved reports. 
+* Opcija da se konvertovane datoteke čuvaju u ulaznoj fascikli.
+* Izvještaji se standardno zapisuju u My Documents ili home fascikli.
+* Promjena konzolnih argumenata.
+* Uklonjen bug: pogrešno izračuvanje slobodnog prostora u Linuksu.
+* Uklonjen bug: pucanje programa u Windows konzoli.
 
-0.3.3 beta [18 July 2011]
+0.3.4 beta [26 juli 2011.]
 --------------
-* Added (by default) unzipping OTD/DOCX in RAM.
-* New console switches.
+* Početna podrška za konverziju latiničnog teksta u ćirilični (samo GUI).
+* Unaprijeđeni izvještaji.
 
-0.3 beta > 0.3.1 beta [23 June 2011]
+0.3.3 beta [18 jul 2011.]
 --------------
-* No significant changes (mostly strings).
-* Added project at <https://gitorious.org/dtknv>.
+* Dodato raspakivanje ODT/DOCX datoteka u RAM.
+* Novi konzolni argumenti.
 
-0.6.6a > 0.6.7a [3 May 2011]
+0.3 beta > 0.3.1 beta [23. jun 2011.]
 --------------
-* Added field for conversion of plain text.
-* Script is now called by cknv, not tocyr.
+* Uglavnom pomjena u niskama.
+* Datat projekat na  <https://gitorious.org/dtknv>.
 
-0.6.5a > 0.6.6a [19 April 2011]
+0.6.6a > 0.6.7a [3. maj 2011.]
 --------------
-* Bug fixes (file conversion works on nt/posix).
-* Interface change.
-* Basic user-friendly log.
+* Dodato polje za konverziju običnog teksta.
+* Skripta se sada poziva preko cknv, a ne tocyr.
 
-0.6.2a > 0.6.5a [11 April 2011]
+0.6.5a > 0.6.6a [19. april 2011.]
 --------------
-* Correct free space calculation on Linux.
-* Correct paths on Linux.
-* Command line support.
-* Many minor tweaks.
+* Ispravka grešake: konverzija datoteka na nt/posix sistemima.
+* Promjene interfejsa.
+* Početni kod za izvještaje o radu.
+
+0.6.2a > 0.6.5a [11. april 2011.]
+--------------
+* Ispravno izračunavanje slobodnog prostora na Linuksu.
+* Ispravne putanje na Linuksu.
+* Podrška za konzolne pozive.
+* Mnogo manjih ispravki.
