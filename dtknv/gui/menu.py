@@ -240,6 +240,11 @@ class Dmenu:
             self.assign_same('out')
             self.master.update_gui()
             self.master.show_filesdir()
+            # If same/in out is selected, set the proper
+            # out path:
+            if self.set.set_sameinout:
+                self.set.set_sameinout = 0
+                self.sett.invoke(0)
 
     
     def languagechanged(self, to):
