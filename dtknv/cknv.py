@@ -54,7 +54,7 @@ import codecs
 
 import version
 
-__version__ = '0.3.1'
+__version__ = '0.3.2'
 
 #
 #    Copyright (C) 2011  Romeo Mlinar (mlinar [a] languagebits.com)

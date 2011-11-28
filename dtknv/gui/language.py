@@ -6,6 +6,8 @@ Strings for the GUI.
 
 """
 
+__version__ = '0.5'
+
 serbian_cyrillic = {
 
 # Language strings for Serbian Cyrillic (converted automatically

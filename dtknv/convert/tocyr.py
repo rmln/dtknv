@@ -39,7 +39,7 @@ import helpers
 from helpers import *
 import version
 
-__version__ = "0.6.3.5"
+__version__ = "0.7"
 __url__ = "https://gitorious.org/dtknv"
 __author__ = "Romeo Mlinar"
 __license__ = "GNU General Public License v. 3"

@@ -8,6 +8,9 @@ conversion.
 
 """
 
+__version__ = '0.5'
+
+
 #
 #    Copyright (C) 2011  Romeo Mlinar (mlinar [a] languagebits.com)
 #

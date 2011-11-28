@@ -8,6 +8,9 @@ are fulfilled.
 
 """
 
+__version__ = '0.5'
+
+
 #
 #    Copyright (C) 2011  Romeo Mlinar (mlinar [a] languagebits.com)
 #
@@ -44,7 +47,7 @@ class FilesDir:
         if os.name == 'nt':
             wraplength=500
         else:
-            wraplength=200
+            wraplength=500
         self.label_selection = tk.Label(self.window, wraplength=wraplength)
         self.label_selection.pack(anchor='w', padx=5, pady=5)
         # The conversion button
