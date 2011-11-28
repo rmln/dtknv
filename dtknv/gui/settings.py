@@ -44,7 +44,7 @@ _default_settings = """
 "set_dirout": "(?)", 
 "set_dir": "(?)", 
 "set_sameinout": "0",
-"set_language": "lngcyr",
+"set_language": "lnglat",
 "set_recursive": "0",
 "set_convertnames": "0",
 "set_verbose": "1",
