@@ -208,10 +208,7 @@ class DtknvGui(tk.Frame):
             self.tocyr.EXTENSIONS = self.set.extensions_tocyr
         # If file is slected, but the converson mode cannot be
         # applied to it, reset the path.
-        if self.set.set_file != self.set.NOP:
-            if helpers.getext(self.set.set_file) not in \
-                    self.tocyr.EXTENSIONS:
-                self.set.set_file = self.set.NOP
+        self.check_allowed_extensions()
         # Save and load the settings, and then update the
         # gui:
         self.set.reload()
@@ -228,7 +225,23 @@ class DtknvGui(tk.Frame):
         else:
             self.bind_all("<F5>", None)
 
-            
+
+    def check_allowed_extensions(self):
+        """
+        Check if file extension is allowed in the
+        conversion mode.
+        """
+        # If file is slected, but the converson mode cannot be
+        # applied to it, reset the path.
+        file_selected = self.set.set_file != self.set.NOP
+        if file_selected and (self.set.set_convmode == 'tocyr'):
+            if helpers.getext(self.set.set_file) not in \
+                    self.tocyr.EXTENSIONS:
+                self.set.set_file = self.set.NOP
+                messagebox.showwarning('',
+                                   self.lng['msg_extension_not_supported'])
+        
+
     def explicit_save_in_same_folder(self):
         """
         Converted files can be saved in the same folder

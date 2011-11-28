@@ -74,6 +74,7 @@ serbian_cyrillic = {
                 'укључити опцију "Сачувај у истој фасцикли"\n\n' + \
                 'Укључити ову опцију?',
 'msg_savechanges':'Сачувати промјене?',
+'msg_extension_not_supported':'Та врста датотеке није дозвољена у ћир. конверзији.',
 'msg_nolocalhelp':'Немате инсталирано упутство на рачунару.\n' + \
                    'Отворити верзију на званичном сајту?',
 'msg_nohelpinenglish':'Програм нема упутство на енглеском.',
@@ -194,6 +195,8 @@ english = {
                 'turn on "Save in the same folder"\n\n' + \
                 'Turn the option on?',
 'msg_savechanges':'Save changes?',
+'msg_extension_not_supported':'That extension must be allowed ' + \
+    'for this conversion.',
 'label_save':'Save',
 'label_type':'Type: ',
 'label_updateerror':'The program could not check if there is' + \
