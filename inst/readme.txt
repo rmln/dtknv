@@ -10,10 +10,22 @@ replace strings), but the option is available through the GUI only.
 Help file is available on <http://serbian.languagebits.com/dtknv/doc/> 
 (Serbian only).
 
+How to run it:
+
+python3 dtknv/cknv.py
+
+Or:
+
+python3 dtknv/cknv.py -g
+
 === PREREQUISITES =========
 
 Windows: Python 3
 Linux: python3 for console use; python3-tk for GUI
+
+=== GUI ====================
+
+python3 dtknv/cknv.py -g
 
 === IN ENGLISH ============
 
@@ -63,12 +75,6 @@ Convert myfile.odt and store it in conv.
 cknv.py -g
 
 Show a simple graphical interface.
-
-=== GUI ====================
-
-Double-click on rungui.py to start a simple graphical interface, or
-type cknv.py -g in console.
-
 
 === ABOUT ==================
 
