@@ -105,8 +105,7 @@ class Replace:
 
 class CirConv:
     """
-    Converts Cyrillic script to Latin.
-    TODO: Remove repetitions.
+    Converts Cyrillic script to Latin and vice versa.
     """
         
     def __init__(self, text='', stats=False, exception_files=[], variants=False,
@@ -189,6 +188,55 @@ class CirConv:
     def convert_to_cyrillic(self):
         """Convert the text and place it into .result. No return."""
         self.result = self._charreplace(self.text, mode='tocyr')
+
+        
+    def convert(self, text):
+        """
+        If text is in Cyrillic, convert it to Latin and
+        vice versa. 
+        
+        Return the text.
+
+        Does not use public text or conversion functions.
+        """
+        if self.is_all_cyrillic(text):
+            return self._charreplace(text, mode='tolat')
+        elif self.is_all_latin(text):
+            return self._charreplace(text, mode='tocyr')
+        else:
+            raise ValueError("Method does not accept mixed-script text.")
+        
+
+
+    def is_all_cyrillic(self, text=None):
+        """
+        Return true if all chars are Cyrillic.
+        """
+        return self._is_all_textscript(text, 'lat')
+
+
+    def is_all_latin(self, text=None):
+        """
+        Return true if all chars are Latin.
+        """
+        return self._is_all_textscript(text, 'cyr')
+
+
+    def _is_all_textscript(self, text, script):
+        """
+        Return true if all chars are Cyrillic/Latin
+        """
+        # Check if the argumets are valid
+        if script not in ('lat', 'cyr'):
+            ValueError('script must be "lat" or "cyr"')
+        # If no text is provide, check self.text
+        if text == None: text = self.text
+        # Character sets
+        characters = getattr(self, 'charmap_to%s' % script)
+        for i in text:
+            if (i not in characters.keys()) and (i in characters.values()):
+                    return False
+        return True
 
     
     def _make_charkeys(self):
