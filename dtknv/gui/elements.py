@@ -178,12 +178,14 @@ class Browse:
     Browse for file or folder.
     """
     def __init__(self, mode, initpath=None, extpaths=None,
-                 filetypes=()):
+                 filetypes=(), lng=None):
         """
         Start the class.
         """
         if initpath in (None, '(?)'):
             initpath = helpers.def_report_path()
+        # Language
+        self.lng = lng
         self.show(mode, initpath, filetypes)
 
     
@@ -192,9 +194,11 @@ class Browse:
         Open directory or file.
         """
         if mode == 'file':
-            self.path = filedialog.askopenfilenames(multiple=False,
-                                                    filetypes=filetypes,
-                                                    initialdir=initpath)
+            self.path = filedialog.askopenfilenames(
+                multiple=False,
+                filetypes=filetypes,
+                initialdir=initpath,
+                title=self.lng['title_open_file'])
             # If a folder is selected, followed by
             # canceling the dialogue, tkinter returns (),
             # which causes errors.
@@ -209,9 +213,8 @@ class Browse:
                 if self.path[0] == '{' and self.path[-1] == '}':
                     self.path = self.path[1:-1]
                 
-        elif mode == 'dir':
-            self.path = filedialog.askdirectory(initialdir=initpath)
-            #print("dir path is: '%s'" % path)
-            #self.path = path
+        elif mode in ('dir', 'dirin', 'dirout'):
+            self.path = filedialog.askdirectory(initialdir=initpath,
+                           title=self.lng['title_open_%s' % mode])
         else:
             raise ValueError("Mode must be 'dir' of 'file'")

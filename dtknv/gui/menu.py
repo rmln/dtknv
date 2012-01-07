@@ -198,8 +198,10 @@ class Dmenu:
         Browse for a file.
         """
         filetypes = self.get_file_descriptions()
-        path  = elements.Browse(mode='file', filetypes=filetypes,
-                                initpath=self.set.set_last_filepath).path
+        path  = elements.Browse(mode='file',
+                                filetypes=filetypes,
+                                initpath=self.set.set_last_filepath,
+                                lng=self.lng).path
         if path != '':
             self.set.set_file = path
             path_to_file = helpers.get_file_path(self.set.set_file)
@@ -218,7 +220,8 @@ class Dmenu:
         Browse for an input directory.
         """
         path = elements.Browse(initpath=self.set.set_last_dirin,
-                               mode='dir').path
+                               mode='dirin',
+                               lng=self.lng).path
         if path != '':
             # The path is OK, so assign it to the variable,
             # and reset the file variable.
@@ -235,7 +238,8 @@ class Dmenu:
         Browse for an output directory.
         """
         path = elements.Browse(initpath=self.set.set_last_dirout,
-            mode='dir').path
+                               mode='dirout',
+                               lng=self.lng).path
         if path != '':
             self.set.set_dirout = path
             self.set.set_last_dirout = path

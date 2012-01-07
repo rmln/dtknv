@@ -115,12 +115,16 @@ serbian_cyrillic = {
 'label_convtocyr':'Конверзија у ћирилицу.',
 'label_about_desc':'Дткнв, латинично-ћирилични конвертор (верзија %s).',
 'label_about_author':'Ромео Млинар',
-'label_about_year':'2010-2011',
+'label_about_year':'2010-2012',
 'label_about_license':'Овај програм је бесплатан и слободан, објављен под ' + \
     'условима GPL3 лиценце.',
 'label_about_mail':'Све предлоге и грешке пошаљите на ' + \
     'mlinar--a--languagebits.com. Хвала! :)',
 'label_about_name':'Дткнв',
+'title_open_file':'Одабир датотеке',
+'title_open_dirin':'Одабир улазне фасцикле',
+'title_open_dirout':'Одабир излазне фасцикле',
+'title_open_dir':'Одабир фасцикле',
 'ext_html':'хипертекст ',
 'ext_htm':'хипертекст ',
 'ext_odt':'Опенофис / Либреофис документ',
@@ -240,6 +244,10 @@ english = {
 'label_about_mail':'Please send all your suggestions or bug reports to ' + \
     'mlinar--a--languagebits.com. Thank you! :)',
 'label_about_name':'Dtknv',
+'title_open_file':'File selection',
+'title_open_dirin':'Input folder selection',
+'title_open_dirout':'Output folder selection',
+'title_open_dir':'Folder selection',
 'ext_html':'hypertext ',
 'ext_htm':'hypertext ',
 'ext_odt':'OpenOffice / LibreOffice document',
