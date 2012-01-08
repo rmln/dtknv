@@ -186,8 +186,9 @@ class Dmenu:
             # Open browser
             browser.open(help_local_path)
         else:
-            open_homepage = messagebox.askyesno(self.lng['label_error_generic'], 
-                                                self.lng['msg_nolocalhelp'])
+            open_homepage = messagebox.askyesno(
+                self.lng['label_error_generic'], 
+                self.lng['msg_nolocalhelp'])
             if open_homepage:
                 browser.open(self.set.URL_HELP + '?pismo=%s&ver=%s' % \
                                  (language, version.__version__))

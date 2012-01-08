@@ -184,6 +184,7 @@ class Exceptions:
             ask = messagebox.askyesno(self.lng['label_save'], 
                                       self.lng['msg_savechanges'])
             if ask:
+                # It's OK to save the cells
                 self.save_exc()
         
 
