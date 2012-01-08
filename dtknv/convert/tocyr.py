@@ -44,6 +44,9 @@ __url__ = "https://gitorious.org/dtknv"
 __author__ = "Romeo Mlinar"
 __license__ = "GNU General Public License v. 3"
 
+
+#TODO: Report does not "report" files with errors.
+
 class ToCyr:
     """Converts textual content files from Cyrillic to Latin alphabet."""
 
@@ -107,7 +110,9 @@ class ToCyr:
     EXCFILES = []
 
     def __init__(self):
-        """Convert between Latin and Cyrillic scripts."""
+        """
+        Convert between Latin and Cyrillic scripts.
+        """
         # Load and attach the CirConv class to a class
         # method.
         self.convertor = CirConv()
@@ -117,7 +122,9 @@ class ToCyr:
         
 
     def run(self):
-        """Start the conversion."""
+        """
+        Start the conversion.
+        """
         # Set temporary directory and add it the affix.
         # TODO: Add a check upon each start to see if
         # a file was left undeleted due to a crash.
@@ -160,7 +167,7 @@ class ToCyr:
                 if self.SHOW:
                     print(msg)
             # If report is not false (successfully opened),
-            # seve the string.
+            # save the string.
             if self.report:
                 self.report.write(msg)
         elif self.conversiontype == 'dir':
@@ -179,8 +186,11 @@ class ToCyr:
             #'Could not remove tmp dir. Gracefully ignoring this...'
             print("Tmp fasickla nije mogla biti uklonjena. Psssssst!")
 
+
     def _outpathrec(self, f):
-        """Compile path where content will be saved."""
+        """
+        Compile path where content will be saved.
+        """
         # The out path is the same as in path, so
         # just add self.CONVSUFFIX to filename, ie:
         # bar.txt > bar_cir.txt
@@ -215,7 +225,9 @@ class ToCyr:
 
 
     def _checkife(self, f):
-        """Check if the file f exists; if yes, add an underscore to the name."""
+        """
+        Check if the file f exists; if yes, add an underscore to the name.
+        """
         i = 0
         while i < 50:
             if os.path.exists(f):
@@ -228,14 +240,18 @@ class ToCyr:
 
 
     def _renameresfiles(self, f):
-        """Rename for media files in unzipped DOCX/ODT files."""
+        """
+        Rename for media files in unzipped DOCX/ODT files.
+        """
         if os.path.isdir(f):
             for i in self._getallfiles(f):
                 os.rename(i, self._converttext(i))
 
 
     def _convertfile(self, f):
-        """Convert the file content. Accept all defined file types."""
+        """
+        Convert the file content. Accept all defined file types.
+        """
         # Compile the save path.
         outpath = self._outpathrec(f)
         # See if the filename needs conversion.
@@ -245,8 +261,11 @@ class ToCyr:
         # Create recursively the out dir.
         if self.RECURSIVE:
             makefullpath(outpath)
-        # Deal with text files separately.
+        # File extension
         self.extension = getext(f)
+        # -------------------------------------------------
+        # Conversion of text files
+        # -------------------------------------------------
         if self.extension in self.TEXTFILES:
             try:
                 text = self._load_txt(f, nomem=True)
@@ -256,9 +275,10 @@ class ToCyr:
                 # 'ERROR reading in ._load_txt: %s' % f.encode(self.ENC)
                 print('GRESKA u funkciji  ._load_txt: %s' % f.encode(self.ENC))
                 # 'Error in conversion!'
-                return('Greska u konverziji!')
-            
-        
+                return('Greska prilikom ucitavanja unicode datoteke.')
+        # -------------------------------------------------
+        # Conversion of OpenOffice/LibreOffice & Word files 
+        # -------------------------------------------------    
         if self.extension in ('odt', 'docx'):
             self._unzip(f)
             if self.USERAM:
@@ -269,6 +289,7 @@ class ToCyr:
                 self._save_office(xmlfile, self._converttext(text))
             self._zip(outpath)
 
+        # Update statistics about the converision.
         self._updatecounter(f)
 
 
@@ -279,42 +300,46 @@ class ToCyr:
         """
         if self.conversiontype == 'dir':
             if self.SAMEOUTPATH:
+                # File should be saved in the same folder
+                # from which it was loaded.
                 self.PATHOUT = self.PATHIN
             else:
+                # File should be saved in a new folder,
+                # so create a unique folder and set it
+                # for the output.
                 self.PATHOUT = getstampnewdir(self.PATHOUT)
             if self.RECURSIVE:
-                # Map all files and folders
-                loopover = get_paths('files', self.PATHIN)
+                # Map all files and folders.
+                convert_files = get_paths('files', self.PATHIN)
             else:
-                # Map only files (first level only).
-                loopover = getallfiles(self.PATHIN)
+                # Map files (first level only).
+                convert_files = getallfiles(self.PATHIN)
         else:
-            loopover = self.FILES
+            convert_files = self.FILES
             
         # Filter out files with unsupported extensions.
-        loopover = self._filtersupported(loopover)
-        self.pcounter['all'] = len(loopover)
+        convert_files = self._filtersupported(convert_files)
+        self.pcounter['all'] = len(convert_files)
         
         # Calculate the size of all files for conversion:
-        self.files_space = getfilesizes(loopover)
-        free_space = getfreespace(self.PATHOUT)
-        if self.files_space >= free_space:
+        self.files_space = getfilesizes(convert_files)
+        if self.files_space >= getfreespace(self.PATHOUT):
             # No enough free space. Abort.
             print('Nema dovoljno slobodnog prostora na disku.')
             print('Kraj rada.')
             sys.exit()
         # Finally, convert the files.
-        self._conversionloop(loopover)
+        self._conversionloop(convert_files)
 
 
     def calculatedirsize(self, path):
-        """Calculate size of all supported files. Depends on RECURSIVE.
+        """
+        Calculate size of all supported files. Depends on RECURSIVE.
 
         If RECURSIVE = True, then it returns the size of all files in the
         tree; if False, then it returns only files in current folder.
 
         The size is formated with '%0.2f'.
-
         """
         if self.RECURSIVE:
             files = self._filtersupported(get_paths('files', path))
@@ -325,7 +350,9 @@ class ToCyr:
 
 
     def _converfname(self, path):
-        """Sees if filename/dirname needs conversion, and converts if yes."""
+        """
+        Sees if filename/dirname needs conversion, and converts if yes.
+        """
         if self.CONVERTFNAMES:
             path, f = os.path.split(path)
             if self.EXT_NO_CONVERSION:
@@ -349,7 +376,10 @@ class ToCyr:
     
     def _initreporfile(self):
         """
-        Initialise the report file.
+        Initialises the report file.
+
+        Returns False if the report if off or an error occurs
+        during access of the report file.
         """
         # The report if off
         if not self.REPORT:
@@ -366,12 +396,14 @@ class ToCyr:
         return report
 
 
-    def _conversionloop(self, loopover):
-        """Iterate over items and convert."""
+    def _conversionloop(self, convert_files):
+        """
+        Iterates over files and converts them.
+        """
         # Convert all files in the loop:
         if self.FAILSAFE:
             self.report = self._initreporfile()
-        for f in loopover:
+        for f in convert_files:
             if self.SHOW:
                 # "Loading %s"
                 print('Ucitava se %s' % f.encode(self.ENC))
@@ -399,7 +431,9 @@ class ToCyr:
 
 
     def _updatecounter(self, f):
-        """Update the percentage counter."""
+        """
+        Updates the percentage counter.
+        """
         size = os.path.getsize(f)
         if not size == 0:
             self.pcounter['p'] += (size/self.files_space)*100
@@ -415,7 +449,7 @@ class ToCyr:
 
     def _converttext(self, text):
         """
-        Convert the text to a specified script and return the
+        Converts the text to the specified script and returns the
         result.
         """
         self.convertor.text = text
@@ -429,7 +463,9 @@ class ToCyr:
 
 
     def _filterfiles(self, d, ext):
-        """Return only files of the extension specified."""
+        """
+        Returns only files of the extension specified.
+        """
         if self.USERAM:
             toconvert = []
             self.zipother = []
@@ -444,17 +480,23 @@ class ToCyr:
 
 
     def _filtersupported(self, fs):
-        """Return files with supported extensions."""
+        """
+        Returns files with supported extensions.
+        """
         return [i for i in fs if getext(i) in self.EXT]
 
 
     def _outpath(self, f):
-        """Return out path."""
+        """
+        Returns the output path.
+        """
         return os.path.join(self.PATHOUT, filename(f))
 
 
     def _load_txt(self, f, nomem=False):
-        """Load and return plain text based files."""
+        """
+        Loads and returns plain text based files.
+        """
         if self.USERAM and not nomem:
             z = self.unzipped.zip.open(f)
             encread = codecs.EncodedFile(z, self.ENC, self.ENC).read()
@@ -463,8 +505,11 @@ class ToCyr:
         else:
             return codecs.open(f, encoding = self.ENC, mode="r").read()
 
+
     def _load_office(self, f):
-        """Load file and return textual content."""
+        """
+        Loads a text file and returns its content.
+        """
         if self.USERAM:
             return self._load_txt(f)
         else:
@@ -472,7 +517,8 @@ class ToCyr:
             
 
     def _save_txt(self, f, text, check=False, nomem=False):
-        """Saves text based files.
+        """
+        Saves text based files.
         
         Check if the file already exists. This applies only
         to saving text-based files. In ODT/DOCX they are
@@ -485,8 +531,11 @@ class ToCyr:
                 f = self._checkife(f)
             codecs.open(f, encoding=self.ENC, mode="w").write(text)
 
+
     def _save_office(self, f, text):
-        """Save an office file."""
+        """
+        Saves an office file.
+        """
         if self.USERAM:
             self.zipout.writestr(f, text.encode(self.ENC))
         else:
@@ -494,7 +543,10 @@ class ToCyr:
 
 
     def _checkifexists(self, f):
-        """Check if path exists. If yes, add the underscore."""
+        """
+        Checks if path exists. 
+        If yes, adds an underscore.
+        """
         #TODO: Is this a repeated piece of code?
         if os.path.isfile(f):
             split = os.path.split(f)
@@ -504,7 +556,9 @@ class ToCyr:
 
 
     def _unzip(self, f):
-        """Unzip file content into temporary folder."""
+        """
+        Unzips file content into temporary folder.
+        """
         # Convert the script of the filename (датотека.txt > datoteka.txt)
         # This has to  be done here, or the program will not find the path.
         #fname = self._converfname(filename(f))
@@ -520,12 +574,16 @@ class ToCyr:
             z.extractall(self.unzipped)
     
     def _newzip(self, outpath):
-        """Create new zip object"""
+        """
+        Creates new zip object.
+        """
         self.zipout = zipfile.ZipFile(outpath, mode='w')
 
 
     def _zip(self, path):
-        """Zip file the path points to."""
+        """
+        Zips the file to whitch the path is pointing.
+        """
         if self.USERAM:
             # Save into zip the files that did not
             # need the conversion, to complete the
@@ -548,8 +606,3 @@ class ToCyr:
             # Restore working dir.
             os.chdir(cwdu)
             shutil.rmtree(self.unzipped)
-
-
-    def _apppath(self):
-        """Return application path without 'src' part."""
-        return os.getcwd().split('src')[0]
