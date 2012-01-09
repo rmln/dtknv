@@ -32,6 +32,9 @@ print(converted.result)
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# TODO: In uppercase titles, letters with two chracters should remain
+#       in upercase. I.e. KNJIŽEVNOST not KNjIŽEVNOST. 
+
 __version__ = '1.5'
 __url__ = "https://gitorious.org/dtknv"
 __author__ = "Romeo Mlinar"

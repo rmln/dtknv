@@ -109,6 +109,7 @@ class ToCyr:
     # Exception files
     EXCFILES = []
 
+
     def __init__(self):
         """
         Convert between Latin and Cyrillic scripts.
@@ -236,7 +237,7 @@ class ToCyr:
                 f = os.path.join(path, '_%s' % fn)
             else:
                 return f
-        raise ValueError('Prekoracen broj provjera za isti  naziv.')
+        raise ValueError('Prekoracen broj provjera za isti naziv.')
 
 
     def _renameresfiles(self, f):

@@ -45,6 +45,7 @@ def get_version(v=version.__version__):
     vnum = [int(i) for i in ver[0].split('.')]
     return(vnum, vtag)
 
+
 def get_version_comparison(v1=None, v2=None):
     """
     Return lower, higher or same
