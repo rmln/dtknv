@@ -32,8 +32,6 @@ print(converted.result)
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# TODO: In uppercase titles, letters with two chracters should remain
-#       in upercase. I.e. KNJIŽEVNOST not KNjIŽEVNOST. 
 
 __version__ = '1.5'
 __url__ = "https://gitorious.org/dtknv"
@@ -58,12 +56,19 @@ cyr = {'А':'A', 'Б':'B', 'В':'V', 'Г':'G', 'Д':'D', 'Е':'E',
 lat_resolutions = {'NJ':'Њ',
                    'Nj':'Њ',
                    'nJ':'нЈ',
-                   'LJ':'љ',
+                   'LJ':'Љ',
                    'Lj':'љ',
                    'lJ':'лЈ',
                    'DŽ':'Џ',
                    'Dž':'Џ',
                    'dŽ':'дЖ',}
+
+two_char = {'Њ':'NJ', 'Џ':'DŽ', 'Љ':'LJ'}
+
+# Characters that can follow capital letter. TODO: Options
+# for this?
+INTERPUNCTION_CAPLETTER = "!?.'„“" + '"' + " "
+
 standard_exc = \
 """
 {"injekci": "\u0438\u043d\u0458\u0435\u043a\u0446\u0438", 
@@ -83,17 +88,23 @@ class Replace:
     """
     
     def __init__(self, f=False):
-        """Load and save file strings"""
+        """
+        Load and save file strings
+        """
         pass
 
 
     def load(self, f):
-        """Load a JSON file"""
+        """
+        Load a JSON file.
+        """
         return(self._load(f))
         
 
     def _load(self, f):
-        """Load a JSON file"""
+        """
+        Load a JSON file.
+        """
         # TODO: Add more elaborate check and
         # introduce a warning.
         with open(f, mode='r', encoding='utf-8') as f:
@@ -101,7 +112,9 @@ class Replace:
         return(c)
 
     def save(self, f, exc):
-        """Save a JSON file"""
+        """
+        Save a JSON file.
+        """
         with open(f, mode='w', encoding='utf-8') as f:
             json.dump(exc, f)
 
@@ -170,7 +183,8 @@ class CirConv:
         
     
     def _make_variants(self):
-        """Make variants of the words.
+        """
+        Make variants of the words.
         
         TODO: finish this
 
@@ -184,12 +198,16 @@ class CirConv:
 
 
     def convert_to_latin(self):
-        """Convert the text and place it into .result. No return."""
+        """
+        Convert the text and place it into .result. No return.
+        """
         self.result = self._charreplace(self.text, mode='tolat')
 
 
     def convert_to_cyrillic(self):
-        """Convert the text and place it into .result. No return."""
+        """
+        Convert the text and place it into .result. No return.
+        """
         self.result = self._charreplace(self.text, mode='tocyr')
 
         
@@ -209,7 +227,6 @@ class CirConv:
         else:
             raise ValueError("Method does not accept mixed-script text.")
         
-
 
     def is_all_cyrillic(self, text=None):
         """
@@ -251,17 +268,64 @@ class CirConv:
         
 
     def _prepare_cyrillic(self, text):
-        """Prepare text for conversion to Cyrillic"""
+        """
+        Prepare text for conversion to Cyrillic.
+
+        For example, capitalised "NJEGOŠ" is "ЊЕГОШ". The conversion
+        without this method would be invalid "НЈЕГОШ".
+
+        Uses lat_resolutions dictionary.
+        """
         lat_keys = lat_resolutions.keys()
         for letter in lat_keys:
             if letter in text:
                 text = text.replace(letter, lat_resolutions[letter])
         return text
 
+
+    def _prepare_latin(self, text):
+        """
+        Prepare text for conversion to Latin.
+
+        For example, capitalised "ЊЕГОШ" is "NJEGOŠ". The conversion
+        without this method would be invalid "NjEGOŠ". The first form
+        is required by the grammar of Serbian.
+        """
+        for letter in two_char.keys():
+            for i in range(text.count(letter)):
+                letter_position = text.find(letter)
+                if self._cap_check(text, letter_position):
+                    text = text.replace(letter, two_char[letter])
+        return text
+
+
+    def _cap_check(self, text, position):
+        """
+        Returns true is the character at position+1 is capitalised.
+        This method should contain more detailed checks.
+        """
+        text_check = False
+        try:
+            # In case the letter in quesiton is at the end
+            # of a sentence:
+            if text[position+1] in INTERPUNCTION_CAPLETTER:
+                return(text[position-1].isupper())
+        except:
+            pass
+
+        try:
+            # Is the letter at the end of a word?
+            # I.e. KONJ.
+            text_check = text[position+1].isupper()
+        except IndexError:
+            # Probably is:
+            text_check = text[position-1].isupper()
+        return(text_check)
+
     
     def _excreplace(self, text):
         """
-        Replace custom strongs.
+        Replace custom strings.
         """
         # Go throught self.exceptions list, that holds
         # all dictionaries correspondng to files loaded
@@ -278,16 +342,20 @@ class CirConv:
 
 
     def _charreplace(self, text, mode):
-        """Replace characters in the input text."""
+        """
+        Replace characters in the input text.
+        """
         # Replace custom strings ("exceptions")
         text = self._excreplace(text)
         # Create lists and dictionary
         if mode == 'tocyr':
             charkeys = self.charmap_tocyr.keys()
             charmap = self.charmap_tocyr
+            text = self._prepare_cyrillic(text)
         elif mode == 'tolat':
             charkeys = self.charmap_tolat.keys()
             charmap = self.charmap_tolat
+            text = self._prepare_latin(text)
         else:
             raise ValueError("Mode must be 'tocyr' or 'tolat'.")
         # Replace the characters
