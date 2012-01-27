@@ -308,7 +308,8 @@ class CirConv:
         try:
             # In case the letter in quesiton is at the end
             # of a sentence:
-            if text[position+1] in INTERPUNCTION_CAPLETTER:
+            if (text[position+1] in INTERPUNCTION_CAPLETTER) and \
+                    text[position-1].isupper():
                 return(text[position-1].isupper())
         except:
             pass
