@@ -30,7 +30,10 @@ Komande:
 	Prikazi sucelje (zanemaruje ostale komande).
     -s (--sameoutpath)
 	Izlazna putanja ista kao ulazna (dodaje se novi 
-        nastavak na naziv datoteke).        
+        nastavak na naziv datoteke).
+    -t (--text)
+        Konvertuje tekst unijet u konzoli i odmah ga ispisuje (samo na
+        Linux/Unix sistemima).
 """
 
 #
@@ -74,6 +77,23 @@ __version__ = '0.3.2'
 
 RESPATH = os.path.join(os.path.dirname(__file__), 'resources', 'info')
 
+
+def convert_text(text):
+    """
+    Convert text entered as an argument.
+    Works only on Linux.
+    """
+    if os.name != 'posix':
+        # "Error: the command is available on Linux/Unix sysitems."
+        print("Greska: komanda je dostupna samo na Linux/Unix sistemima.")
+        sys.exit(0)
+    try:
+        print(convertor.convert(CONVERTTEXT))
+    except ValueError:
+        # "Error: Mixed entry"
+        print("Greška: mješovit unos (potrebna ćirilica ili latinica).")
+
+
 def usage():
     """Print help"""
     # Linux terminal supports utf-8, so show information
@@ -104,7 +124,7 @@ if __name__ == '__main__':
     if len(args) == 0:
         usage()
         sys.exit(2)
-    # Try initialising the class:
+    # Try initialising the classes:
     try:
         from convert.tocyr import ToCyr
         c = ToCyr()
@@ -112,14 +132,22 @@ if __name__ == '__main__':
         c.RECURSIVE = False
     except:
         raise RuntimeError('Could not initialise ToCyr.')
+    # Convertor for this instance only
+    try:
+        from srpismo.cyrconv import CirConv
+        convertor = CirConv()
+    except:
+        raise RuntimeError('Could not initialise CirConv.')
     # Gui variable can override command calls
     SHOWGUI = False
+    CONVERTTEXT = False
     # Command line arguments
     try:
         supplied, r = getopt.getopt(args, 
-                                    'i:o:e:c:vnrhfmgs',
+                                    'i:o:e:c:t:vnrhfmgs',
                                     ['pathin=', 'pathout=', 'encoding=',
-                                     'conversionreportname=', 'verbose',
+                                     'conversionreportname=', 'text=',
+                                     'verbose',
                                      'names', 'recursive', 'help', 
                                      'nofailsafe', 'noram', 'gui',
                                      'sameoutpath'])
@@ -152,10 +180,14 @@ if __name__ == '__main__':
             SHOWGUI = True
         elif o in ('-s', '--sameouthpath'):
             c.SAMEOUTPATH = True
-            
+        elif o in ('-t', '--text'):
+            CONVERTTEXT = a
+
     if SHOWGUI == True:
         del(c)
         from gui import main
         main.show()
+    elif CONVERTTEXT:
+        convert_text(CONVERTTEXT)
     else:
         c.run()
