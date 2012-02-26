@@ -32,10 +32,13 @@ import helpers
 import version
 
 class Report:
-    """Class for creating reports of conversion, with some stats."""
-        
+    """
+    Class for creating reports of conversion, with some stats.
+    """    
     def __init__(self, cn=False, reppath=None, flush=True):
-        """Start Report() call"""
+        """
+        Start Report() call.
+        """
         if not cn:
             raise RuntimeError('Host class (cn) must be supplied.')
         else:
@@ -54,7 +57,9 @@ class Report:
         self._saveinitial()
         
     def _openfile(self):
-        """Open the report file.""" 
+        """
+        Open the report file.
+        """ 
         f = os.path.join(self.reppath, self._filename())
         if self.cn.SHOW:
             print('Izvjestaj o radu je u:\r\n', f)
@@ -63,30 +68,36 @@ class Report:
         return opened 
     
     def _filename(self):
-        """Return filename"""
+        """
+        Return the filename.
+        """
         return self.cn.REPORTNAME  + self.dt + '.txt'
     
     def _saveinitial(self):
-        """Save initial text"""
-        if self.cn.USERAM:
-            mode = 'RAM (brži način).\r\n'
-        else:
-            mode = 'Na disk (sporiji način, provjerite podešavanja).\r\n'
+        """
+        Save the initial text.
+        """
         t = 70*'-' + '\r\n'
         t = t + 'DTknv datoteka o radu\r\n'
         t = t + 70*'-' + '\r\n'
         t = t + 'Verzija programa: %s\r\n' % version.__version__
-        t = t + 'Datum/vrijeme: %s\r\n' % self.dt
-        t = t + 'Raspakivanje: %s' % mode
+        t = t + 'Datum i vrijeme: %s\r\n' % self.dt
+        if not self.cn.USERAM:
+            t = t + 'Raspakivanje: Na disk (sporiji način, provjerite ' + \
+                'podešavanja).\r\n'
         t = t + 70*'-' + '\r\n'
         self.write(t)
     
     def write(self, text):
-        """Write into the file"""
+        """
+        Write into the file.
+        """
         self.repopened.write(text)
         if self.flush:
             self.repopened.flush()
     
     def close(self):
-        """Close the report file"""
+        """
+        Close the report file.
+        """
         self.repopened.close()
