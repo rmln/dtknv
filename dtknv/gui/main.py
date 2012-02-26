@@ -226,6 +226,9 @@ class DtknvGui(tk.Frame):
             self.update_status('label_ready', append=0)
         else:
             self.bind_all("<F5>", None)
+        # Unbind click in status bar
+        self.status.unbind('<Button-1>')
+        self.status.configure(cursor='arrow')
 
 
     def check_allowed_extensions(self):
@@ -347,8 +350,21 @@ class DtknvGui(tk.Frame):
                 else:
                     reptext = self.lng['label_finished'] + reptext
                     repcol = "green"
-                self.status.configure(text=reptext, bg=repcol)
+                self.status.configure(text=reptext, bg=repcol, cursor='hand1')
+                self.status.bind('<Button-1>', self.open_report)
                 break
+
+
+    def open_report(self, *e):
+        """
+        Open the report file so user can inspect it.
+        self.tocyr.report.file
+        """
+        try:
+            helpers.open_text_viewer(self.tocyr.report.file)
+        except:
+            #TODO Add dialogue here.
+            print("Could not open file.")
 
 
     def kill_program(self, *e):
