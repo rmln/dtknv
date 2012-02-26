@@ -35,6 +35,19 @@ from time import strftime
 
 import version
 
+def open_text_viewer(text_file):
+    """
+    Open a default text editor, depending on the OS
+    in use.
+    """
+    if os.name == 'nt':
+        executable = 'notepad.exe'
+    else:
+        raise ValueError("A text editor not defined for %s" % os.name)
+
+    # Launch the viewer
+    os.system(executable + ' ' + text_file)
+
 def get_version(v=version.__version__):
     """
     Separate the version tag into tuple numbers
