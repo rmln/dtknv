@@ -578,7 +578,8 @@ class ToCyr:
         """
         Creates new zip object.
         """
-        self.zipout = zipfile.ZipFile(outpath, mode='w')
+        self.zipout = zipfile.ZipFile(outpath, mode='w',
+                                      compression=zipfile.ZIP_DEFLATED)
 
 
     def _zip(self, path):
@@ -598,7 +599,8 @@ class ToCyr:
                 path = self._checkife(path) # TODO: Check this in ZIP mode
             # Store current working dir so it can be restored later.
             cwdu = os.getcwd()
-            z = zipfile.ZipFile(path, 'w')
+            z = zipfile.ZipFile(path, mode='w',
+                                      compression=zipfile.ZIP_DEFLATED)
             os.chdir(self.unzipped)
             for r, d, files in os.walk('.'):
                 for fz in files:
