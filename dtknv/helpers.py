@@ -40,13 +40,23 @@ def open_text_viewer(text_file):
     Open a default text editor, depending on the OS
     in use.
     """
+    linux_editors = {'gnome':'gedit', 'kde':'kate', 
+                     'xfce':'mousepad', 'generic':'nano'}
+
     if os.name == 'nt':
         executable = 'notepad.exe'
+    elif os.name == 'posix':
+        # Try to detect current deskop environment, and
+        # then select the most probable text editor
+        # for the platform.
+        de = detect_desktop_environment()
+        executable = linux_editors[de]
     else:
         raise ValueError("A text editor not defined for %s" % os.name)
 
     # Launch the viewer
     os.system(executable + ' ' + text_file)
+
 
 def get_version(v=version.__version__):
     """
@@ -269,3 +279,24 @@ def get_paths(what, path):
             for filename in filenames:
                 paths.append(os.path.join(dirname, filename))
     return paths
+
+
+def detect_desktop_environment():
+    """
+    This code is from:
+    <http://stackoverflow.com/questions/2035657/
+    what-is-my-current-desktop-environment>
+    """
+    desktop_environment = 'generic'
+    if os.environ.get('KDE_FULL_SESSION') == 'true':
+        desktop_environment = 'kde'
+    elif os.environ.get('GNOME_DESKTOP_SESSION_ID'):
+        desktop_environment = 'gnome'
+    else:
+        try:
+            info = getoutput('xprop -root _DT_SAVE_MODE')
+            if ' = "xfce4"' in info:
+                desktop_environment = 'xfce'
+        except (OSError, RuntimeError):
+            pass
+    return desktop_environment
