@@ -80,6 +80,8 @@ serbian_cyrillic = {
 'msg_nolocalhelp':'Немате инсталирано упутство на рачунару.\n' + \
                    'Отворити верзију на званичном сајту?',
 'msg_nohelpinenglish':'Програм нема упутство на енглеском.',
+'msg_error_opening_report':'Грешка приликом отварања извјештаја\n (%s).',
+'msg_report_not_created':'Извјештај није креиран (укључите га у подешавањима).',
 'label_save':'Сачувати',
 'label_type':'Врста: ',
 'label_updateerror':'Прогам није могао провјерити да ли је' + \
@@ -92,6 +94,7 @@ serbian_cyrillic = {
 'label_datechanged':'Посљедња измјена: ',
 'label_file':'Датотека: ',
 'label_finishedcheck':' Провјерите датотеке и извјештај.',
+'label_no_report':' Извјештај није креиран.',
 'label_conversion':'Конверзија.',
 'label_finishedwitherrors':'Завршено, уз грешке. ',
 'label_finished':'Завршено.',
@@ -204,6 +207,8 @@ english = {
 'msg_savechanges':'Save changes?',
 'msg_extension_not_supported':'That extension must be allowed ' + \
     'for this conversion.',
+'msg_error_opening_report':'Error while opening the report\n (%s).',
+'msg_report_not_created':'Report is off (turn it on in settings).',
 'label_save':'Save',
 'label_type':'Type: ',
 'label_updateerror':'The program could not check if there is' + \
@@ -216,6 +221,7 @@ english = {
 'label_datechanged':'Last change: ',
 'label_file':'File: ',
 'label_finishedcheck':' Check your files and the report.',
+'label_no_report':' A report is not created.',
 'label_conversion':'Conversion.',
 'label_finishedwitherrors':'Completed, with some errors. ',
 'label_finished':'Completed.',

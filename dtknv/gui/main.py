@@ -340,10 +340,12 @@ class DtknvGui(tk.Frame):
             self.status.update()
             time.sleep(0.3)
             if not self.th.is_alive():
-                try:
+                # Report is created?
+                if self.tocyr.report:
                     reptext = self.lng['label_finishedcheck']
-                except AttributeError:
-                    reptext = '(Bez izvještaja.)'
+                else:
+                    reptext = self.lng['label_no_report']
+                # Was there errors?
                 if self.tocyr.errors_during_work:
                     reptext =  self.lng['label_finishedwitherrors'] + reptext
                     repcol = "orange"
@@ -358,14 +360,17 @@ class DtknvGui(tk.Frame):
     def open_report(self, *e):
         """
         Open the report file so user can inspect it.
-        self.tocyr.report.file
         """
-        try:
-            helpers.open_text_viewer(self.tocyr.report.file)
-        except:
-            #TODO Add dialogue here.
-            print("Could not open file.")
-
+        if self.tocyr.report:
+            try:
+                helpers.open_text_viewer(self.tocyr.report.file)
+            except:
+                messagebox.showwarning(self.lng['label_error_generic'],
+                                   self.lng['msg_error_opening_report'] % \
+                                       self.tocyr.report.file)
+        else:
+            messagebox.showwarning('', self.lng['msg_report_not_created'])
+           
 
     def kill_program(self, *e):
         """
