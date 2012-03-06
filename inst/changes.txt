@@ -1,6 +1,15 @@
-0.5 beta [Decembar 2011]
+﻿0.5.1 beta [februar 2012.]
 --------------
-* Redizajniran i pobošljan interfejs (pisan "od nule").
+* Uklonjen bug: uključena kompresija ZIP fajlova.
+* Uklonjen bug: konvertovanje naslova pisanih velikim slovima.
+* Dodato: otvaranje izvještaja klikom na statusnu traku (zavisi od OS-a).
+* Dodato: konverzija teksta u konzoli (samo Linux).
+* Poboljšanje: jasniji naslovi dijaloga za otvaranje fascikli i datoteka. 
+* Poboljšanje: dodato pregledno uputstvo za hitar početak rada programa.  
+
+0.5 beta [decembar 2011.]
+--------------
+* Redizajniran i poboljšan interfejs (pisan "od nule").
 * Dvosmjerna konverzija (iz ćirilice i u ćirilicu).
 * Dodati izuzeci (search and replace).
 * Domen na <http:\\serbian.languagebits.com>.
@@ -10,7 +19,7 @@
 * Opcija da se konvertovane datoteke čuvaju u ulaznoj fascikli.
 * Izvještaji se standardno zapisuju u My Documents ili home fascikli.
 * Promjena konzolnih argumenata.
-* Uklonjen bug: pogrešno izračuvanje slobodnog prostora u Linuksu.
+* Uklonjen bug: pogrešno izražavanje slobodnog prostora u Linuksu.
 * Uklonjen bug: pucanje programa u Windows konzoli.
 
 0.3.4 beta [26 juli 2011.]
@@ -25,8 +34,8 @@
 
 0.3 beta > 0.3.1 beta [23. jun 2011.]
 --------------
-* Uglavnom pomjena u niskama.
-* Datat projekat na  <https://gitorious.org/dtknv>.
+* Uglavnom promjena u niskama.
+* Dodat projekat na  <https://gitorious.org/dtknv>.
 
 0.6.6a > 0.6.7a [3. maj 2011.]
 --------------
@@ -35,7 +44,7 @@
 
 0.6.5a > 0.6.6a [19. april 2011.]
 --------------
-* Ispravka grešake: konverzija datoteka na nt/posix sistemima.
+* Ispravka greške: konverzija datoteka na nt/posix sistemima.
 * Promjene interfejsa.
 * Početni kod za izvještaje o radu.
 
