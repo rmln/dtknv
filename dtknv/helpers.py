@@ -74,7 +74,7 @@ def get_version_comparison(v1=None, v2=None):
     Return lower, higher or same
     version, when compared v1 to v2.
     """
-    # If v1 is None, then compare to the corrent version
+    # If v1 is None, then compare to the current version
     if v1 == None:
         v1 = get_version()[0]
     else:
