@@ -1,15 +1,14 @@
 #! /usr/bin/python3
 """
-Dtknv je jednostavna alatka za konverziju datoteka sa cirilicnim
-sadrzajem u latinicni. Moguce je konvertovati tekstualne datoteke, ali
-i Libreofis (Openofis) i Vord dokumenta (samo DOCX). Graficki
-interfejs podrzava i prebacivanje latinice u cirilicu, ali za sada samo
-u ogranicenom tekstualnom modu.
+Dtknv je jednostavna alatka za konverziju datoteka sa ćiriličnim
+sadržajem u latinični, a za običan tekst i obrnuto. Moguće je 
+konvertovati tekstualne datoteke, ali i Libreofis (Openofis)
+i Vord dokumenta (DOCX).
 
 Komande:
 
     -i (--pathin)
-	Ulazna putanja (fascila ili datoteka).
+	Ulazna putanja (fascikla ili datoteka).
     -o (--pathout)
 	Izlazna putanja.
     -e (--encoding)     
@@ -17,23 +16,23 @@ Komande:
     -n (--names)
 	Konvertuj nazive datoteka.
     -r (--recursive)
-	Rekurzivna konverzija. Pazljivo!
+	Rekurzivna konverzija. Pažljivo!
     -v (--verbose)
-	Prikazuj izvjestaj prilikom rada.
+	Prikazuj izvještaj prilikom rada.
     -c (--conversionreportname) 
-	Naziv datoteke za izvjestaj.
+	Naziv datoteke za izvještaj.
     -f (--nofailsafe)
-	Obustavi konverziju prilikom prve greske.
+	Obustavi konverziju prilikom prve greške.
     -m (--noram)
 	Raspakuj odt/docx na disk (standardno RAM) 
     -g (--gui)
-	Prikazi sucelje (zanemaruje ostale komande).
+	Prikaži sučelje (zanemaruje ostale komande).
     -s (--sameoutpath)
 	Izlazna putanja ista kao ulazna (dodaje se novi 
         nastavak na naziv datoteke).
     -t (--text)
-        Konvertuje tekst unijet u konzoli i odmah ga ispisuje (samo na
-        Linux/Unix sistemima).
+       Konvertuje tekst u konzoli. Radi samo na UNIX sistemima),
+       a sva srpska slova moraju biti iz jednog pisma.
 """
 
 #
