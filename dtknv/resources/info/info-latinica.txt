@@ -1,11 +1,12 @@
 Dtknv je jednostavna alatka za konverziju datoteka sa ćiriličnim
-sadržajem u latinični. Moguće je konvertovati tekstualne datoteke, ali
-i Libreofis (Openofis) i Vord dokumenta (samo DOCX).
+sadržajem u latinični, a za običan tekst i obrnuto. Moguće je 
+konvertovati tekstualne datoteke, ali i Libreofis (Openofis)
+i Vord dokumenta (DOCX).
 
 Komande:
 
     -i (--pathin)
-	Ulazna putanja (fascila ili datoteka).
+	Ulazna putanja (fascikla ili datoteka).
     -o (--pathout)
 	Izlazna putanja.
     -e (--encoding)     
@@ -27,3 +28,6 @@ Komande:
     -s (--sameoutpath)
 	Izlazna putanja ista kao ulazna (dodaje se novi 
         nastavak na naziv datoteke).
+    -t (--text)
+       Konvertuje tekst u konzoli. Radi samo na UNIX sistemima,
+       a sva srpska slova moraju biti iz jednog pisma.
