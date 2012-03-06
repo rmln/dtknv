@@ -38,8 +38,8 @@ import helpers
 
 class NewVersion:
 
-    URL = r'http://www.languagebits.com/dtknv/doc/version.txt'
-    DLPAGE = r'http://www.languagebits.com/dtknv/'
+    URL = r'http://serbian.languagebits.com/dtknv/doc/version.txt'
+    DLPAGE = r'http://serbian.languagebits.com/dtknv/'
     
     def __init__(self, master):
         self.master = master
@@ -106,7 +106,6 @@ class NewVersion:
             ver['version'] =  new_version[0]
             ver['date'] =  new_version[1]
             ver['info'] =  new_version[2]
-            #ver['version'] =  '0.5.5 beta'
             if os.name != 'posix':
                 ver['url'] =  new_version[3]
             else:
