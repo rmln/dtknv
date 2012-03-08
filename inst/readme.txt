@@ -49,6 +49,7 @@ We advise you to use GUI interface.
     -g (--gui)          Show graphical interface (overrides console commands).
     -s (--sameoutpath)  The out path same as input (a string is appended
        			onto the new file)
+    -t (--text)         Convert text in console (must be of the same script)
 
 Conslole examples:
 
@@ -75,6 +76,12 @@ Convert myfile.odt and store it in conv.
 cknv.py -g
 
 Show a simple graphical interface.
+
+(5)
+$ cknv.py -t "Ovo je proba."
+
+returns:
+$ Ово је проба. 
 
 === ABOUT ==================
 
